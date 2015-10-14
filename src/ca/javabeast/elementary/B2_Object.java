@@ -39,12 +39,12 @@ class Person {
         System.out.println("person(" + id + ")");  
     }  
   
-    /*
+    
     public static void get(){
         String s = null;
         System.out.println("person(" + s + ")");
     }
-    */
+    
 }  
   
 class Build {  
