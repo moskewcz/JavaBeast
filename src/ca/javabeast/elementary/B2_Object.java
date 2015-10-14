@@ -58,6 +58,30 @@ public class B2_Object {
         CC cc = new CC();  
         takesA(cc);  
         takesB(cc.makeB()); 
+        
+        new ExtendsTest(); 
+        
+        ProxyTest pt = new ProxyTest();
+        pt.p(20);
+        pt.p2(50);
+        
+        Component ct = new Component();  
+        System.out.println(ct);
+        
+        //break loop
+        loop: for (int i = 0; i < 10; i++) {  
+            for (int j = 0; j < 10; j++) {  
+                for (int k = 0; k < 10; k++) {  
+                    for (int n = 0; n < 10; n++) {  
+                        if (n == 6) {  
+                            break loop;  
+                        }  
+                        System.out.print(n);  
+                    }  
+                }  
+            }  
+        }  
+        System.out.println("\nI'm here!"); 
     }
     
     static void takesA(AA a){}  
@@ -76,19 +100,8 @@ public class B2_Object {
     public static void w(ActionCharacter x){x.fight();} 
 }
 
-class InnerClass {  
-    class A{  
-        void a(){  
-            System.out.println("this is A.a()!");  
-        }  
-    }  
-    static class C{  
-        void c(){  
-            System.out.println("this is C.c()!");  
-        }  
-    }  
-} 
 
+/*=====================================================*/
 class Person {  
     
     public Person(int id) {  
@@ -124,6 +137,20 @@ class Build {
 } 
 
 
+/*====================================================*/
+class InnerClass {  
+    class A{  
+        void a(){  
+            System.out.println("this is A.a()!");  
+        }  
+    }  
+    static class C{  
+        void c(){  
+            System.out.println("this is C.c()!");  
+        }  
+    }  
+} 
+
 interface CanFight {void fight();}  
 interface CanFly {void fly();}  
 interface CanSwim {void swim();}  
@@ -138,7 +165,7 @@ class Hero extends ActionCharacter implements CanFight, CanFly, CanSwim {
   
 } 
 
-//extends inner class
+//inner class extended
 class AA{  
       
 }  
@@ -151,4 +178,85 @@ class CC extends AA{
               
         };  
     }  
+}
+
+/*===============================================*/
+//initalize the parent class
+class AAA {  
+    public AAA() {  
+        System.out.println("A()!");  
+    }  
+}  
+  
+class BBB extends AAA {  
+    public BBB() {  
+        System.out.println("B()!");  
+    }  
+}  
+  
+class ExtendsTest extends BBB {  
+  
+    public ExtendsTest() {  
+        System.out.println("ExtendsTest()!");  
+    }  
 } 
+
+//proxy
+
+class ProxyTest {
+	Source source = new Source();
+	void p(int n){
+		source.a(n);
+	}
+	void p2(int n){
+		source.b(n);
+	}
+	
+}
+
+class Source{
+	void a(int n){
+		System.out.println("this is : "+n);
+	}
+	void b(int n){
+		System.out.println("this is : "+n);
+	}
+}
+
+//component
+
+class Soap{  
+    private String s;  
+    Soap(){  
+        System.out.println("soap");  
+        s = "constructor";  
+    }  
+    public String toString(){  
+        return s;  
+    }  
+}  
+  
+class Component {  
+    private String s1 = "happy",s2="Happy",s3,s4;  
+    private Soap castille;  
+    private int i;  
+    public Component(){  
+        s3 = "joy";  
+        castille = new Soap();  
+    }  
+    {  
+        i = 88;  
+    }  
+    public String toString(){  
+        if(s4 == null){  
+            s4 = "Joy";  
+        }  
+            return "s1 = " + s1 + "\n" +  
+                   "s2 = " + s2 + "\n" +  
+                   "s3 = " + s3 + "\n" +  
+                   "s4 = " + s4 + "\n" +  
+                   "i = " + i + "\n" +  
+                   "castille = " + castille;  
+  
+    }  
+}
