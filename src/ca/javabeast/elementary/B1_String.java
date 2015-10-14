@@ -28,7 +28,7 @@ public class B1_String {
      * @param args 
      */     
     public static void main(String[] args){
-        //stringTest();
+        stringTest();
         stringUtilTest();
     }
     
@@ -169,5 +169,6 @@ public class B1_String {
         String s39 = "ad";  
         System.out.println(s37 == s38);//true  
         System.out.println(s37 == s39);//true 
+        System.out.println("");
     }
 }
