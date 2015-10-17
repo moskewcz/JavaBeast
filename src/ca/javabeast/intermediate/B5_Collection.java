@@ -34,7 +34,7 @@ public class B5_Collection {
         printN(a);
         testCollections();
         sorted();
-        rotate();
+        rotate(); 
     }
     
     /**
