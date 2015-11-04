@@ -1,6 +1,8 @@
 package ca.javabeast.algorithms;
 
 import java.util.Arrays;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,30 +15,76 @@ import java.util.Arrays;
  */
 public class B17_Basic {
 
+    private static int j;
+
     public static void main(String[] args) {
         //14,15,16
-  
+        TestLock();
     }
 
-    public static void testAssert(){
-        int i = 0;  
-        for(i=0;i<5;i++)  
-        {  
-            System.out.println(i);  
-        }   
-        --i; 
-        assert i==5;  
+    public static void TestLock() {
+
+        Lock lock = new ReentrantLock();
+
+        for (int i = 0; i < 2; i++) {
+            new Thread() {
+
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    while (true) {
+                        /*synchronized (ThreadTest.this) {			
+                         System.out.println("j--=" + j--);
+                         //exception throwed
+                         }*/
+                        lock.lock();
+                        try {
+                            System.out.println("j++=" + j++);
+                        } finally {
+                            lock.unlock();
+                        }
+                    }
+                }
+            }.start();
+            new Thread() {
+                @Override
+                public void run() {
+                    // TODO Auto-generated method stub
+                    while (true) {
+                        /*synchronized (ThreadTest.this) {
+                         System.out.println("j++=" + j++);	
+                         }*/
+                        lock.lock();
+                        try {
+                            System.out.println("j--=" + j--);
+                        } finally {
+                            lock.unlock();
+                        }
+                    }
+                }
+            }.start();
+        }
     }
-         
+
+    public static void testAssert() {
+        int i = 0;
+        for (i = 0; i < 5; i++) {
+            System.out.println(i);
+        }
+        --i;
+        assert i == 5;
+    }
+
     public static void multiThread() {
         new Thread(new MultiThread.Thread1()).start();
         try {
             Thread.sleep(10);
-        } catch (InterruptedException e) { 
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         new Thread(new MultiThread.Thread2()).start();
     }
+
     public static void breakLoop() {
         label:
         for (int i = 0; i < 10; i++) {
@@ -160,9 +208,7 @@ class Outer {
     }
 }
 
-
 class MultiThread {
- 
 
     public static class Thread1 implements Runnable {
 
