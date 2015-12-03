@@ -13,7 +13,7 @@ public class LinkedList<O> {
 
     private Element<O> head;
 
-    public LinkedList(Element head) {
+    public LinkedList(Element<O> head) {
         this.head = head;
     }
 
@@ -64,12 +64,45 @@ public class LinkedList<O> {
         return e == null ? null : e.value();
     }
 
+    public boolean remove(O value) {
+        Element<O> e;
+        if (head == null) {
+            return false;
+        }
+        e = this.head;
+        if (head.value() == value) {
+            this.head = this.head.next();
+            e.setNext(null);
+            return true;
+        }
+        while (e != null) {
+            if (e.next() != null && e.next().value() == value) {
+                e.setNext(e.next().next());
+                e.next().setNext(null);
+                return true;
+            }
+            e = e.next();
+        }
+        return false;
+    }
+
     public Element<O> find(O value) {
         Element<O> e = this.head;
         while (e != null && e.value() != value) {
             e = e.next();
         }
         return e;
+    }
+
+    public void clear() {
+        Element<O> e = this.head;
+        while (e != null) {
+            Element<O> n = e.next();
+            e.setValue(null);
+            e.setNext(null);
+            e = n;
+        }
+        this.head = null;
     }
 
 }
