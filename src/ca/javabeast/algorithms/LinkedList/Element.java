@@ -14,8 +14,9 @@ public class Element<O> {
     private O value;
     private Element next;
 
-    public Element(O value) {
-        this.value = value;
+    public Element(O v,Element<O> n) {
+        this.value = v;
+        this.next = n;
     }
 
     public void setValue(O value) {
