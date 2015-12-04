@@ -9,11 +9,39 @@ package ca.javabeast.algorithms.LinkedList;
  *
  * @author alpenliebe <alpseinstein@gmail.com>
  */
-public class LinkedList<O> {
+public class LinkedList<T> {
 
-    private Element<O> head;
+    private Element<T> head;
+    private Element<T> tail;
 
-    public LinkedList(Element<O> head) {
+    class Element<T> {
+
+        private T value;
+        private Element<T> next;
+
+        public Element(T v, Element<T> n) {
+            this.value = v;
+            this.next = n;
+        }
+
+        public void setValue(T value) {
+            this.value = value;
+        }
+
+        public void setNext(Element<T> next) {
+            this.next = next;
+        }
+
+        public T value() {
+            return value;
+        }
+
+        public Element<T> next() {
+            return next;
+        }
+    }
+
+    public LinkedList(Element<T> head) {
         this.head = head;
     }
 
@@ -21,17 +49,17 @@ public class LinkedList<O> {
         return this.head == null;
     }
 
-    public void addFirst(O value) {
-        Element<O> e = new Element<>(value, head);
+    public void addFirst(T value) {
+        Element<T> e = new Element<>(value, head);
         this.head = e;
     }
 
-    public void addLast(O value) {
-        Element<O> e = new Element<>(value, null);
+    public void addLast(T value) {
+        Element<T> e = new Element<>(value, null);
         if (this.isEmpty()) {
             this.head = e;
         } else {
-            Element<O> n = this.head.next();
+            Element<T> n = this.head.next();
             while (n.next() != null) {
                 n = n.next();
                 n.setNext(e);
@@ -39,8 +67,8 @@ public class LinkedList<O> {
         }
     }
 
-    public O removeFirst() {
-        Element<O> h = this.head;
+    public T removeFirst() {
+        Element<T> h = this.head;
         if (!this.isEmpty()) {
             this.head = this.head.next();
         }
@@ -48,15 +76,15 @@ public class LinkedList<O> {
         return h.value();
     }
 
-    public O removeLast() {
-        Element<O> e = this.head;
+    public T removeLast() {
+        Element<T> e = this.head;
         if (isEmpty()) {
         } else if (e.next() == null) {
             this.head = null;
         } else {
             while (e.next().next() != null) {
                 e = e.next();
-                Element<O> l = e.next();
+                Element<T> l = e.next();
                 e.setNext(null);
                 e = l;
             }
@@ -64,8 +92,8 @@ public class LinkedList<O> {
         return e == null ? null : e.value();
     }
 
-    public boolean remove(O value) {
-        Element<O> e;
+    public boolean remove(T value) {
+        Element<T> e;
         if (head == null) {
             return false;
         }
@@ -86,8 +114,8 @@ public class LinkedList<O> {
         return false;
     }
 
-    public Element<O> find(O value) {
-        Element<O> e = this.head;
+    public Element<T> find(T value) {
+        Element<T> e = this.head;
         while (e != null && e.value() != value) {
             e = e.next();
         }
@@ -95,14 +123,78 @@ public class LinkedList<O> {
     }
 
     public void clear() {
-        Element<O> e = this.head;
+        Element<T> e = this.head;
         while (e != null) {
-            Element<O> n = e.next();
+            Element<T> n = e.next();
             e.setValue(null);
             e.setNext(null);
             e = n;
         }
         this.head = null;
     }
+    
+    //maintain tail
+    public boolean remove(Element<T> e){
+        Element<T> cur = this.head;
+        
+        //e is null
+        if(e==null){
+            return false;
+        }
+        
+        //remove head
+        if(head.equals(e)){
+            head=head.next();
+            e.setNext(null);
+            if(head==null)
+                tail=null;
+            return true;
+        }
+        
+        //remove e after head
+        while(cur!=null){
+            if(e.equals(cur.next())){
+                cur.setNext(cur.next().next());
+                e.setNext(null);
+                if(cur.next()==null){
+                    tail=cur;
+                }
+                return true;
+                    
+            }
+            cur = cur.next();
+                
+        }
+        
+        //when empty list and no e found
+        return false;
+    }
 
+    public boolean addAfter(Element<T> e,T v){
+        Element<T> cur = this.head;
+        
+        //add to the begining
+        if (e==null){
+            head = new Element<>(v,head);
+            if(head.next()==null){
+                tail=head;
+            }
+            return true;
+        }
+        
+        //add after begining
+        while(cur!=null){
+            if(cur.equals(e)){
+                cur.setNext(new Element<>(v,cur.next()));
+                if(cur.next()==null){
+                    tail=cur;
+                }
+                return true;
+            }
+            cur = cur.next();
+        }
+        
+        //when empty list or no e found 
+        return false;
+    }
 }
