@@ -41,6 +41,55 @@ public class LinkedList<T> {
         }
     }
 
+    class Node<T> {
+
+        private T value;
+        private Node<T> prev;
+        private Node<T> next;
+        private Node<T> child;
+
+        public Node(T v, Node<T> p,Node<T> n) {
+            this.value = v;
+            this.prev=p;
+            this.next = n;
+        }
+
+        public void setValue(T value) {
+            this.value = value;
+        }
+
+        public void setPrev(Node<T> prev) {
+            this.prev = prev;
+        }
+
+        public void setNext(Node<T> next) {
+            this.next = next;
+        }
+
+        public T value() {
+            return value;
+        }
+
+        public Node<T> prev() {
+            return prev;
+        }
+
+        public Node<T> next() {
+            return next;
+        }
+
+        public void setChild(Node<T> child) {
+            this.child = child;
+        }
+
+        public Node<T> child() {
+            return child;
+        }
+
+        
+         
+    }
+
     public LinkedList(Element<T> head) {
         this.head = head;
     }
@@ -219,5 +268,59 @@ public class LinkedList<T> {
                 mBehind=mBehind.next();
         }
         return mBehind;
+    }
+    
+    //flatten
+    public Node<T> flatten(Node<T> h,Node<T> t){
+        Node<T> cur=t;
+        //traversal the list
+        while(cur!=null){
+            if(cur.child()!=null){  //found a child and append the child list to the end of parent list
+                t=append(cur.child(),t);
+            }
+            cur = cur.next();
+        }
+        return t;
+    }
+    
+    private Node<T> append(Node<T> h,Node<T> t){
+        t.setNext(h);
+        h.setPrev(t);
+        //found the end of the list
+        while(h.next!=null){
+            h=h.next();
+        }
+        return h;
+    }
+    
+    public Node<T> unflatten (Node<T> t){
+        Node<T> cur = t;
+        
+        //back traversal the list
+        while(cur!=null){
+            if(cur.child()!=null){  //found the child of cur position and cut the child list off to parent list
+                t=cur.child().prev();
+                t.setNext(null);
+                cur.child().setPrev(null);
+            }
+            cur = cur.prev();
+        }
+        return t;
+    }
+    
+    public boolean nullOrCycle(Element<T> h){
+        Element<T> cur,cur2;
+        cur=h;
+        cur2=h.next();
+        
+        //if either cur2 or cur2.next() is null ,it is acyclic
+        while(cur2 != null && cur2.next()!=null ){
+            if(cur.equals(cur2) || cur.equals(cur2.next())){
+                return true;
+            }
+            cur=cur.next();
+            cur2=cur2.next().next();
+        }
+        return false;
     }
 }
