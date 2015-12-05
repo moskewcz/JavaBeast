@@ -197,4 +197,27 @@ public class LinkedList<T> {
         //when empty list or no e found 
         return false;
     }
+    
+    
+    //Mth-to-Last Element of a Linked List
+    public Element<T> findMToLastElement(int m){
+        Element<T> cur,mBehind = null;
+        int i=0;
+        
+        //empty list
+        if(head==null)
+            return null;
+        
+        cur = head;
+        //traversal the list
+        while(cur.next()!=null){
+            i++;
+            cur=cur.next();
+            if(i==m)
+                mBehind = head;
+            else if(i>m)
+                mBehind=mBehind.next();
+        }
+        return mBehind;
+    }
 }
