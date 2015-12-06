@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ca.javabeast.algorithms.LinkedList;
+package ca.javabeast.algorithms.linkedlist;
 
 /**
  *
