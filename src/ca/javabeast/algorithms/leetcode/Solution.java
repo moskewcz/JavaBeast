@@ -13,11 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ca.javabeast.algorithms.leetcode;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 import java.util.Stack;
 
 /**
@@ -48,10 +46,10 @@ class LeetCode {
                     left = i + 1;
                 } else {
                     stack.pop();
-                    if (stack.isEmpty()){
-                        max = Math.max(max, i-left+1);
+                    if (stack.isEmpty()) {
+                        max = Math.max(max, i - left + 1);
                     } else {
-                        max = Math.max(max, i-stack.peek());
+                        max = Math.max(max, i - stack.peek());
                     }
                 }
             }
@@ -63,25 +61,39 @@ class LeetCode {
     }
 
     public int lengthOfLongestSubstring(String s) {
-        Set<Character> set = new HashSet<>();
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
         int max = 0;
         //record the start point
-        int j=0;
-        for(int i=0;i<s.length();i++){
+        for (int i = 0, j = 0; i < s.length(); i++) {
             Character c = s.charAt(i);
-            if(set.contains(c)){  //encounter a repeat character
-                while(s.charAt(j)!=c){
-                    set.remove(s.charAt(j));
-                    j++;
-                }
-                j++;
+            if (map.containsKey(c)) {  //encounter a repeat character
+                j = Math.max(j, map.get(c) + 1);
             }
-            set.add(c);
-            max = Math.max(max,set.size());
+            map.put(c, i);
+            max = Math.max(max, i - j + 1);
         }
         return max;
     }
-    
+
+    public void Rotate2DMatrix(int[][] matrix) {
+        int n = matrix.length;
+        int[] temp = new int[4];
+        for (int i = 0, j = 0; i < n / 2; i++, j++) { //only start to rotate the node on the diagonal 
+            int e = n - 2 * i; //get length of the edge
+            for (int k = 0; e > 1 && k < e - 1; k++) {  //Rotate every node on the edge 
+                temp[1] = matrix[i][j + k];
+                temp[2] = matrix[i + k][j + e - 1];
+                temp[3] = matrix[i + e - 1][j + e - 1 - k];
+                temp[0] = matrix[i + e - 1 - k][j];
+                matrix[i][j + k] = temp[0];
+                matrix[i + k][j + e - 1] = temp[1];
+                matrix[i + e - 1][j + e - 1 - k] = temp[2];
+                matrix[i + e - 1 - k][j] = temp[3];
+            }
+
+        }
+    }
+
     public static String ezFormat(Object... args) {
         String format = new String(new char[args.length])
                 .replace("\0", "%s");
