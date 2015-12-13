@@ -24,9 +24,36 @@ import java.util.Set;
  *
  * @author alpenliebe <alpseinstein@gmail.com>
  */
-public class CharacterProcess {
+public class CharacterProcessor {
+    
+    public static String findFirstNonrepeatedCharacter(String str) {
+        HashMap<Integer, Object> charHash = new HashMap<>();
 
-    public static Character findFirstNonrepeatedCharacter(String str) {
+        int i;
+        Object once=new Object(),multiple=new Object();
+        // Scan str, building hash table
+        for (i = 0; i < str.length(); ) {
+            final int cp = str.codePointAt(i);
+            i+=Character.charCount(cp);
+            if (charHash.containsKey(cp)) {
+        // Increment count corresponding to c
+                charHash.put(cp, multiple);
+            } else {
+                charHash.put(cp, once);
+            }
+        }
+        // Search hash table in order of str
+        for (i = 0; i < str.length();) {
+            final int cp = str.codePointAt(i);
+            i+=Character.charCount(cp);
+            if (charHash.get(cp) ==once) {
+                return new String(Character.toChars(cp));
+            }
+        }
+        return null;
+    }
+    
+    public static Character findFirstNonrepeatedCharacter2(String str) {
         HashMap<Character, Integer> charHash = new HashMap<Character, Integer>();
 
         int i;
@@ -51,7 +78,7 @@ public class CharacterProcess {
         return null;
     }
 
-    public static Character findFirstNonrepeatedCharacter2(String s) {
+    public static Character findFirstNonrepeatedCharacter3(String s) {
         Map<Integer, Character> map = new HashMap<>();
         Set<Character> set = new HashSet<>();
         for (int i = 0; i < s.length(); i++) {
