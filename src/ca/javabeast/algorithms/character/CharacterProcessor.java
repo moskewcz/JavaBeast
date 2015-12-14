@@ -99,4 +99,73 @@ public class CharacterProcessor {
         }
         return min == s.length() ? null : s.charAt(min);
     }
+    
+    
+    public static String RemoveSpecifiedCharacters( String str, String remove ){
+        if(remove==null||"".equals(remove))
+            return str;
+        char[] s = str.toCharArray();
+        // flags automatically initialized to false, size of 128 assumes ASCII
+        boolean[] flags = new boolean[128];
+        int cur,left=0;
+        
+        // Set flags for characters to be removed
+        for(cur=0;cur<remove.length();cur++){
+            int c = remove.charAt(cur);
+            flags[c]=true;
+        }
+        for(cur=0;cur<s.length;cur++){
+            if(!flags[s[cur]]){
+                s[left++] = s[cur];
+            }
+        }
+        return new String(s,0,left);
+        
+    }
+    
+    public static String reverseWords(String str){
+        char[] arr = str.toCharArray();
+        int cur=0,left,right,slen;
+        slen = str.length();
+        reverseCharacters(arr,0,slen-1);
+        for(left=0;cur<slen;cur++){
+            if(arr[cur]==' '){
+                right=cur-1;
+                reverseCharacters(arr,left,right);
+                left=cur+1;
+            } 
+        }
+        str = String.valueOf(arr);
+        return  str;
+    }
+    
+    public static void reverseCharacters(char[] arr,int start,int end){
+        for(char temp;start<=end;start++,end--){
+            temp = arr[start];
+            arr[start] = arr[end];
+            arr[end]=temp;
+        }
+    }
+    
+    public static String reverseWords2(String str){
+        int cur,start,end,slen,writePos=0;
+        slen=str.length();
+        cur=slen-1;
+        end=slen;
+        char[] buffer = new char[slen];
+        while(cur>=0){
+            if(str.charAt(cur)==' '){
+                buffer[writePos++]=str.charAt(cur--);
+            } else {
+                end = cur;
+                while(cur>=0&&str.charAt(cur)!=' ')
+                    cur--;
+                for(start=cur+1;start<=end;start++,writePos++){
+                    buffer[writePos]=str.charAt(start);
+                }
+            }
+        }
+        str = String.valueOf(buffer);
+        return  str;
+    }
 }
