@@ -168,4 +168,49 @@ public class CharacterProcessor {
         str = String.valueOf(buffer);
         return  str;
     }
+    
+    public static int parseInt(String str){
+        int n=0;
+        for(int i=0;i<str.length();i++){
+            int d = str.charAt(i)-'0';
+            if(d>0){
+                n*=10;
+                n+=d;
+            }
+        }
+        if(str.charAt(0)=='-'){
+            n=~(n-1);
+        }
+        return n;
+    }
+    public static final int MAX_DIGITS = 10;
+    public static String parseString(int n){
+        /* Buffer big enough for largest int and - sign */
+        char[] temp = new char[ MAX_DIGITS + 1 ];
+        boolean isNeg=false;
+        int i =0;
+        if(n<0){
+            n=~n+1;
+            isNeg=true;
+        }
+        
+        do{
+            char c = (char) (n%10 + '0');
+            temp[i]=c;
+            n=n/10;
+            i++;
+        }while(n>0);
+        //concanate the char to string
+        StringBuilder sb = new StringBuilder();
+        if(isNeg){
+            sb.append('-');
+        }
+        while( i > 0 ){
+            sb.append( temp[--i] );
+        }
+        return sb.toString();
+    }
+    public static void main(String[] args){
+        System.out.println(parseString(parseInt("-3244")));
+    }
 }
