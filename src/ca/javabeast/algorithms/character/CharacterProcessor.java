@@ -200,7 +200,7 @@ public class CharacterProcessor {
             n=n/10;
             i++;
         }while(n>0);
-        //concanate the char to string
+        //concatenate the char to string
         StringBuilder sb = new StringBuilder();
         if(isNeg){
             sb.append('-');
