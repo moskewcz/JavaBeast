@@ -16,6 +16,8 @@
 
 package ca.javabeast.algorithms.recursion;
 
+import java.util.Arrays;
+
 /**
  *
  * @author alpenliebe <alpseinstein@gmail.com>
@@ -67,5 +69,30 @@ public class Recursion {
         public BSException(String message) {
             super(message);
         }
+    }
+    
+    public static void permuteString(String str){
+        boolean[] arr = new boolean[str.length()];
+        StringBuilder sb = new StringBuilder();
+        doPermute(arr,str,sb);
+    }
+    
+    public static void doPermute(boolean[] arr,String str,StringBuilder sb){
+        if(sb.length()==arr.length){
+            System.out.println(sb.toString());
+            return;
+        }
+        for(int i = 0;i<arr.length;i++){
+            if(arr[i]) continue;
+            sb.append(str.charAt(i));
+            arr[i]=true;
+            doPermute(arr,str,sb);
+            arr[i]=false;
+            sb.setLength(sb.length()-1);
+        }
+    }
+    
+    public static void main(String[] args){
+        permuteString("abcd");
     }
 }
