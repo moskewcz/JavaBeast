@@ -110,12 +110,44 @@ public class Recursion {
         }
     }
 
-    public static void permuteTele(int[] arr) {
-        StringBuilder sb = new StringBuilder();
-        doPermute2(arr, sb, 0);
+    public static void permuteTele2(int[] arr) {
+        int len = arr.length;
+        char[] words = new char[len];
+        for (int i = 0; i < len; i++) {
+            if (arr[i] > 1 && arr[i] < 10) {
+                words[i] = getCharKey(arr[i], 1);
+            } else {
+                words[i] = (char) (arr[i] + '0');
+            }
+        }
+        while (true) {
+            System.out.println(new String(words));
+            for (int i = len - 1; i > -1; i--) {
+                if (i < 0) {
+                    return;
+                }
+                char a = getCharKey(arr[i], 1);
+                char b = getCharKey(arr[i], 2);
+                char c = getCharKey(arr[i], 3);
+                if (words[i] == c || words[i] == '0' || words[i] == '1') {
+                    words[i] = a;
+                } else if (words[i] == b) {
+                    words[i] = c;
+                    break;
+                } else {
+                    words[i] = b;
+                    break;
+                }
+            }
+        }
     }
 
-    public static void doPermute2(int[] arr, StringBuilder sb, int start) {
+    public static void permuteTele(int[] arr) {
+        StringBuilder sb = new StringBuilder();
+        doPermuteTele(arr, sb, 0);
+    }
+
+    public static void doPermuteTele(int[] arr, StringBuilder sb, int start) {
         if (start == arr.length) {
             System.out.println(sb.toString());
             return;
@@ -125,13 +157,13 @@ public class Recursion {
         if (n > 1 && n < 10) {
             for (int j = 1; j < 4; j++) {
                 sb.append(getCharKey(n, j));
-                doPermute2(arr, sb, start + 1);
+                doPermuteTele(arr, sb, start + 1);
                 sb.setLength(sb.length() - 1);
             }
 
         } else {
             sb.append(n);
-            doPermute2(arr, sb, start + 1);
+            doPermuteTele(arr, sb, start + 1);
             sb.setLength(sb.length() - 1);
         }
 
@@ -151,6 +183,6 @@ public class Recursion {
         permuteString("abcd");
         combineString("123");
         int[] a = {0, 0, 0, 1, 2, 0, 3};
-        permuteTele(a);
+        permuteTele2(a);
     }
 }
