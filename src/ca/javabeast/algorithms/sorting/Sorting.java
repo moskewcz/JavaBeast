@@ -27,6 +27,20 @@ public class Sorting {
     public static void main(String[] args) {
         // TODO code application logic here
     }
+    
+    public void selectionSort(int[] data) {
+        for(int start=0;start<data.length-1;start++){
+            insert(data, start, findMinimumIndex(data, start));
+        }
+    }
+    //stable sort
+    private void insert(int[] data, int start, int index) {
+        if(index>start){
+            int temp=data[index];
+            System.arraycopy(data, start, data, start+1, index-start);
+            data[start]=temp;
+        }
+    }
 
     public void selectionSortRecursive(int[] data) {
         selectionSortRecursive(data, 0);
@@ -34,7 +48,7 @@ public class Sorting {
 
     // Sort a subset of the array starting at the given index.
     private void selectionSortRecursive(int[] data, int start) {
-        if (start > data.length - 1) {
+        if (start < data.length - 1) {
             swap(data, start, findMinimumIndex(data, start));
             selectionSortRecursive(data, start + 1);
         }
@@ -120,4 +134,5 @@ public class Sorting {
             data[k++]=temp[i++];
         }
     }
+
 }
