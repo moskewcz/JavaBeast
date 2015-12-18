@@ -69,4 +69,55 @@ public class Sorting {
             }
         }
     }
+    
+    public void quickSort(int[] data,int left,int right){
+        int range = right-left;
+        int i = left, j = right;
+        int pivot = data[left+range/2];
+        while (i <= j) {
+            while (data[i]<pivot){
+                i++;
+            }
+            while (data[j]<pivot){
+                j--;
+            }
+            if (i <= j) {
+                  swap(data,i,j);
+                  i++;
+                  j--;
+            }
+            
+        }
+        if (left < i - 1)
+            quickSort(data,left,i-1);
+        if (i < right)
+            quickSort(data,i,right);
+    } 
+   
+    public void mergeSort(int[] data,int left,int right){
+        int range = right-left;
+        if(range>0){
+            int mid = left+range/2;
+            mergeSort(data,left,mid);
+            mergeSort(data,mid,right);
+            mergePart(data,left,mid,right);
+        }
+    } 
+
+    private void mergePart(int[] data, int left, int mid, int right) {
+        int[] temp = new int[right+1];
+        System.arraycopy(data, left, temp, left, right-left+1);
+        int i=left,j=mid + 1,k=left;
+        while(i<=mid&&j<=right){
+            if(temp[i]<=temp[j]){
+                data[k]=temp[i++];
+            } else {
+                data[k]=temp[j++];
+            }
+            k++;
+        }
+        while(i<=mid){
+            data[k++]=temp[i++];
+        }
+    }
 }
