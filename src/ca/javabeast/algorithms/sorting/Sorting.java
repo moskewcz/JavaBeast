@@ -89,9 +89,8 @@ public class Sorting {
     }
 
     public void quickSort(int[] data, int left, int right) {
-        int range = right - left;
         int i = left, j = right;
-        int pivot = data[left + range / 2];
+        int pivot = data[ ( left + right ) / 2 ];
         while (i <= j) {
             while (data[i] < pivot) {
                 i++;
@@ -157,6 +156,25 @@ public class Sorting {
 
         Arrays.sort( employees, cp );
     }
+    
+    public void sortEmployeesStable(Employee[] data){
+        for(int i=0;i<data.length;i++ ){
+            data[i].sequence=i;
+        }
+        shakySort( data, new Comparator<Employee>() {
+
+            @Override
+            public int compare(Employee o1, Employee o2) {
+                int ret = o1.surname.compareTo(o2.surname);
+                if(ret==0)
+                    ret = o1.givenname.compareTo(o2.givenname);
+                if(ret==0)
+                    ret = o1.sequence-o2.sequence;
+                return ret;
+            }
+        } );
+    }
+    
     public void sort(Employee[] data) {
         Comparator<Employee> cp = new Comparator<Employee>() {
             @Override
@@ -174,14 +192,13 @@ public class Sorting {
     }
 
     private void quickSort(Employee[] data, Comparator cp, int left, int right) {
-        int range = right - left;
         int i = left, j = right;
-        Employee pivot = data[left + range / 2];
+        Employee pivot = data[ ( left + right ) / 2 ];
         while (true) {
-            while (cp.compare(data[i], pivot) == 1) {
+            while (cp.compare(data[i], pivot) >0) {
                 i++;
             }
-            while (cp.compare(data[j], pivot) == -1) {
+            while (cp.compare(data[j], pivot) <0) {
                 j--;
             }
             if (i > j) {
@@ -209,11 +226,16 @@ public class Sorting {
         }
     }
 
+    private void shakySort(Employee[] data, Comparator<Employee> comparator) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     private static class Employee {
 
         public String extension;
         public String givenname;
         public String surname;
+        public int sequence;
 
         public Employee() {
         }
