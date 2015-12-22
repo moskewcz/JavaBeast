@@ -151,7 +151,10 @@ class InnerClass {
     }  
 } 
 
-interface CanFight {void fight();}  
+interface CanFight {
+    int i=0;
+    void fight();
+}  
 interface CanFly {void fly();}  
 interface CanSwim {void swim();}  
 class ActionCharacter {public void fight(){}}  

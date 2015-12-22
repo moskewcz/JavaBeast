@@ -30,38 +30,40 @@ import java.util.Vector;
  * @author Alpenliebe <alpseinstein@gmail.com>
  */
 public class B09_CreationalPattern {
-    
-    public static void main(String[] args) {  
-        SendFactory sf = new SendFactory();  
+
+    public static void main(String[] args) {
+        SendFactory sf = new SendFactory();
         Sender sender1 = sf.produce("sms");
         Sender sender2 = SendFactory.produceMail();
         Sender sender3 = new SendMailFactory().produce();
-        sender1.Send(); 
-        sender2.Send();  
+        sender1.Send();
+        sender2.Send();
         sender3.Send();
         Builder builder = new Builder();
         builder.produceMailSender(10);
-    } 
-    
+    }
+
 }
 
 interface Sender {
-	public void Send();
+
+    public void Send();
 }
 
 class MailSender implements Sender {
-	@Override
-	public void Send() {
-		System.out.println("this is mailsender!");
-	}
+
+    @Override
+    public void Send() {
+        System.out.println("this is mailsender!");
+    }
 }
 
 class SmsSender implements Sender {
 
-	@Override
-	public void Send() {
-		System.out.println("this is sms sender!");
-	}
+    @Override
+    public void Send() {
+        System.out.println("this is sms sender!");
+    }
 }
 
 //Factory
@@ -69,16 +71,16 @@ class SendFactory {
 
     //Factory Method
     public Sender produce(String type) {
-            if ("mail".equals(type)) {
-                    return new MailSender();
-            } else if ("sms".equals(type)) {
-                    return new SmsSender();
-            } else {
-                    System.out.println("please input correct type");
-                    return null;
-            }
+        if ("mail".equals(type)) {
+            return new MailSender();
+        } else if ("sms".equals(type)) {
+            return new SmsSender();
+        } else {
+            System.out.println("please input correct type");
+            return null;
+        }
     }
-    
+
 //    public Sender produceMail(){  
 //        return new MailSender();  
 //    }  
@@ -86,125 +88,168 @@ class SendFactory {
 //    public Sender produceSms(){  
 //        return new SmsSender();  
 //    } 
-    
     //Static Factory Method
-    public static Sender produceMail(){  
-        return new MailSender();  
-    }  
-      
-    public static Sender produceSms(){  
-        return new SmsSender();  
-    } 
+    public static Sender produceMail() {
+        return new MailSender();
+    }
+
+    public static Sender produceSms() {
+        return new SmsSender();
+    }
 }
 
 //Abstract Factory
-interface Provider {  
-    public Sender produce();  
-} 
+interface Provider {
 
-class SendMailFactory implements Provider {
-	
-	@Override
-	public Sender produce(){
-		return new MailSender();
-	}
+    public Sender produce();
 }
 
-class SendSmsFactory implements Provider{
+class SendMailFactory implements Provider {
 
-	@Override
-	public Sender produce() {
-		return new SmsSender();
-	}
+    @Override
+    public Sender produce() {
+        return new MailSender();
+    }
+}
+
+class SendSmsFactory implements Provider {
+
+    @Override
+    public Sender produce() {
+        return new SmsSender();
+    }
 }
 
 //Singleton
-class Singleton{
-    
+class Singleton {
+
     private static Singleton instance = null;
-    
-    private Singleton(){
-        
+
+    private Singleton() {
+
     }
-    
+
     //inner class singleton
-    private static class SingletonFactory {  
-        private static Singleton instance = new Singleton();  
-    } 
-    
-    public static Singleton getInstance(){
+    private static class SingletonFactory {
+
+        private static Singleton instance = new Singleton();
+    }
+
+    public static Singleton getInstance() {
         return SingletonFactory.instance;
     }
-    
-    public Object readResolve(){
+
+    public Object readResolve() {
         return getInstance();
     }
-    
+
     //synchronized singleton
-    private static synchronized void syncInit() {  
-        if (instance == null) {  
-            instance = new Singleton();  
-        }  
-    }  
-  
-    public static Singleton getInstance2() {  
-        if (instance == null) {  
-            syncInit();  
-        }  
-        return instance;  
+    private static synchronized void syncInit() {
+        if (instance == null) {
+            instance = new Singleton();
+        }
     }
-    
-    private Vector properties = null;  
-  
-    public Vector getProperties() {  
-        return properties;  
+
+    public static Singleton getInstance2() {
+        if (instance == null) {
+            syncInit();
+        }
+        return instance;
     }
-    
-    public void updateProperties() {  
-        Singleton shadow = new Singleton();  
-        properties = shadow.getProperties();  
+
+    private Vector properties = null;
+
+    public Vector getProperties() {
+        return properties;
+    }
+
+    public void updateProperties() {
+        Singleton shadow = new Singleton();
+        properties = shadow.getProperties();
     }
 }
 
 //Builder
-class Builder{
+class Builder {
+
     private List<Sender> list = new ArrayList<Sender>();
-    
-    public void produceMailSender(int count){
-        for(int i=0;i<count;i++){
+
+    public void produceMailSender(int count) {
+        for (int i = 0; i < count; i++) {
             list.add(new MailSender());
         }
     }
-    
-    public void produceSmsSender(int count){
-        for(int i=0;i<count;i++){
+
+    public void produceSmsSender(int count) {
+        for (int i = 0; i < count; i++) {
             list.add(new SmsSender());
         }
     }
 }
 
+class Window {
+
+    public Window(boolean visible, boolean modal, boolean dialog) {
+        this.visible = visible;
+        this.modal = modal;
+        this.dialog = dialog;
+    }
+    private boolean visible;
+    private boolean modal;
+    private boolean dialog;
+// rest of class omitted
+}
+
+class WindowBuilder {
+
+    public WindowBuilder() {
+    }
+
+    public WindowBuilder setDialog(boolean flag) {
+        dialog = flag;
+        return this;
+    }
+
+    public WindowBuilder setModal(boolean flag) {
+        modal = flag;
+        return this;
+    }
+
+    public WindowBuilder setVisible(boolean flag) {
+        visible = flag;
+        return this;
+    }
+
+    public Window build() {
+        return new Window(visible, modal, dialog);
+    }
+    private boolean dialog;
+    private boolean modal;
+    private boolean visible;
+}
+
 //Prototype
-class Prototype implements Cloneable,Serializable{
+class Prototype implements Cloneable, Serializable {
+
     private static final long serialVersionUID = 1L;
     private String str;
     private SerializableObject obj;
-    
-    
-    public Object clone()throws CloneNotSupportedException{
+
+    public Object clone() throws CloneNotSupportedException {
         Prototype proto = (Prototype) super.clone();
         return proto;
     }
 
-    public Object deepClone() throws IOException, ClassNotFoundException{
+    public Object deepClone() throws IOException, ClassNotFoundException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);
         oos.writeObject(this);
-        
+
         ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
         ObjectInputStream ois = new ObjectInputStream(bis);
         return ois.readObject();
     }
-    
+
     public String getStr() {
         return str;
     }
@@ -220,12 +265,11 @@ class Prototype implements Cloneable,Serializable{
     public void setObj(SerializableObject obj) {
         this.obj = obj;
     }
-    
-    
+
 }
 
-class SerializableObject implements Serializable{
+class SerializableObject implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
-}
 
+}
