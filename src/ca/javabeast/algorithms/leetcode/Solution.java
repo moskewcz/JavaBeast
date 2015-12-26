@@ -103,4 +103,8 @@ class LeetCode {
     public static void print(Object... args) {
         System.out.println(ezFormat(args));
     }
+    
+    public int bulbSwitch(int n) {
+        return (int)Math.sqrt(n);
+    }
 }
