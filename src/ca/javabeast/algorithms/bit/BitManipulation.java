@@ -28,6 +28,17 @@ public class BitManipulation {
         // TODO code application logic here
     }
 
+    /* Returns true if the machine is little-endian, false if the
+     * machine is big-endian
+
+     boolean isLittleEndian(){
+     union {
+     int theInteger;
+     char singleByte;
+     } endianTest;
+     endianTest.theInteger = 1;
+     return endianTest.singleByte;
+     }*/
     int numOnesInBinary(int number) {
         int numOnes = 0;
         while (number != 0) {
@@ -42,19 +53,19 @@ public class BitManipulation {
     int numOnesInBinary2(int number) {
         int numOnes = 0;
         while (number != 0) {
-            number = number & (number-1);
+            number = number & (number - 1);
             numOnes++;
         }
         return numOnes;
     }
-    
+
     int numOnesInBinary3(int number) {
         int numOnes = 0;
         while (number != 0) {
-            if(number<0){
+            if (number < 0) {
                 numOnes++;
             }
-            number=number<<1;
+            number = number << 1;
         }
         return numOnes;
     }
