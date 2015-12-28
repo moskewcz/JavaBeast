@@ -38,7 +38,21 @@ public class BitManipulation {
      } endianTest;
      endianTest.theInteger = 1;
      return endianTest.singleByte;
+    
+    
      }*/
+    /* Returns true if the machine is little-endian, false if the
+     * machine is big-endian
+
+     bool isLittleEndian(){
+     int
+     testNum;
+     char *ptr;
+     testNum = 1;
+     ptr = (char *) &testNum;
+     return (*ptr);   //Returns the byte at the lowest address  
+     }
+     */
     int numOnesInBinary(int number) {
         int numOnes = 0;
         while (number != 0) {
