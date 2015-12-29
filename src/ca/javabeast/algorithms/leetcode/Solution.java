@@ -27,6 +27,7 @@ public class Solution {
     public static void main(String[] args) {
         LeetCode lc = new LeetCode();
         LeetCode.print(lc.longestValidParentheses("()(()"));
+        LeetCode.print(lc.bulbSwitch(100));
     }
 
 }
@@ -103,8 +104,8 @@ class LeetCode {
     public static void print(Object... args) {
         System.out.println(ezFormat(args));
     }
-    
+
     public int bulbSwitch(int n) {
-        return (int)Math.sqrt(n);
+        return (int) Math.sqrt(n);
     }
 }
