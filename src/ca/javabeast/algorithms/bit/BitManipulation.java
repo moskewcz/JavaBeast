@@ -26,8 +26,8 @@ public class BitManipulation {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-    }
 
+    }
     /* Returns true if the machine is little-endian, false if the
      * machine is big-endian
 
@@ -53,6 +53,7 @@ public class BitManipulation {
      return (*ptr);   //Returns the byte at the lowest address  
      }
      */
+
     int numOnesInBinary(int number) {
         int numOnes = 0;
         while (number != 0) {
