@@ -16,6 +16,8 @@
 package ca.javabeast.algorithms.leetcode;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 /**
@@ -149,25 +151,50 @@ class LeetCode {
         }
         return res;
     }
-    
+
     public int romanToInt2(String str) {
-    int[] a = new int[26];
-    a['I' - 'A'] = 1;
-    a['V' - 'A'] = 5;
-    a['X' - 'A'] = 10;
-    a['L' - 'A'] = 50;
-    a['C' - 'A'] = 100;
-    a['D' - 'A'] = 500;
-    a['M' - 'A'] = 1000;
-    char prev = 'A';
-    int sum = 0;
-    for(char s : str.toCharArray()) {
-        if(a[s - 'A'] > a[prev - 'A']) {
-            sum = sum - 2 * a[prev - 'A'];
+        int[] a = new int[26];
+        a['I' - 'A'] = 1;
+        a['V' - 'A'] = 5;
+        a['X' - 'A'] = 10;
+        a['L' - 'A'] = 50;
+        a['C' - 'A'] = 100;
+        a['D' - 'A'] = 500;
+        a['M' - 'A'] = 1000;
+        char prev = 'A';
+        int sum = 0;
+        for (char s : str.toCharArray()) {
+            if (a[s - 'A'] > a[prev - 'A']) {
+                sum = sum - 2 * a[prev - 'A'];
+            }
+            sum = sum + a[s - 'A'];
+            prev = s;
         }
-        sum = sum + a[s - 'A'];
-        prev = s;
+        return sum;
     }
-    return sum;
-}
+
+    //60. Permutation Sequence
+    public String getPermutation(int n, int k) {
+        List<Integer> numbers = new LinkedList<>();
+        int[] factorial = new int[n + 1];
+        StringBuilder sb = new StringBuilder();
+
+        // create an array of factorial lookup
+        factorial[0] = 1;
+        for (int i = 1, sum = 1; i <= n; i++) {
+            sum *= i;
+            factorial[i] = sum;
+            numbers.add(i);
+        }
+
+        k--;
+        for (int i = 1; i <= n; i++) {
+            int index = k / factorial[n - i];
+            sb.append(numbers.get(index));
+            numbers.remove(index);
+            k = k % factorial[n - i];
+        }
+
+        return sb.toString();
+    }
 }
