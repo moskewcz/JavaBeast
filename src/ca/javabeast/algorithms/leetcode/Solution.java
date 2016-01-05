@@ -229,6 +229,7 @@ class LeetCode {
         return res;
     }
 
+    //43 Multiply Strings
     public String multiply(String num1, String num2) {
 
         int len1 = num1.length(), len2 = num2.length();
@@ -253,5 +254,31 @@ class LeetCode {
         }
 
         return sb.length() == 0 ? "0" : sb.toString();
+    }
+    
+    //67. Add Binary
+    public String addBinary(String a, String b) {
+        if(a.length()<b.length()){
+            String temp = a;
+            a = b;
+            b = temp;
+        }
+        
+        int len1 = a.length(),
+            len2 = b.length(),
+            c = 0,
+            sum = 0;
+        char[] arr = a.toCharArray();
+        for(int i = 0; i<len2 || (c!=0 && i < len1); i++){
+            if(i<len2)
+                sum = (a.charAt(len1-i-1)- '0') + (b.charAt(len2-i-1) - '0') +c;
+            else
+                sum = (a.charAt(len1-i-1)- '0') + c;
+            arr[len1-i-1] = (char)(sum%2 + '0');
+            c = sum/2;
+        }
+ 
+        String s = new String(arr);
+        return c > 0 ? "1"+s : s;
     }
 }
