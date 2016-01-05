@@ -197,4 +197,61 @@ class LeetCode {
 
         return sb.toString();
     }
+
+    public String add(String num1, String num2) {
+        if (num1.length() < num2.length()) {
+            String temp = num1;
+            num1 = num2;
+            num2 = temp;
+        }
+        int len1 = num1.length();
+        int len2 = num2.length();
+        char[] arr1 = num1.toCharArray();
+        char[] arr2 = num2.toCharArray();
+        boolean flag = false;
+        for (int i = 0, i1 = 0, i2 = 0, temp = 0; i < len1; i++) {
+            i1 = arr1[len1 - i - 1] - '0';
+            i2 = i < len2 ? arr2[len2 - i - 1] - '0' : 0;
+            temp = i1 + i2 + (flag ? 1 : 0);
+            if (temp >= 10) {
+                flag = true;
+                temp -= 10;
+            } else {
+                flag = false;
+            }
+            //System.out.println(i2);
+            arr1[len1 - i - 1] = (char) (temp + '0');
+        }
+        String res = new String(arr1);
+        if (flag) {
+            res = 1 + res;
+        }
+        return res;
+    }
+
+    public String multiply(String num1, String num2) {
+
+        int len1 = num1.length(), len2 = num2.length();
+        int p1 = 0, p2 = 0;
+        int m = 0;
+        int[] arr = new int[len1 + len2];
+        for (int i = len1 - 1; i >= 0; i--) {
+            for (int j = len2 - 1; j >= 0; j--) {
+                m = (num1.charAt(i) - '0') * (num2.charAt(j) - '0');
+                p1 = i + j;
+                p2 = i + j + 1;
+                arr[p2] += m;
+                arr[p1] += arr[p2] / 10;
+                arr[p2] = arr[p2] % 10;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int p : arr) {
+            if (!(sb.length() == 0 && p == 0)) {
+                sb.append(p);
+            }
+        }
+
+        return sb.length() == 0 ? "0" : sb.toString();
+    }
 }
