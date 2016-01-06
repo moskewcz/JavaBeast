@@ -15,6 +15,8 @@
  */
 package ca.javabeast.algorithms.leetcode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,6 +38,7 @@ public class Solution {
 
 class LeetCode {
 
+    //32. Longest Valid Parentheses
     public int longestValidParentheses(String s) {
         Stack<Integer> stack = new Stack<>();
         int left = 0;
@@ -63,8 +66,9 @@ class LeetCode {
         return max;
     }
 
+    //3. Longest Substring Without Repeating Characters
     public int lengthOfLongestSubstring(String s) {
-        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        HashMap<Character, Integer> map = new HashMap<>();
         int max = 0;
         //record the start point
         for (int i = 0, j = 0; i < s.length(); i++) {
@@ -78,6 +82,7 @@ class LeetCode {
         return max;
     }
 
+    //48. Rotate Image
     public void Rotate2DMatrix(int[][] matrix) {
         int n = matrix.length;
         int[] temp = new int[4];
@@ -106,11 +111,25 @@ class LeetCode {
     public static void print(Object... args) {
         System.out.println(ezFormat(args));
     }
+    
+    //237. Delete Node in a Linked List
+    public void deleteNode(ListNode node) {
+        ListNode cur=node.next;
+        while(cur.next !=null){
+            node.val = cur.val;
+            node=cur;
+            cur=cur.next;
+        }
+        node.val = cur.val;
+        node.next=null;
+    }
 
+    //319. Bulb Switcher
     public int bulbSwitch(int n) {
         return (int) Math.sqrt(n);
     }
 
+    //12. Integer to Roman
     public String intToRoman(int num) {
         String M[] = {"", "M", "MM", "MMM"};
         String C[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
@@ -119,6 +138,7 @@ class LeetCode {
         return M[num / 1000] + C[(num % 1000) / 100] + X[(num % 100) / 10] + I[num % 10];
     }
 
+    //13. Roman to Integer
     public static int romanToInt(String s) {
         int res = 0;
         for (int i = s.length() - 1; i >= 0; i--) {
@@ -151,7 +171,6 @@ class LeetCode {
         }
         return res;
     }
-
     public int romanToInt2(String str) {
         int[] a = new int[26];
         a['I' - 'A'] = 1;
@@ -284,16 +303,6 @@ class LeetCode {
     }
 
     //2. Add Two Numbers
-    class ListNode {
-
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-        }
-    }
-
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         if (l1 == null) {
             return l2;
@@ -324,5 +333,85 @@ class LeetCode {
         }
 
         return head.next;
+    }
+    class ListNode {
+
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
+    }
+    
+    //66. Plus One
+    public int[] plusOne(int[] digits) {
+         int c = 0, sum = 0, len = digits.length;
+         sum = digits[len-1] + 1;
+         c = sum/10;
+         digits[len-1] = sum%10;
+         
+         for(int i = len - 2; c!=0&&i>=0; i--){
+             sum = digits[i] + c;
+             c = sum/10;
+             digits[i] = sum%10;
+         }
+         
+         int [] res =digits;
+         if( c > 0) {
+             res = new int[len+1];
+             res[0] = c;
+             for(int i = 0; i < len; i++){
+                 res[i+1] = digits[i];
+             }
+         }
+         
+         return res;
+    }
+    
+    
+    //39. Combination Sum
+    public List<List<Integer>> combinationSum(int[] cand, int target) {
+        Arrays.sort(cand);
+        List<List<Integer>> res = new LinkedList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs_com(cand, 0, target, path, res);
+        return res;
+    }
+    void dfs_com(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+        if (target > 0) {
+            for (int i = cur; i < cand.length; i++){
+                if (i > cur && cand[i] == cand[i-1]) continue;
+                if(target-cand[i]<0) break;
+                path.add(cand[i]);
+                dfs_com(cand, i, target - cand[i], path, res);
+                path.remove(path.size()-1);
+            }
+        } else if(target == 0){
+            res.add(new ArrayList(path));
+        }
+    }
+    
+    //40. Combination Sum II
+    public List<List<Integer>> combinationSum2(int[] cand, int target) {
+        Arrays.sort(cand);
+        List<List<Integer>> res = new LinkedList<>();
+        List<Integer> path = new ArrayList<>();
+        dfs_com2(cand, 0, target, path, res);
+        return res;
+    }
+    void dfs_com2(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+        if (target == 0) {
+            res.add(new ArrayList(path));
+            return ;
+        }
+        if (target < 0) return;
+        for (int i = cur; i < cand.length; i++){
+            if (i > cur && cand[i] == cand[i-1]) continue;
+            if(target-cand[i]<0) break;
+            path.add(cand[i]);
+            dfs_com(cand, i+1, target - cand[i], path, res);
+            path.remove(path.size()-1);
+        }
     }
 }
