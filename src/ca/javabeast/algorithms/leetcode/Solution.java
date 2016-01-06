@@ -255,30 +255,74 @@ class LeetCode {
 
         return sb.length() == 0 ? "0" : sb.toString();
     }
-    
+
     //67. Add Binary
     public String addBinary(String a, String b) {
-        if(a.length()<b.length()){
+        if (a.length() < b.length()) {
             String temp = a;
             a = b;
             b = temp;
         }
-        
+
         int len1 = a.length(),
-            len2 = b.length(),
-            c = 0,
-            sum = 0;
+                len2 = b.length(),
+                c = 0,
+                sum = 0;
         char[] arr = a.toCharArray();
-        for(int i = 0; i<len2 || (c!=0 && i < len1); i++){
-            if(i<len2)
-                sum = (a.charAt(len1-i-1)- '0') + (b.charAt(len2-i-1) - '0') +c;
-            else
-                sum = (a.charAt(len1-i-1)- '0') + c;
-            arr[len1-i-1] = (char)(sum%2 + '0');
-            c = sum/2;
+        for (int i = 0; i < len2 || (c != 0 && i < len1); i++) {
+            if (i < len2) {
+                sum = (a.charAt(len1 - i - 1) - '0') + (b.charAt(len2 - i - 1) - '0') + c;
+            } else {
+                sum = (a.charAt(len1 - i - 1) - '0') + c;
+            }
+            arr[len1 - i - 1] = (char) (sum % 2 + '0');
+            c = sum / 2;
         }
- 
+
         String s = new String(arr);
-        return c > 0 ? "1"+s : s;
+        return c > 0 ? "1" + s : s;
+    }
+
+    //2. Add Two Numbers
+    class ListNode {
+
+        int val;
+        ListNode next;
+
+        ListNode(int x) {
+            val = x;
+        }
+    }
+
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        int carry = 0;
+        ListNode head = new ListNode(0);
+        ListNode cur = head;
+        int i1 = 0, i2 = 0;
+        //iterate over l1 and l2;
+        while (carry != 0 || (l1 != null && l2 != null)) {
+            i1 = l1 != null ? l1.val : 0;
+            i2 = l2 != null ? l2.val : 0;
+            cur.next = new ListNode((i1 + i2 + carry) % 10);
+            cur = cur.next;
+
+            carry = (i1 + i2 + carry) / 10;
+            l1 = l1 != null ? l1.next : null;
+            l2 = l2 != null ? l2.next : null;
+
+        }
+        if (l1 == null) {
+            cur.next = l2;
+        } else if (l2 == null) {
+            cur.next = l1;
+        }
+
+        return head.next;
     }
 }
