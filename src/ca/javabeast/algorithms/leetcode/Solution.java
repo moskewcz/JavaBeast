@@ -377,11 +377,11 @@ class LeetCode {
         Arrays.sort(cand);
         List<List<Integer>> res = new LinkedList<>();
         List<Integer> path = new ArrayList<>();
-        dfs_com(cand, 0, target, path, res);
+        bt_com(cand, 0, target, path, res);
         return res;
     }
 
-    void dfs_com(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+    void bt_com(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
         if (target > 0) {
             for (int i = cur; i < cand.length; i++) {
                 if (i > cur && cand[i] == cand[i - 1]) {
@@ -391,7 +391,7 @@ class LeetCode {
                     break;
                 }
                 path.add(cand[i]);
-                dfs_com(cand, i, target - cand[i], path, res);
+                bt_com(cand, i, target - cand[i], path, res);
                 path.remove(path.size() - 1);
             }
         } else if (target == 0) {
@@ -404,11 +404,11 @@ class LeetCode {
         Arrays.sort(cand);
         List<List<Integer>> res = new LinkedList<>();
         List<Integer> path = new ArrayList<>();
-        dfs_com2(cand, 0, target, path, res);
+        bt_com2(cand, 0, target, path, res);
         return res;
     }
 
-    void dfs_com2(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+    void bt_com2(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
         if (target == 0) {
             res.add(new ArrayList(path));
             return;
@@ -424,7 +424,7 @@ class LeetCode {
                 break;
             }
             path.add(cand[i]);
-            dfs_com(cand, i + 1, target - cand[i], path, res);
+            bt_com2(cand, i + 1, target - cand[i], path, res);
             path.remove(path.size() - 1);
         }
     }
@@ -433,43 +433,92 @@ class LeetCode {
     public List<List<Integer>> combine(int n, int k) {
         List<Integer> path = new ArrayList<>();
         List<List<Integer>> res = new LinkedList<>();
-        dfs_com(n, 1, k, path, res);
+        bt_com(n, 1, k, path, res);
         return res;
     }
 
-    void dfs_com(int n, int cur, int k, List<Integer> path, List<List<Integer>> res) {
+    void bt_com(int n, int cur, int k, List<Integer> path, List<List<Integer>> res) {
         if (k > 0) {
             for (int i = cur; i < n + 1; i++) {
                 path.add(i);
-                dfs_com(n, i + 1, k - 1, path, res);
+                bt_com(n, i + 1, k - 1, path, res);
                 path.remove(path.size() - 1);
             }
         } else if (k == 0) {
             res.add(new ArrayList(path));
         }
     }
-    /**
-     *
-    public List<List<Integer>> combine(int n, int k) {
-        if (n == 0 || k == 0 || k > n) {
-            return Collections.emptyList();
-        }
-        List<List<Integer>> res = new ArrayList<>();
-        for (int i = 1; i <= n + 1 - k; i++) {
-            res.add(Arrays.asList(i));
-        }
-        for (int i = 2; i <= k; i++) {
-            List<List<Integer>> tmp = new ArrayList<>();
-            for (List<Integer> list : res) {
-                for (int m = list.get(list.size() - 1) + 1; m <= n - (k - i); m++) {
-                    List<Integer> newList = new ArrayList<>(list);
-                    newList.add(m);
-                    tmp.add(newList);
-                }
+
+//    public List<List<Integer>> combine(int n, int k) {
+//        if (n == 0 || k == 0
+//                || k > n) {
+//            return Collections.emptyList();
+//        }
+//        List<List<Integer>> res
+//                = new ArrayList<>();
+//        for (int i = 1; i <= n + 1 - k; i++) {
+//            res.add(Arrays.asList(i));
+//        }
+//        for (int i = 2; i <= k; i++) {
+//            List<List<Integer>> tmp = new ArrayList<>();
+//            for (List<Integer> list
+//                    : res) {
+//                for (int m = list.get(list.size() - 1) + 1; m <= n - (k - i); m++) {
+//                    List<Integer> newList = new ArrayList<>(list);
+//                    newList.add(m);
+//                    tmp.add(newList);
+//                }
+//            }
+//            res = tmp;
+//        }
+//        return res;
+//    }
+
+    //46. Permutations
+    public List<List<Integer>> permute(int[] num) {
+        List<List<Integer>> result = new LinkedList<>();
+        doPermute(result, num, 0);
+        return result;
+    }
+
+    private void doPermute(List<List<Integer>> result, int[] array, int start) {
+        if (start >= array.length) {
+            List<Integer> current = new ArrayList<>();
+            for (int a : array) {
+                current.add(a);
             }
-            res = tmp;
+            result.add(current);
+        } else {
+            for (int i=start; i<array.length; i++) {
+                swap(array, start, i);
+                doPermute(result, array, start+1);
+                swap(array, start, i);
+            }
         }
-        return res;
-    }*/
+    }
     
+    private void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    
+//    public List<List<Integer>> permute(int[] nums) {
+//        List<Integer> path = new ArrayList<>();
+//        List<List<Integer>> res = new LinkedList<>();
+//        bt_per(nums, 0, path, res);
+//        return res;
+//    }
+//
+//    void bt_per(int[] nums, int cur, List<Integer> path, List<List<Integer>> res) {
+//        if (cur < nums.length) {
+//            for (int i = 0; i <= cur; i++) {
+//                path.add(i, nums[cur]);
+//                bt_per(nums, cur + 1, path, res);
+//                path.remove(i);
+//            }
+//        } else if (cur == nums.length) {
+//            res.add(new ArrayList(path));
+//        }
+//    }
 }
