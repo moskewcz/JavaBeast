@@ -17,6 +17,7 @@ package ca.javabeast.algorithms.leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -111,17 +112,17 @@ class LeetCode {
     public static void print(Object... args) {
         System.out.println(ezFormat(args));
     }
-    
+
     //237. Delete Node in a Linked List
     public void deleteNode(ListNode node) {
-        ListNode cur=node.next;
-        while(cur.next !=null){
+        ListNode cur = node.next;
+        while (cur.next != null) {
             node.val = cur.val;
-            node=cur;
-            cur=cur.next;
+            node = cur;
+            cur = cur.next;
         }
         node.val = cur.val;
-        node.next=null;
+        node.next = null;
     }
 
     //319. Bulb Switcher
@@ -171,6 +172,7 @@ class LeetCode {
         }
         return res;
     }
+
     public int romanToInt2(String str) {
         int[] a = new int[26];
         a['I' - 'A'] = 1;
@@ -334,6 +336,7 @@ class LeetCode {
 
         return head.next;
     }
+
     class ListNode {
 
         int val;
@@ -343,33 +346,32 @@ class LeetCode {
             val = x;
         }
     }
-    
+
     //66. Plus One
     public int[] plusOne(int[] digits) {
-         int c = 0, sum = 0, len = digits.length;
-         sum = digits[len-1] + 1;
-         c = sum/10;
-         digits[len-1] = sum%10;
-         
-         for(int i = len - 2; c!=0&&i>=0; i--){
-             sum = digits[i] + c;
-             c = sum/10;
-             digits[i] = sum%10;
-         }
-         
-         int [] res =digits;
-         if( c > 0) {
-             res = new int[len+1];
-             res[0] = c;
-             for(int i = 0; i < len; i++){
-                 res[i+1] = digits[i];
-             }
-         }
-         
-         return res;
+        int c = 0, sum = 0, len = digits.length;
+        sum = digits[len - 1] + 1;
+        c = sum / 10;
+        digits[len - 1] = sum % 10;
+
+        for (int i = len - 2; c != 0 && i >= 0; i--) {
+            sum = digits[i] + c;
+            c = sum / 10;
+            digits[i] = sum % 10;
+        }
+
+        int[] res = digits;
+        if (c > 0) {
+            res = new int[len + 1];
+            res[0] = c;
+            for (int i = 0; i < len; i++) {
+                res[i + 1] = digits[i];
+            }
+        }
+
+        return res;
     }
-    
-    
+
     //39. Combination Sum
     public List<List<Integer>> combinationSum(int[] cand, int target) {
         Arrays.sort(cand);
@@ -378,20 +380,25 @@ class LeetCode {
         dfs_com(cand, 0, target, path, res);
         return res;
     }
+
     void dfs_com(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
         if (target > 0) {
-            for (int i = cur; i < cand.length; i++){
-                if (i > cur && cand[i] == cand[i-1]) continue;
-                if(target-cand[i]<0) break;
+            for (int i = cur; i < cand.length; i++) {
+                if (i > cur && cand[i] == cand[i - 1]) {
+                    continue;
+                }
+                if (target - cand[i] < 0) {
+                    break;
+                }
                 path.add(cand[i]);
                 dfs_com(cand, i, target - cand[i], path, res);
-                path.remove(path.size()-1);
+                path.remove(path.size() - 1);
             }
-        } else if(target == 0){
+        } else if (target == 0) {
             res.add(new ArrayList(path));
         }
     }
-    
+
     //40. Combination Sum II
     public List<List<Integer>> combinationSum2(int[] cand, int target) {
         Arrays.sort(cand);
@@ -400,18 +407,69 @@ class LeetCode {
         dfs_com2(cand, 0, target, path, res);
         return res;
     }
+
     void dfs_com2(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
         if (target == 0) {
             res.add(new ArrayList(path));
-            return ;
+            return;
         }
-        if (target < 0) return;
-        for (int i = cur; i < cand.length; i++){
-            if (i > cur && cand[i] == cand[i-1]) continue;
-            if(target-cand[i]<0) break;
+        if (target < 0) {
+            return;
+        }
+        for (int i = cur; i < cand.length; i++) {
+            if (i > cur && cand[i] == cand[i - 1]) {
+                continue;
+            }
+            if (target - cand[i] < 0) {
+                break;
+            }
             path.add(cand[i]);
-            dfs_com(cand, i+1, target - cand[i], path, res);
-            path.remove(path.size()-1);
+            dfs_com(cand, i + 1, target - cand[i], path, res);
+            path.remove(path.size() - 1);
         }
     }
+
+    //77. Combinations
+    public List<List<Integer>> combine(int n, int k) {
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new LinkedList<>();
+        dfs_com(n, 1, k, path, res);
+        return res;
+    }
+
+    void dfs_com(int n, int cur, int k, List<Integer> path, List<List<Integer>> res) {
+        if (k > 0) {
+            for (int i = cur; i < n + 1; i++) {
+                path.add(i);
+                dfs_com(n, i + 1, k - 1, path, res);
+                path.remove(path.size() - 1);
+            }
+        } else if (k == 0) {
+            res.add(new ArrayList(path));
+        }
+    }
+    /**
+     *
+    public List<List<Integer>> combine(int n, int k) {
+        if (n == 0 || k == 0 || k > n) {
+            return Collections.emptyList();
+        }
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 1; i <= n + 1 - k; i++) {
+            res.add(Arrays.asList(i));
+        }
+        for (int i = 2; i <= k; i++) {
+            List<List<Integer>> tmp = new ArrayList<>();
+            for (List<Integer> list : res) {
+                for (int m = list.get(list.size() - 1) + 1; m <= n - (k - i); m++) {
+                    List<Integer> newList = new ArrayList<>(list);
+                    newList.add(m);
+                    tmp.add(newList);
+                }
+            }
+            res = tmp;
+        }
+        return res;
+    }*/
+    
 }
