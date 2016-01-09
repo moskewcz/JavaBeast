@@ -473,7 +473,6 @@ class LeetCode {
 //        }
 //        return res;
 //    }
-
     //46. Permutations
     public List<List<Integer>> permute(int[] num) {
         List<List<Integer>> result = new LinkedList<>();
@@ -489,20 +488,20 @@ class LeetCode {
             }
             result.add(current);
         } else {
-            for (int i=start; i<array.length; i++) {
+            for (int i = start; i < array.length; i++) {
                 swap(array, start, i);
-                doPermute(result, array, start+1);
+                doPermute(result, array, start + 1);
                 swap(array, start, i);
             }
         }
     }
-    
+
     private void swap(int[] array, int i, int j) {
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
     }
-    
+
 //    public List<List<Integer>> permute(int[] nums) {
 //        List<Integer> path = new ArrayList<>();
 //        List<List<Integer>> res = new LinkedList<>();
@@ -521,4 +520,69 @@ class LeetCode {
 //            res.add(new ArrayList(path));
 //        }
 //    }
+    
+    //31. Next Permutation
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        int index = n - 1;
+        if (n < 2) {
+            return;
+        }
+        while (index > 0) {
+            if (nums[index - 1] < nums[index]) {
+                if (index > 0) {
+                    for (int i = n - 1; i >= index; i--) {
+                        if (nums[i] > nums[index - 1]) {
+                            swap(nums, i, index - 1);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            index--;
+        }
+
+        reverse(nums, index, n - 1);
+    }
+    void reverse(int[] nums, int left, int right) {
+        while (left < right) {
+            swap(nums, left, right);
+            left++;
+            right--;
+        }
+    }
+    
+    //47. Permutations II
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return new ArrayList<List<Integer>>();
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        doPermuteUnique(nums, 0, result);
+        return result;
+    }
+    public boolean hasSameElement(int[] a, int begin, int i) {
+        for (int j = begin; j < i; j++) {
+            if (a[i] == a[j])
+                return true;
+        }
+        return false;
+    }
+    public void doPermuteUnique(int[] a, int begin, List<List<Integer>> result) {
+        int n = a.length;
+        if (begin == n) {
+            ArrayList<Integer> list = new ArrayList<Integer>();
+            for (int i = 0; i < n; i++)
+                list.add(a[i]);
+            result.add(list);
+        } else {
+            for (int i = begin; i < n; i++) {
+                if (i > begin && hasSameElement(a, begin, i)) continue;
+                swap(a,begin,i);
+                doPermuteUnique(a, begin + 1, result);
+                swap(a,begin,i);
+            }
+    
+        }
+    }
 }
