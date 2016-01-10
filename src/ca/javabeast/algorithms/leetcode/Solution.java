@@ -520,7 +520,6 @@ class LeetCode {
 //            res.add(new ArrayList(path));
 //        }
 //    }
-    
     //31. Next Permutation
     public void nextPermutation(int[] nums) {
         int n = nums.length;
@@ -545,6 +544,7 @@ class LeetCode {
 
         reverse(nums, index, n - 1);
     }
+
     void reverse(int[] nums, int left, int right) {
         while (left < right) {
             swap(nums, left, right);
@@ -552,37 +552,174 @@ class LeetCode {
             right--;
         }
     }
-    
+
     //47. Permutations II
     public List<List<Integer>> permuteUnique(int[] nums) {
-        if (nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0) {
             return new ArrayList<List<Integer>>();
+        }
         List<List<Integer>> result = new ArrayList<List<Integer>>();
         doPermuteUnique(nums, 0, result);
         return result;
     }
+
     public boolean hasSameElement(int[] a, int begin, int i) {
         for (int j = begin; j < i; j++) {
-            if (a[i] == a[j])
+            if (a[i] == a[j]) {
                 return true;
+            }
         }
         return false;
     }
+
     public void doPermuteUnique(int[] a, int begin, List<List<Integer>> result) {
         int n = a.length;
         if (begin == n) {
             ArrayList<Integer> list = new ArrayList<Integer>();
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n; i++) {
                 list.add(a[i]);
+            }
             result.add(list);
         } else {
             for (int i = begin; i < n; i++) {
-                if (i > begin && hasSameElement(a, begin, i)) continue;
-                swap(a,begin,i);
+                if (i > begin && hasSameElement(a, begin, i)) {
+                    continue;
+                }
+                swap(a, begin, i);
                 doPermuteUnique(a, begin + 1, result);
-                swap(a,begin,i);
+                swap(a, begin, i);
             }
-    
+
         }
+    }
+
+    //22. Generate Parentheses
+    public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        char[] perm = new char[n * 2];
+        perms(n, n, perm, 0, res);
+        return res;
+    }
+
+    private void perms(int open, int close, char[] perm, int i, List<String> res) {
+        if (i == perm.length) {
+            res.add(new String(perm));
+            return;
+        }
+        if (open > 0 && close >= open) {
+            perm[i] = '(';
+            perms(open - 1, close, perm, i + 1, res);
+        }
+        if (close > 0) {
+            perm[i] = ')';
+            perms(open, close - 1, perm, i + 1, res);
+        }
+    }
+
+    //273. Integer to English Words
+    public String numberToWords(int num) {
+        String[] units = new String[]{"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        String[] tens = new String[]{"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety", "Hundred"};
+        String[] digits = new String[]{"Billion", "Million", "Thousand", ""};
+        StringBuilder sb = new StringBuilder();
+        int f = 1000000000;
+        int i = 0, n = 0;
+        if (num == 0) {
+            sb.append(units[0]);
+        }
+        while (num > 0) {
+            n = num / f;
+            if (n > 0) {
+                numberToWordsHelper(sb, n, units, tens);
+                sb.append(digits[i]).append(" ");
+            }
+            num %= f;
+            f /= 1000;
+            i++;
+        }
+
+        return sb.toString().trim();
+    }
+
+    private void numberToWordsHelper(StringBuilder sb, int num, String[] units, String[] tens) {
+        if (num == 0) {
+
+        } else if (num < 20) {
+            sb.append(units[num]).append(" ");
+        } else if (num < 100) {
+            sb.append(tens[num / 10]).append(" ");
+            if (num % 10 > 0) {
+                sb.append(units[num % 10]).append(" ");
+            }
+        } else {
+            sb.append(units[num / 100]).append(" Hundred ");
+            numberToWordsHelper(sb, num % 100, units, tens);
+        }
+    }
+//    public String numberToWords(int num) {
+//        String[] units = new String[]{"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+//        String[] tens = new String[]{"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety", "Hundred"};
+//        String[] digits = new String[]{"Billion", "Million", "Thousand", ""};
+//        StringBuilder sb = new StringBuilder();
+//        int f = 1000000000;
+//        int i = 0, n = 0;
+//        if (num == 0) {
+//            sb.append(units[0]);
+//        }
+//        while (num > 0) {
+//            n = num / f;
+//            int h = 100;
+//            if (n > 0) {
+//                if (n / h > 0) {
+//                    sb.append(units[n / h])
+//                            .append(" ")
+//                            .append(tens[tens.length - 1])
+//                            .append(" ");
+//                }
+//                n %= h;
+//                h /= 10;
+//                if (n / h == 1) {
+//                    sb.append(units[n])
+//                            .append(" ");
+//                } else {
+//                    if (n / h > 1) {
+//                        sb.append(tens[n / h])
+//                                .append(" ");
+//                    }
+//                    if (n % h > 0) {
+//                        sb.append(units[n % h])
+//                                .append(" ");
+//                    }
+//                }
+//                sb.append(digits[i])
+//                        .append(" ");
+//            }
+//            num %= f;
+//            f /= 1000;
+//            i++;
+//        }
+//        return sb.toString().trim();
+//    }
+
+    //6. ZigZag Conversion
+    public String ZigZagConvert(String text, int nRow) {
+        if (nRow < 2) {
+            return text;
+        }
+        int g = (2 * nRow - 2);
+        StringBuilder sb = new StringBuilder(text.length());
+        for (int k = 0; k < nRow; k++) {
+            for (int i = k; i < text.length();) {
+                sb.append(text.charAt(i));
+                if (k == 0 || k == nRow - 1) {
+                    i += g;
+                } else if (i % g > nRow - 1) {
+                    i += 2 * k;
+                } else {
+                    i += (g - 2 * k);
+                }
+            }
+        }
+        return sb.toString();
     }
 }
