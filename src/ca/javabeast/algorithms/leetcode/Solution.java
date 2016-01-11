@@ -728,31 +728,31 @@ class LeetCode {
         }
         return sb.toString();
     }
-    
+
     //71. Simplify Path
     public String simplifyPath(String path) {
         Deque<String> stack = new ArrayDeque<>();
         StringBuilder sb = new StringBuilder(path.length());
-        StringBuilder forder = new StringBuilder(path.length());
-        
-        for(int i=0; i <= path.length(); i++){
-            if(i==path.length() || path.charAt(i)=='/'){
-                String f = forder.toString();
-                if("..".equals(f)){
-                    if(stack.size()>0)
+        StringBuilder forders = new StringBuilder(path.length());
+        String folder = "";
+        for (int i = 0; i <= path.length(); i++) {
+            if (i == path.length() || path.charAt(i) == '/') {
+                if ("..".equals(folder)) {
+                    if (stack.size() > 0) {
                         stack.pop();
-                } else if(!".".equals(f) && !"".equals(f)){
-                    stack.push(f);
+                    }
+                } else if (!".".equals(folder) && !"".equals(folder)) {
+                    stack.push(folder);
                 }
-                forder = new StringBuilder(path.length());
+                folder = "";
             } else {
-                forder.append(path.charAt(i));
+                folder += path.charAt(i);
             }
         }
-        
-        while(stack.size()>0){
+
+        while (stack.size() > 0) {
             sb.append('/')
-                .append(stack.poll());
+                    .append(stack.pollLast());
         }
         return sb.length() > 0 ? sb.toString() : "/";
     }
