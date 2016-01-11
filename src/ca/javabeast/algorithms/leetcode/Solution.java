@@ -36,9 +36,7 @@ public class Solution {
         LeetCode.print(lc.bulbSwitch(100));
 
         //String s = "boo:and:foo";
-
         //System.out.println(Arrays.asList(s.split("o")));
-        
         System.out.println(lc.reverseWords(" "));
     }
 
@@ -342,6 +340,16 @@ class LeetCode {
         }
 
         return head.next;
+    }
+
+    private class RandomListNode {
+
+        int label;
+        RandomListNode next, random;
+
+        public RandomListNode(int x) {
+            label = x;
+        }
     }
 
     class ListNode {
@@ -774,11 +782,11 @@ class LeetCode {
                     words[k++] = words[j++];
                 }
                 //System.out.println(k);
-                reverse(words, k - (j - i), k-1);
+                reverse(words, k - (j - i), k - 1);
                 i = j;
             }
         }
-        return new String(words,0,k).trim();
+        return new String(words, 0, k).trim();
     }
 
     void reverse(char[] array, int left, int right) {
@@ -789,5 +797,45 @@ class LeetCode {
             left++;
             right--;
         }
+    }
+
+    
+    //138. Copy List with Random Pointer
+    public RandomListNode copyRandomList(RandomListNode head) {
+        RandomListNode cur = head, next, copy;
+
+        //insert copy into every cur's next;
+        while (cur != null) {
+            next = cur.next;
+            copy = new RandomListNode(cur.label);
+            copy.next = next;
+            cur.next = copy;
+            cur = next;
+        }
+
+        //assign random code point for copy
+        cur = head;
+        while (cur != null) {
+            copy = cur.next;
+            if (cur.random != null) {
+                copy.random = cur.random.next;
+            }
+            cur = copy.next;
+        }
+
+        //link copy into a list
+        cur = head;
+        if (head != null) {
+            head = head.next;
+        }
+        while (cur != null) {
+            copy = cur.next;
+            cur.next = copy.next;
+            if (copy.next != null) {
+                copy.next = cur.next.next;
+            }
+            cur = cur.next;
+        }
+        return head;
     }
 }
