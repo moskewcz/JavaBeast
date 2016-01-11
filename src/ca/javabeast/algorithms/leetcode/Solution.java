@@ -15,9 +15,11 @@
  */
 package ca.javabeast.algorithms.leetcode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +35,10 @@ public class Solution {
         LeetCode lc = new LeetCode();
         LeetCode.print(lc.longestValidParentheses("()(()"));
         LeetCode.print(lc.bulbSwitch(100));
+
+        String s = "boo:and:foo";
+
+        System.out.println(Arrays.asList(s.split("o")));
     }
 
 }
@@ -721,5 +727,33 @@ class LeetCode {
             }
         }
         return sb.toString();
+    }
+    
+    //71. Simplify Path
+    public String simplifyPath(String path) {
+        Deque<String> stack = new ArrayDeque<>();
+        StringBuilder sb = new StringBuilder(path.length());
+        StringBuilder forder = new StringBuilder(path.length());
+        
+        for(int i=0; i <= path.length(); i++){
+            if(i==path.length() || path.charAt(i)=='/'){
+                String f = forder.toString();
+                if("..".equals(f)){
+                    if(stack.size()>0)
+                        stack.pop();
+                } else if(!".".equals(f) && !"".equals(f)){
+                    stack.push(f);
+                }
+                forder = new StringBuilder(path.length());
+            } else {
+                forder.append(path.charAt(i));
+            }
+        }
+        
+        while(stack.size()>0){
+            sb.append('/')
+                .append(stack.poll());
+        }
+        return sb.length() > 0 ? sb.toString() : "/";
     }
 }
