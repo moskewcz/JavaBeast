@@ -18,7 +18,6 @@ package ca.javabeast.algorithms.leetcode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,9 +35,11 @@ public class Solution {
         LeetCode.print(lc.longestValidParentheses("()(()"));
         LeetCode.print(lc.bulbSwitch(100));
 
-        String s = "boo:and:foo";
+        //String s = "boo:and:foo";
 
-        System.out.println(Arrays.asList(s.split("o")));
+        //System.out.println(Arrays.asList(s.split("o")));
+        
+        System.out.println(lc.reverseWords(" "));
     }
 
 }
@@ -755,5 +756,38 @@ class LeetCode {
                     .append(stack.pollLast());
         }
         return sb.length() > 0 ? sb.toString() : "/";
+    }
+
+    //151. Reverse Words in a String
+    public String reverseWords(String s) {
+        char[] words = s.toCharArray();
+        reverse(words, 0, words.length - 1);
+        //System.out.println(new String(words));
+        int k = 0;
+        for (int i = 0, j = 0; i < words.length; i++) {
+            if (words[i] != ' ') {
+                if (k != 0) {
+                    words[k++] = ' ';
+                }
+                j = i;
+                while (j < words.length && words[j] != ' ') {
+                    words[k++] = words[j++];
+                }
+                //System.out.println(k);
+                reverse(words, k - (j - i), k-1);
+                i = j;
+            }
+        }
+        return new String(words,0,k).trim();
+    }
+
+    void reverse(char[] array, int left, int right) {
+        while (left < right) {
+            char c = array[left];
+            array[left] = array[right];
+            array[right] = c;
+            left++;
+            right--;
+        }
     }
 }
