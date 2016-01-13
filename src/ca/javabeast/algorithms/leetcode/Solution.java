@@ -799,7 +799,6 @@ class LeetCode {
         }
     }
 
-    
     //138. Copy List with Random Pointer
     public RandomListNode copyRandomList(RandomListNode head) {
         RandomListNode cur = head, next, copy;
@@ -837,5 +836,53 @@ class LeetCode {
             cur = cur.next;
         }
         return head;
+    }
+
+    //209. Minimum Size Subarray Sum
+    public int minSubArrayLen(int s, int[] nums) {
+        int start = 0, end = 0, sum = 0, minLen = Integer.MAX_VALUE;
+        while (end < nums.length) {
+            while (end < nums.length && sum < s) {
+                sum += nums[end++];
+            }
+            if (sum < s) {
+                break;
+            }
+            while (start < end && sum >= s) {
+                sum -= nums[start++];
+            }
+            if (end - start + 1 < minLen) {
+                minLen = end - start + 1;
+            }
+        }
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
+    }
+    public int minSubArrayLen2(int s, int[] nums) {
+        int[] sums = new int[nums.length + 1];
+        for (int i = 1; i < nums.length + 1; i++) {
+            sums[i] = sums[i - 1] + nums[i - 1];
+        }
+        int min = sums.length + 1;
+        for (int i = 0; i < sums.length; i++) {
+            int end = binarySearch(sums, sums[i] + s, i + 1, sums.length - 1);
+            if (end == sums.length) {
+                break;
+            }
+            if (end - i < min) {
+                min = end - i;
+            }
+        }
+        return min == sums.length + 1 ? 0 : min;
+    }
+    int binarySearch(int[] sums, int v, int left, int right) {
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (sums[mid] >= v) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
     }
 }
