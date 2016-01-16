@@ -935,24 +935,5 @@ class LeetCode {
         }
         return min == s.length() + 1 ? "" : s.substring(i, j);
     }
-    
-    //LCS : Longest common sequence/longest common substring
-        //Space Time (only length of lcs): min(m,n)
-    //KMP : String matching/powerString
-        //next time:o(M)
-        //comparison Time : o(N)/o(2-1/M)*n
-        //overall Time : next + comparison
-    //DP : Longest Increasing sequence/Traveling salesman problem/1,2,5,7 coins constitute n/matrix and parenthesis
-        //f(new state) = max{ f(old state) + payoff(decision)}
-        //Time:o(states*decisions)
-        //Soace :o(states)
-    //Greedy Algorithm : 1,2,5 coins constitute n/Activity selection problem(sort end time)/knapsack problem(sort Price-performance ratio)
-        //Opt(x) = opt(y) + max{payoff(y,x)};
-        //MST(Minimal Spanning Tree)
-            //Prim
-            //Krusal
-        //Dijkstra
-        //Huffman
-    //BFS(Breadth First Search): 
-        //key words:minimal/shortest/edge weight one
+
 }
