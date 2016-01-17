@@ -20,8 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -936,4 +938,61 @@ class LeetCode {
         return min == s.length() + 1 ? "" : s.substring(i, j);
     }
 
+    
+    //127. Word Ladder
+    public int ladderLength(String start, String end, Set<String> dict) {
+        Set<String> set1 = new HashSet<>();
+        Set<String> set2 = new HashSet<>();
+
+        set1.add(start);
+        set2.add(end);
+
+        return ladderLengthHelper(dict, set1, set2, 1);
+    }
+
+    int ladderLengthHelper(Set<String> dict, Set<String> set1, Set<String> set2, int level) {
+        if (set1.isEmpty()) {
+            return 0;
+        }
+
+        if (set1.size() > set2.size()) {
+            return ladderLengthHelper(dict, set2, set1, level);
+        }
+
+        // remove words from both ends
+        for (String word : set1) {
+            dict.remove(word);
+        };
+        for (String word : set2) {
+            dict.remove(word);
+        };
+
+        // the set for next level
+        Set<String> set = new HashSet<>();
+
+        // for each string in the current level
+        for (String str : set1) {
+            for (int i = 0; i < str.length(); i++) {
+                char[] chars = str.toCharArray();
+
+                // change letter at every position
+                for (char ch = 'a'; ch <= 'z'; ch++) {
+                    chars[i] = ch;
+                    String word = new String(chars);
+
+                    // found the word in other end(set)
+                    if (set2.contains(word)) {
+                        return level + 1;
+                    }
+
+                    // if not, add to the next level
+                    if (dict.contains(word)) {
+                        set.add(word);
+                    }
+                }
+            }
+        }
+
+        return ladderLengthHelper(dict, set2, set, level + 1);
+    }
 }
