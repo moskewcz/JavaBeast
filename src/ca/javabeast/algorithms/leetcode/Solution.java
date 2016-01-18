@@ -1062,7 +1062,7 @@ class LeetCode {
             this.y=y;
         }
     }
-    public int getStepsBFS(char[][] matrix,Point s,Point e){
+    public int getMatrixStepsBFS(char[][] matrix,Point s,Point e){
         int rows = matrix.length;
         int cols = matrix[0].length;
         int[][] steps = new int[rows][cols];
