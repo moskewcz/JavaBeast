@@ -995,4 +995,59 @@ class LeetCode {
 
         return ladderLengthHelper(dict, set2, set, level + 1);
     }
+    
+    
+    
+    //G questions 1: for all i in  i .. n sum(i/3+i/5)
+    public int sumDividend(int n){
+        int i  = n/3, j = n/5, k = n/15;
+        return 3*i*(i+1)/2+5*j*(j+1)/2+15*k*(k+1)/2;
+    }
+    
+    //G questions 2: how many combinations of String of n length with abc and in which the consistency of any letter is not over 3.
+    public int abcCombination(int n){
+        if (n<1)
+            return 0;
+        //initial dp
+        int [][] dp = new int[n][2];
+        dp[0][0] = 3;
+        dp[0][1] = 0;
+        for(int i = 0; i < n;i++){
+            dp[i][0] = dp[i-1][0]*2 + dp[i-1][1]*2;
+            dp[i][1] = dp[i-1][0];
+        }
+        
+        return dp[n-1][0]+dp[n-1][1];
+    }
+    
+    //G questions 3: how many zero exchanges would be made to sort a array with 0...n-1 misplaced
+    public int zeroExchange(int[] nums){
+        int res = 0;
+        boolean[] mark = new boolean[nums.length];
+        for(int i=0;i<nums.length;i++){
+            res  += give(nums[i],nums,mark);
+        }
+        return res;
+    }
+    int give(int x, int[] nums,boolean[] mark){
+        int r = 0 ; 
+        boolean have = false;
+        for(;!mark[x];r++){
+            if(x == 0)
+                have = true;
+            mark[x] = true;
+            x = nums[x];
+        }
+        return have?r-1:(r<=1?0:r+1);
+    }
+    
+    //G questions 4: how many opreations will occur when insert one element to the end to sort a array with 1...n per time?
+    public int insertLastCount(int[] nums){
+        int want = 1;
+        for(int i=0; i < nums.length;i++){
+            if(nums[i]==want)
+                want++;
+        }
+        return nums.length-want+1;
+    }
 }
