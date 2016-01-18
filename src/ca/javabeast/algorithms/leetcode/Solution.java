@@ -1050,4 +1050,49 @@ class LeetCode {
         }
         return nums.length-want+1;
     }
+    
+    //G questions 5: 
+    //Given  a 2 dimensional matrix where some of the elements are filled with 1 and rest of the elements
+    //are filled. Here X means you cannot traverse to that particular points. From a cell you can either traverse to left, right, up or down
+    //Given two points in the matrix find the shortest path between these points 
+    private class Point{
+        int x,y;
+        public Point(int x ,int y){
+            this.x=x;
+            this.y=y;
+        }
+    }
+    public int getStepsBFS(char[][] matrix,Point s,Point e){
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int[][] steps = new int[rows][cols];
+        boolean[][] visited = new boolean[rows][cols];
+        Deque<Point> q = new ArrayDeque<>();
+        q.add(s);
+        while(q.size()>0){
+            Point p = q.poll();
+            visited[p.x][p.y] = true;
+            if(p.x==e.x&&p.y==e.y)
+                break;
+            if(p.x+1>=0&&p.x+1<rows&&!visited[p.x+1][p.y]&&matrix[p.x+1][p.y]!='X'){
+                q.add(new Point(p.x+1,p.y));
+                steps[p.x+1][p.y] = steps[p.x][p.y]+1;
+            }
+            if(p.x-1>=0&&p.x-1<rows&&!visited[p.x-1][p.y]&&matrix[p.x-1][p.y]!='X'){
+                q.add(new Point(p.x-1,p.y));
+                steps[p.x-1][p.y] = steps[p.x][p.y]+1;
+            }
+            if(p.y+1>=0&&p.y+1<cols&&!visited[p.x][p.y+1]&&matrix[p.x][p.y+1]!='X'){
+                q.add(new Point(p.x,p.y+1));
+                steps[p.x][p.y+1] = steps[p.x][p.y]+1;
+            }
+            if(p.y-1>=0&&p.y-1<cols&&!visited[p.x][p.y-1]&&matrix[p.x][p.y-1]!='X'){
+                q.add(new Point(p.x,p.y-1));
+                steps[p.x][p.y-1] = steps[p.x][p.y]+1;
+            }
+                
+        }
+        
+        return steps[e.x][e.y];
+    }
 }
