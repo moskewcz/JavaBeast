@@ -938,7 +938,6 @@ class LeetCode {
         return min == s.length() + 1 ? "" : s.substring(i, j);
     }
 
-    
     //127. Word Ladder
     public int ladderLength(String start, String end, Set<String> dict) {
         Set<String> set1 = new HashSet<>();
@@ -995,104 +994,133 @@ class LeetCode {
 
         return ladderLengthHelper(dict, set2, set, level + 1);
     }
-    
-    
-    
+
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
-    public int sumDividend(int n){
-        int i  = n/3, j = n/5, k = n/15;
-        return 3*i*(i+1)/2+5*j*(j+1)/2+15*k*(k+1)/2;
+    public int sumDividend(int n) {
+        int i = n / 3, j = n / 5, k = n / 15;
+        return 3 * i * (i + 1) / 2 + 5 * j * (j + 1) / 2 + 15 * k * (k + 1) / 2;
     }
-    
+
     //G questions 2: how many combinations of String of n length with abc and in which the consistency of any letter is not over 3.
-    public int abcCombination(int n){
-        if (n<1)
+    public int abcCombination(int n) {
+        if (n < 1) {
             return 0;
+        }
         //initial dp
-        int [][] dp = new int[n][2];
+        int[][] dp = new int[n][2];
         dp[0][0] = 3;
         dp[0][1] = 0;
-        for(int i = 0; i < n;i++){
-            dp[i][0] = dp[i-1][0]*2 + dp[i-1][1]*2;
-            dp[i][1] = dp[i-1][0];
+        for (int i = 0; i < n; i++) {
+            dp[i][0] = dp[i - 1][0] * 2 + dp[i - 1][1] * 2;
+            dp[i][1] = dp[i - 1][0];
         }
-        
-        return dp[n-1][0]+dp[n-1][1];
+
+        return dp[n - 1][0] + dp[n - 1][1];
     }
-    
+
     //G questions 3: how many zero exchanges would be made to sort a array with 0...n-1 misplaced
-    public int zeroExchange(int[] nums){
+    public int zeroExchange(int[] nums) {
         int res = 0;
         boolean[] mark = new boolean[nums.length];
-        for(int i=0;i<nums.length;i++){
-            res  += give(nums[i],nums,mark);
+        for (int i = 0; i < nums.length; i++) {
+            res += give(nums[i], nums, mark);
         }
         return res;
     }
-    int give(int x, int[] nums,boolean[] mark){
-        int r = 0 ; 
+
+    int give(int x, int[] nums, boolean[] mark) {
+        int r = 0;
         boolean have = false;
-        for(;!mark[x];r++){
-            if(x == 0)
+        for (; !mark[x]; r++) {
+            if (x == 0) {
                 have = true;
+            }
             mark[x] = true;
             x = nums[x];
         }
-        return have?r-1:(r<=1?0:r+1);
+        return have ? r - 1 : (r <= 1 ? 0 : r + 1);
     }
-    
+
     //G questions 4: how many opreations will occur when insert one element to the end to sort a array with 1...n per time?
-    public int insertLastCount(int[] nums){
+    public int insertLastCount(int[] nums) {
         int want = 1;
-        for(int i=0; i < nums.length;i++){
-            if(nums[i]==want)
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == want) {
                 want++;
+            }
         }
-        return nums.length-want+1;
+        return nums.length - want + 1;
     }
-    
+
     //G questions 5: 
     //Given  a 2 dimensional matrix where some of the elements are filled with 1 and rest of the elements
     //are filled. Here X means you cannot traverse to that particular points. From a cell you can either traverse to left, right, up or down
     //Given two points in the matrix find the shortest path between these points 
-    private class Point{
-        int x,y;
-        public Point(int x ,int y){
-            this.x=x;
-            this.y=y;
+    private class Point {
+
+        int x, y;
+
+        public Point(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
     }
-    public int getMatrixStepsBFS(char[][] matrix,Point s,Point e){
+
+    public int getMatrixStepsBFS(char[][] matrix, Point s, Point e) {
         int rows = matrix.length;
         int cols = matrix[0].length;
         int[][] steps = new int[rows][cols];
         boolean[][] visited = new boolean[rows][cols];
         Deque<Point> q = new ArrayDeque<>();
         q.add(s);
-        while(q.size()>0){
+        while (q.size() > 0) {
             Point p = q.poll();
             visited[p.x][p.y] = true;
-            if(p.x==e.x&&p.y==e.y)
+            if (p.x == e.x && p.y == e.y) {
                 break;
-            if(p.x+1>=0&&p.x+1<rows&&!visited[p.x+1][p.y]&&matrix[p.x+1][p.y]!='X'){
-                q.add(new Point(p.x+1,p.y));
-                steps[p.x+1][p.y] = steps[p.x][p.y]+1;
             }
-            if(p.x-1>=0&&p.x-1<rows&&!visited[p.x-1][p.y]&&matrix[p.x-1][p.y]!='X'){
-                q.add(new Point(p.x-1,p.y));
-                steps[p.x-1][p.y] = steps[p.x][p.y]+1;
+            if (p.x + 1 >= 0 && p.x + 1 < rows && !visited[p.x + 1][p.y] && matrix[p.x + 1][p.y] != 'X') {
+                q.add(new Point(p.x + 1, p.y));
+                steps[p.x + 1][p.y] = steps[p.x][p.y] + 1;
             }
-            if(p.y+1>=0&&p.y+1<cols&&!visited[p.x][p.y+1]&&matrix[p.x][p.y+1]!='X'){
-                q.add(new Point(p.x,p.y+1));
-                steps[p.x][p.y+1] = steps[p.x][p.y]+1;
+            if (p.x - 1 >= 0 && p.x - 1 < rows && !visited[p.x - 1][p.y] && matrix[p.x - 1][p.y] != 'X') {
+                q.add(new Point(p.x - 1, p.y));
+                steps[p.x - 1][p.y] = steps[p.x][p.y] + 1;
             }
-            if(p.y-1>=0&&p.y-1<cols&&!visited[p.x][p.y-1]&&matrix[p.x][p.y-1]!='X'){
-                q.add(new Point(p.x,p.y-1));
-                steps[p.x][p.y-1] = steps[p.x][p.y]+1;
+            if (p.y + 1 >= 0 && p.y + 1 < cols && !visited[p.x][p.y + 1] && matrix[p.x][p.y + 1] != 'X') {
+                q.add(new Point(p.x, p.y + 1));
+                steps[p.x][p.y + 1] = steps[p.x][p.y] + 1;
             }
-                
+            if (p.y - 1 >= 0 && p.y - 1 < cols && !visited[p.x][p.y - 1] && matrix[p.x][p.y - 1] != 'X') {
+                q.add(new Point(p.x, p.y - 1));
+                steps[p.x][p.y - 1] = steps[p.x][p.y] + 1;
+            }
+
         }
-        
+
         return steps[e.x][e.y];
+    }
+
+    
+    
+    //64. Minimum Path Sum
+    public int minPathSum(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int[] dp = new int[cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (i == 0 && j == 0) {
+                    dp[j] = grid[i][j];
+                } else if (i == 0) {
+                    dp[j] = dp[j - 1] + grid[i][j];
+                } else if (j == 0) {
+                    dp[j] = dp[j] + grid[i][j];
+                } else {
+                    dp[j] = Math.min(dp[j], dp[j - 1]) + grid[i][j];
+                }
+            }
+        }
+        return dp[cols - 1];
     }
 }
