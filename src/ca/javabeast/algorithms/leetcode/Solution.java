@@ -1101,8 +1101,24 @@ class LeetCode {
         return steps[e.x][e.y];
     }
 
-    
-    
+    //DP Questions:53,64,72,85,91,97,120,131,132,139,140,152
+    //  1,equations
+    //  2,initial value
+    //  3,space optimal
+    //53. Maximum Subarray
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int res = dp[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            if (res < dp[i]) {
+                res = dp[i];
+            }
+        }
+        return res;
+    }
+
     //64. Minimum Path Sum
     public int minPathSum(int[][] grid) {
         int rows = grid.length;
@@ -1122,5 +1138,31 @@ class LeetCode {
             }
         }
         return dp[cols - 1];
+    }
+
+    //72. Edit Distance
+    public int minDistance0(String word1, String word2) {
+        int m = word1.length();
+        int n = word2.length();
+
+        int[][] cost = new int[m + 1][n + 1];
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0) {
+                    cost[i][j] = j;
+                } else if (j == 0) {
+                    cost[i][j] = i;
+                } else if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    cost[i][j] = cost[i - 1][j - 1];
+                } else {
+                    int a = cost[i - 1][j - 1];
+                    int b = cost[i - 1][j];
+                    int c = cost[i][j - 1];
+                    cost[i][j] = a < b ? (a < c ? a : c) : (b < c ? b : c);
+                    cost[i][j]++;
+                }
+            }
+        }
+        return cost[m][n];
     }
 }
