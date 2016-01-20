@@ -1165,4 +1165,65 @@ class LeetCode {
         }
         return cost[m][n];
     }
+
+    //Sorting Questions:74,4,75
+    //74. Search a 2D Matrix
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int m = matrix.length, n = matrix[0].length;
+        for (int i = 0, j = n - 1; i < m && j >= 0;) {
+            if (matrix[i][j] < target) {
+                i++;
+            } else if (matrix[i][j] > target) {
+                j--;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //4. Median of Two Sorted Arrays
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int m = nums1.length, n = nums2.length;
+        return (findK(nums1, nums2, 0, 0, (m + n + 1) / 2) + findK(nums1, nums2, 0, 0, (m + n + 2) / 2)) * 0.5;
+    }
+
+    double findK(int[] a, int[] b, int sa, int sb, int k) {
+        if (sa > a.length - 1) {
+            return b[sb + k - 1];
+        }
+        if (sb > b.length - 1) {
+            return a[sa + k - 1];
+        }
+        if (k == 1) {
+            return Math.min(a[sa], b[sb]);
+        }
+
+        int aMid = Integer.MAX_VALUE, bMid = Integer.MAX_VALUE;
+        if (sa + k / 2 - 1 < a.length) {
+            aMid = a[sa + k / 2 - 1];
+        }
+        if (sb + k / 2 - 1 < b.length) {
+            bMid = b[sb + k / 2 - 1];
+        }
+
+        if (aMid < bMid) {
+            return findK(a, b, sa + k / 2, sb, k - k / 2);
+        } else {
+            return findK(a, b, sa, sb + k / 2, k - k / 2);
+        }
+    }
+
+    //75. Sort Colors
+    public void sortColors(int[] nums) {
+        int n = nums.length;
+        for (int i = 0, j = n, k = 0; k < j; ++k) {
+            if (nums[k] < 1) {
+                swap(nums, i++, k);
+            } else if (nums[k] > 1) {
+                swap(nums, --j, k--);
+            }
+
+        }
+    }
 }
