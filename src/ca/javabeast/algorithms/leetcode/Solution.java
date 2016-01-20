@@ -610,29 +610,6 @@ class LeetCode {
         }
     }
 
-    //22. Generate Parentheses
-    public List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
-        char[] perm = new char[n * 2];
-        perms(n, n, perm, 0, res);
-        return res;
-    }
-
-    private void perms(int open, int close, char[] perm, int i, List<String> res) {
-        if (i == perm.length) {
-            res.add(new String(perm));
-            return;
-        }
-        if (open > 0 && close >= open) {
-            perm[i] = '(';
-            perms(open - 1, close, perm, i + 1, res);
-        }
-        if (close > 0) {
-            perm[i] = ')';
-            perms(open, close - 1, perm, i + 1, res);
-        }
-    }
-
     //273. Integer to English Words
     public String numberToWords(int num) {
         String[] units = new String[]{"Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
@@ -1225,5 +1202,54 @@ class LeetCode {
             }
 
         }
+    }
+
+    //Graphic Questions:
+    //22. Generate Parentheses
+        public List<String> generateParenthesis(int n) {
+        List<String> res = new ArrayList<>();
+        char[] perm = new char[n*2];
+        perms(n, n, perm, 0, res);
+        return res;
+    }
+    
+    private void perms(int open, int close, char[] perm, int i, List<String> res) {
+        if (i == perm.length) {
+            res.add(new String(perm));
+            return;
+        }
+        if (open > 0 && close >= open) {
+            perm[i] = '(';
+            perms(open - 1, close, perm, i+1, res);
+        }
+        if (close > 0) {
+            perm[i] = ')';
+            perms(open, close - 1, perm, i+1, res);
+        }
+    }
+    
+    //200. Number of Islands
+    public int numIslands(char[][] grid) {
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    traversalIslands(grid, i, j);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    void traversalIslands(char[][] a, int x, int y) {
+        if (x < 0 || x >= a.length || y < 0 || y >= a[0].length || a[x][y] != '1') {
+            return;
+        }
+        a[x][y] = '0';
+        traversalIslands(a, x - 1, y);
+        traversalIslands(a, x, y - 1);
+        traversalIslands(a, x + 1, y);
+        traversalIslands(a, x, y + 1);
     }
 }
