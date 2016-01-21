@@ -389,83 +389,6 @@ class LeetCode {
         return res;
     }
 
-    //39. Combination Sum
-    public List<List<Integer>> combinationSum(int[] cand, int target) {
-        Arrays.sort(cand);
-        List<List<Integer>> res = new LinkedList<>();
-        List<Integer> path = new ArrayList<>();
-        bt_com(cand, 0, target, path, res);
-        return res;
-    }
-
-    void bt_com(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
-        if (target > 0) {
-            for (int i = cur; i < cand.length; i++) {
-                if (i > cur && cand[i] == cand[i - 1]) {
-                    continue;
-                }
-                if (target - cand[i] < 0) {
-                    break;
-                }
-                path.add(cand[i]);
-                bt_com(cand, i, target - cand[i], path, res);
-                path.remove(path.size() - 1);
-            }
-        } else if (target == 0) {
-            res.add(new ArrayList(path));
-        }
-    }
-
-    //40. Combination Sum II
-    public List<List<Integer>> combinationSum2(int[] cand, int target) {
-        Arrays.sort(cand);
-        List<List<Integer>> res = new LinkedList<>();
-        List<Integer> path = new ArrayList<>();
-        bt_com2(cand, 0, target, path, res);
-        return res;
-    }
-
-    void bt_com2(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
-        if (target == 0) {
-            res.add(new ArrayList(path));
-            return;
-        }
-        if (target < 0) {
-            return;
-        }
-        for (int i = cur; i < cand.length; i++) {
-            if (i > cur && cand[i] == cand[i - 1]) {
-                continue;
-            }
-            if (target - cand[i] < 0) {
-                break;
-            }
-            path.add(cand[i]);
-            bt_com2(cand, i + 1, target - cand[i], path, res);
-            path.remove(path.size() - 1);
-        }
-    }
-
-    //77. Combinations
-    public List<List<Integer>> combine(int n, int k) {
-        List<Integer> path = new ArrayList<>();
-        List<List<Integer>> res = new LinkedList<>();
-        bt_com(n, 1, k, path, res);
-        return res;
-    }
-
-    void bt_com(int n, int cur, int k, List<Integer> path, List<List<Integer>> res) {
-        if (k > 0) {
-            for (int i = cur; i < n + 1; i++) {
-                path.add(i);
-                bt_com(n, i + 1, k - 1, path, res);
-                path.remove(path.size() - 1);
-            }
-        } else if (k == 0) {
-            res.add(new ArrayList(path));
-        }
-    }
-
 //    public List<List<Integer>> combine(int n, int k) {
 //        if (n == 0 || k == 0
 //                || k > n) {
@@ -1204,15 +1127,18 @@ class LeetCode {
         }
     }
 
-    //Graphic Questions:
+    
+    
+    
+    //Graphic Questions(BFS/DFS):77,78,90,51,52
     //22. Generate Parentheses
-        public List<String> generateParenthesis(int n) {
+    public List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
-        char[] perm = new char[n*2];
+        char[] perm = new char[n * 2];
         perms(n, n, perm, 0, res);
         return res;
     }
-    
+
     private void perms(int open, int close, char[] perm, int i, List<String> res) {
         if (i == perm.length) {
             res.add(new String(perm));
@@ -1220,14 +1146,14 @@ class LeetCode {
         }
         if (open > 0 && close >= open) {
             perm[i] = '(';
-            perms(open - 1, close, perm, i+1, res);
+            perms(open - 1, close, perm, i + 1, res);
         }
         if (close > 0) {
             perm[i] = ')';
-            perms(open, close - 1, perm, i+1, res);
+            perms(open, close - 1, perm, i + 1, res);
         }
     }
-    
+
     //200. Number of Islands
     public int numIslands(char[][] grid) {
         int res = 0;
@@ -1251,5 +1177,104 @@ class LeetCode {
         traversalIslands(a, x, y - 1);
         traversalIslands(a, x + 1, y);
         traversalIslands(a, x, y + 1);
+    }
+
+    //139. Word Break
+    public boolean wordBreak(String s, Set<String> wordDict) {
+        boolean[] visited = new boolean[s.length()];
+        return wordBreakDFS(wordDict, visited, s, 0);
+    }
+
+    boolean wordBreakDFS(Set<String> d, boolean[] v, String s, int cur) {
+        if (cur >= s.length()) {
+            return true;
+        }
+        if (v[cur]) {
+            return false;
+        }
+        v[cur] = true;
+        for (int i = cur + 1; i <= s.length(); i++) {
+            if (d.contains(s.substring(cur, i)) && wordBreakDFS(d, v, s, i)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    //39. Combination Sum
+    public List<List<Integer>> combinationSum(int[] cand, int target) {
+        Arrays.sort(cand);
+        List<List<Integer>> res = new LinkedList<>();
+        List<Integer> path = new ArrayList<>();
+        bt_com(cand, 0, target, path, res);
+        return res;
+    }
+
+    void bt_com(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+        if (target > 0) {
+            for (int i = cur; i < cand.length; i++) {
+                if (i > cur && cand[i] == cand[i - 1]) {
+                    continue;
+                }
+                if (target - cand[i] < 0) {
+                    break;
+                }
+                path.add(cand[i]);
+                bt_com(cand, i, target - cand[i], path, res);
+                path.remove(path.size() - 1);
+            }
+        } else if (target == 0) {
+            res.add(new ArrayList(path));
+        }
+    }
+
+    //40. Combination Sum II
+    public List<List<Integer>> combinationSum2(int[] cand, int target) {
+        Arrays.sort(cand);
+        List<List<Integer>> res = new LinkedList<>();
+        List<Integer> path = new ArrayList<>();
+        bt_com2(cand, 0, target, path, res);
+        return res;
+    }
+
+    void bt_com2(int[] cand, int cur, int target, List<Integer> path, List<List<Integer>> res) {
+        if (target == 0) {
+            res.add(new ArrayList(path));
+            return;
+        }
+        if (target < 0) {
+            return;
+        }
+        for (int i = cur; i < cand.length; i++) {
+            if (i > cur && cand[i] == cand[i - 1]) {
+                continue;
+            }
+            if (target - cand[i] < 0) {
+                break;
+            }
+            path.add(cand[i]);
+            bt_com2(cand, i + 1, target - cand[i], path, res);
+            path.remove(path.size() - 1);
+        }
+    }
+
+    //77. Combinations
+    public List<List<Integer>> combine(int n, int k) {
+        List<Integer> path = new ArrayList<>();
+        List<List<Integer>> res = new LinkedList<>();
+        bt_com(n, 1, k, path, res);
+        return res;
+    }
+
+    void bt_com(int n, int cur, int k, List<Integer> path, List<List<Integer>> res) {
+        if (k > 0) {
+            for (int i = cur; i < n + 1; i++) {
+                path.add(i);
+                bt_com(n, i + 1, k - 1, path, res);
+                path.remove(path.size() - 1);
+            }
+        } else if (k == 0) {
+            res.add(new ArrayList(path));
+        }
     }
 }
