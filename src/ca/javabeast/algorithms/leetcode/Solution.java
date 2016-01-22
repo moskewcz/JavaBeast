@@ -1275,8 +1275,9 @@ class LeetCode {
         }
     }
 
-    //Array Question:
+    //Array Questions:
     //315. Count of Smaller Numbers After Self
+    //Merge sort,Hashing,Binary Tree
     public List<Integer> countSmaller(int[] nums) {
         int n = nums.length;
         int[] count = new int[n];
@@ -1327,5 +1328,83 @@ class LeetCode {
             p[k++] = t[i++];
         }
 
+    }
+
+    //287. Find the Duplicate Number
+    //Bitwise,Floyd's loop detection
+    public int findDuplicate(int[] nums) {
+        int slow = 0, fast = 0;
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+        slow = 0;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
+    }
+//    public int findDuplicate(int[] nums) {
+//        int n = nums.length - 1;
+//        int t = 0;
+//        for (int i = 0; n >>> i != 0; i++) {
+//            int indeed = 0;
+//            for (int j = 0; j < n + 1; j++) {
+//                if ((nums[j] & (1 << i)) != 0) {
+//                    indeed++;
+//                }
+//            }
+//            int should = 0;
+//            for (int j = 1; j < n + 1; j++) {
+//                if ((j & (1 << i)) != 0) {
+//                    should++;
+//                }
+//            }
+//            if (indeed > should) {
+//                t |= (1 << i);
+//            }
+//        }
+//        return t;
+//    }
+
+    //312. Burst Balloons
+    //DP,https://leetcode.com/discuss/72216/share-some-analysis-and-explanations
+    public int maxCoins(int[] old_nums) {
+        int n = old_nums.length + 2;
+        if (n < 3) {
+            return 0;
+        }
+        int[] nums = new int[n];
+        nums[0] = nums[n - 1] = 1;
+        System.arraycopy(old_nums, 0, nums, 1, n - 2);
+        int[][] dp = new int[n][n];
+        for (int len = 3; len < n + 1; len++) {
+            for (int i = 0; i + len < n + 1; i++) {
+                int j = i + len - 1;
+                for (int k = i + 1; k < j; k++) {
+                    dp[i][j] = Math.max(dp[i][j], (dp[i][k] + dp[k][j] + nums[i] * nums[k] * nums[j]));
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+    
+    
+    //String Questions:
+    //3. Longest Substring Without Repeating Characters
+    public int lengthOfLongestSubstring1(String s) {
+        boolean[] visited = new boolean[Character.MAX_VALUE];
+        int max = 0;
+        for (int i = 0, j = 0; j < s.length();) {
+            if (!visited[s.charAt(j)]) {
+                visited[s.charAt(j++)] = true;
+                max = Math.max(max, j - i);
+            } else {
+                visited[s.charAt(i++)] = false;
+            }
+        }
+        return max;
     }
 }
