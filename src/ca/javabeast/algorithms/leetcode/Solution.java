@@ -1293,69 +1293,39 @@ class LeetCode {
         }
         return res;
     }
-    void mergeSort(int[] a, int[] p, int[] c, int l, int r) {
-        int range = r - l;
-        if (range > 0) {
-            int m = l + range / 2;
-            mergeSort(a, p, c, l, m);
-            mergeSort(a, p, c, m + 1, r);
-            //merge(a,p,c,l,m,r);
-            merge(a, p, c, l, r);
-        }
-    }
-    void merge(int[] nums, int[] indexes, int[] count, int start, int end) {
-        int mid = (start + end) / 2;
-        int left_index = start;
-        int right_index = mid + 1;
-        int rightcount = 0;
-        int[] new_indexes = new int[end - start + 1];
 
-        int sort_index = 0;
-        while (left_index <= mid && right_index <= end) {
-            if (nums[indexes[right_index]] < nums[indexes[left_index]]) {
-                new_indexes[sort_index] = indexes[right_index];
-                rightcount++;
-                right_index++;
+    void mergeSort(int[] a, int[] p, int[] c, int l, int r) {
+        if (l >= r) {
+            return;
+        }
+        int m = (l + r) / 2;
+        mergeSort(a, p, c, l, m);
+        mergeSort(a, p, c, m + 1, r);
+        merge(a, p, c, l, m, r);
+
+    }
+
+    void merge(int[] a, int[] p, int[] c, int l, int m, int r) {
+        int i = 0, k = l, j = m + 1 - l;
+        int[] t = new int[r - l + 1];
+        System.arraycopy(p, l, t, 0, r - l + 1);
+        while (i < m + 1 - l && j < r + 1 - l) {
+            if (a[t[i]] <= a[t[j]]) {
+                if (l + i < k) {
+                    c[t[i]] += (k - i - l);
+                }
+                p[k] = t[i++];
             } else {
-                new_indexes[sort_index] = indexes[left_index];
-                count[indexes[left_index]] += rightcount;
-                left_index++;
+                p[k] = t[j++];
             }
-            sort_index++;
+            k++;
         }
-        while (left_index <= mid) {
-            new_indexes[sort_index] = indexes[left_index];
-            count[indexes[left_index]] += rightcount;
-            left_index++;
-            sort_index++;
+        while (i < m + 1 - l) {
+            if (l + i < k) {
+                c[t[i]] += (k - i - l);
+            }
+            p[k++] = t[i++];
         }
-        while (right_index <= end) {
-            new_indexes[sort_index++] = indexes[right_index++];
-        }
-        for (int i = start; i <= end; i++) {
-            indexes[i] = new_indexes[i - start];
-        }
-    }//Time Limit Exceeded due to array coping;
-    //    void merge(int[] a, int[] p, int[] c, int l, int m, int r) {
-    //        int i = l, k = l, j = m + 1;
-    //        int[] t = new int[r + 1];
-    //        System.arraycopy(p, l, t, l, r - l + 1);
-    //        while (i < m + 1 && j < r + 1) {
-    //            if (a[t[i]] <= a[t[j]]) {
-    //                if (i < k) {
-    //                    c[t[i]] += (k - i);
-    //                }
-    //                p[k] = t[i++];
-    //            } else {
-    //                p[k] = t[j++];
-    //            }
-    //            k++;
-    //        }
-    //        while (i < m + 1) {
-    //            if (i < k) {
-    //                c[t[i]] += (k - i);
-    //            }
-    //            p[k++] = t[i++];
-    //        }
-    //    }
+
+    }
 }
