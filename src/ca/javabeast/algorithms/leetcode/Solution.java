@@ -1390,8 +1390,6 @@ class LeetCode {
         return dp[0][n - 1];
     }
 
-    
-    
     //String Questions:
     //3. Longest Substring Without Repeating Characters
     public int lengthOfLongestSubstring1(String s) {
@@ -1406,5 +1404,67 @@ class LeetCode {
             }
         }
         return max;
+    }
+
+    //316. Remove Duplicate Letters
+    public String removeDuplicateLetters(String s) {
+        int n = s.length();
+        int[] num = new int[256];
+        boolean[] in = new boolean[256];
+        for (int i = 0; i < n; i++) {
+            num[s.charAt(i)]++;
+        }
+
+        Deque<Character> stack = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            num[c]--;
+            if (!in[c]) {
+                while (stack.size() > 0 && stack.peek() > c && num[stack.peek()] > 0) {
+                    in[stack.pop()] = false;
+                }
+                stack.push(c);
+                in[c] = true;
+            }
+
+        }
+        char[] res = new char[stack.size()];
+        for (int i = 0; stack.size() > 0; i++) {
+            res[i] = stack.removeLast();
+        }
+        return new String(res);
+    }
+
+    //301. Remove Invalid Parentheses
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> res = new ArrayList<>();
+        remove(s, res, 0, 0, new char[]{'(', ')'});
+        return res;
+    }
+
+    void remove(String s, List<String> res, int l_i, int l_j, char[] p) {
+        int stack = 0;
+        for (int i = l_i; i < s.length(); i++) {
+            if (s.charAt(i) == p[0]) {
+                stack++;
+            } else if (s.charAt(i) == p[1]) {
+                stack--;
+            }
+            if (stack < 0) {
+                for (int j = l_j; j <= i; j++) {
+                    if (s.charAt(j) == p[1] && (j == l_j || s.charAt(j - 1) != p[1])) {
+                        remove(s.substring(0, j) + s.substring(j + 1, s.length()), res, i, j, p);
+                    }
+                }
+                return;
+            }
+        }
+        String reversed = new StringBuilder(s).reverse().toString();
+        if (p[0] == '(') {
+            remove(reversed, res, 0, 0, new char[]{')', '('});
+        } else {
+            res.add(reversed);
+        }
+
     }
 }
