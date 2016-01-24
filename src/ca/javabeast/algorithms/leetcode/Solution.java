@@ -1467,4 +1467,202 @@ class LeetCode {
         }
 
     }
+
+    //Graphic and Tree
+    //105. Construct Binary Tree from Preorder and Inorder Traversal
+    //Definition for a binary tree node
+    public class TreeNode {
+
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int x) {
+            val = x;
+        }
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return getRoot(preorder, inorder, 0, 0, preorder.length);
+    }
+
+    public TreeNode getRoot(int[] pre, int[] in, int lp, int li, int n) {
+        if (n < 1) {
+            return null;
+        }
+        TreeNode root = new TreeNode(pre[lp]);
+        int i = li;
+        for (; pre[lp] != in[i]; i++);
+        root.left = getRoot(pre, in, lp + 1, li, i - li);
+        root.right = getRoot(pre, in, lp + i - li + 1, i + 1, n - i - 1 + li);
+        return root;
+    }
+
+    //106. Construct Binary Tree from Inorder and Postorder Traversal
+    public TreeNode buildTree2(int[] inorder, int[] postorder) {
+        return getRoot(postorder, inorder, inorder.length - 1, 0, inorder.length);
+    }
+
+    public TreeNode getRoot2(int[] post, int[] in, int rp, int li, int n) {
+        if (n < 1) {
+            return null;
+        }
+        TreeNode root = new TreeNode(post[rp]);
+        int i = li;
+        for (; post[rp] != in[i]; i++);
+        root.left = getRoot(post, in, rp - (n - i + li), li, i - li);
+        root.right = getRoot(post, in, rp - 1, i + 1, n - (i - li + 1));
+        return root;
+    }
+
+    //124. Binary Tree Maximum Path Sum
+    public int maxPathSum(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int[] max = new int[]{Integer.MIN_VALUE};
+        maxPathSumHelper(root, max);
+        return max[0];
+    }
+
+    int maxPathSumHelper(TreeNode root, int[] max) {
+        if (root == null) {
+            return 0;
+        }
+        int left = maxPathSumHelper(root.left, max);
+        int right = maxPathSumHelper(root.right, max);
+        int res = Math.max(Math.max(left, right), 0) + root.val;
+        max[0] = Math.max(Math.max(max[0], res), left + right + root.val);
+        return res;
+    }
+
+    //111. Minimum Depth of Binary Tree
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        int min = 1;
+        if (left > 0 && right > 0) {
+            min += Math.min(left, right);
+        } else if (left > 0) {
+            min += left;
+        } else if (right > 0) {
+            min += right;
+        }
+        return min;
+    }
+
+    //110. Balanced Binary Tree
+    public boolean isBalanced(TreeNode root) {
+        boolean[] b = new boolean[1];
+        findDepth(root, b);
+        return !b[0];
+    }
+
+    int findDepth(TreeNode root, boolean[] b) {
+        if (root == null) {
+            return 0;
+        }
+        int left = findDepth(root.left, b);
+        int right = findDepth(root.right, b);
+        if (left > right + 1 || right > left + 1) {
+            b[0] = true;
+        }
+        return Math.max(left, right) + 1;
+    }
+
+    //104. Maximum Depth of Binary Tree
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+
+        return Math.max(left, right) + 1;
+    }
+
+    //100. Same Tree
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null) {
+            return q == null;
+        }
+        if (q == null) {
+            return false;
+        }
+        return q.val == p.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+    }
+
+    //98. Validate Binary Search Tree
+    public boolean isValidBST(TreeNode root) {
+        int[] last = new int[]{0};
+        boolean[] first = new boolean[]{true};
+        return helper(root, first, last);
+    }
+
+    public boolean helper(TreeNode root, boolean[] first, int[] last) {
+        if (root == null) {
+            return true;
+        }
+        if (!helper(root.left, first, last)) {
+            return false;
+        }
+
+        if (first[0]) {
+            first[0] = false;
+        } else if (last[0] >= root.val) {
+            return false;
+        }
+
+        last[0] = root.val;
+        return helper(root.right, first, last);
+    }
+
+    //114. Flatten Binary Tree to Linked List
+    public void flatten(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+        root.left = null;
+
+        flatten(left);
+        if (left != null) {
+            root.right = left;
+            while (left.right != null) {
+                left = left.right;
+            }
+            left.right = right;
+        }
+        flatten(right);
+    }
+
+    //109. Convert Sorted List to Binary Search Tree
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode cur = head;
+        int h = 1;
+        while (cur.next != null) {
+            cur = cur.next;
+            h++;
+        }
+        return helper(new ListNode[]{head}, h);
+    }
+
+    TreeNode helper(ListNode[] h, int n) {
+        if (n < 1) {
+            return null;
+        }
+        TreeNode left = helper(h, (n - 1) / 2);
+        TreeNode root = new TreeNode(h[0].val);
+        root.left = left;
+        h[0] = h[0].next;
+        root.right = helper(h, n / 2);
+        return root;
+    }
 }
