@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -1664,5 +1665,38 @@ class LeetCode {
         h[0] = h[0].next;
         root.right = helper(h, n / 2);
         return root;
+    }
+
+    //Definition for undirected graph.
+    class UndirectedGraphNode {
+
+        int label;
+        List<UndirectedGraphNode> neighbors;
+
+        UndirectedGraphNode(int x) {
+            label = x;
+            neighbors = new ArrayList<>();
+        }
+    }
+
+    //133. Clone Graph
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        Map<Integer, UndirectedGraphNode> map = new HashMap<>();
+        return cloneGraphHelper(node, map);
+    }
+
+    UndirectedGraphNode cloneGraphHelper(UndirectedGraphNode n, Map<Integer, UndirectedGraphNode> map) {
+        if (n == null) {
+            return null;
+        }
+        if (map.containsKey(n.label)) {
+            return map.get(n.label);
+        }
+        UndirectedGraphNode nc = new UndirectedGraphNode(n.label);
+        map.put(nc.label, nc);
+        for (int i = 0; i < n.neighbors.size(); i++) {
+            nc.neighbors.add(cloneGraphHelper(n.neighbors.get(i), map));
+        }
+        return nc;
     }
 }
