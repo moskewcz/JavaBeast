@@ -461,31 +461,6 @@ class LeetCode {
 //            res.add(new ArrayList(path));
 //        }
 //    }
-    //31. Next Permutation
-    public void nextPermutation(int[] nums) {
-        int n = nums.length;
-        int index = n - 1;
-        if (n < 2) {
-            return;
-        }
-        while (index > 0) {
-            if (nums[index - 1] < nums[index]) {
-                if (index > 0) {
-                    for (int i = n - 1; i >= index; i--) {
-                        if (nums[i] > nums[index - 1]) {
-                            swap(nums, i, index - 1);
-                            break;
-                        }
-                    }
-                }
-                break;
-            }
-            index--;
-        }
-
-        reverse(nums, index, n - 1);
-    }
-
     void reverse(int[] nums, int left, int right) {
         while (left < right) {
             swap(nums, left, right);
@@ -1698,5 +1673,74 @@ class LeetCode {
             nc.neighbors.add(cloneGraphHelper(n.neighbors.get(i), map));
         }
         return nc;
+    }
+
+    //O(N) Questions
+    //42. Trapping Rain Water
+    public int trap(int[] height) {
+        int n = height.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+        int res = 0;
+        for (int i = 0, max = 0; i < n; i++) {
+            left[i] = max;
+            max = Math.max(max, height[i]);
+        }
+        for (int i = n - 1, max = 0; i >= 0; i--) {
+            right[i] = max;
+            max = Math.max(max, height[i]);
+        }
+        for (int i = 0; i < n; i++) {
+            int min = Math.min(left[i], right[i]);
+            res += Math.max(min - height[i], 0);
+        }
+        return res;
+    }
+
+    //11. Container With Most Water
+    public int maxArea(int[] height) {
+        int best = 0, n = height.length;
+        if (n < 2) {
+            return 0;
+        }
+        for (int i = 0, j = n - 1; i < j;) {
+            int lmax = height[i], rmax = height[j];
+            best = Math.max(best, Math.min(height[i], height[j]) * (j - i));
+            if (height[i] < height[j]) {
+                while (i < n - 1 && height[i] <= lmax) {
+                    i++;
+                }
+            } else {
+                while (j > 0 && height[j] <= rmax) {
+                    j--;
+                }
+            }
+        }
+        return best;
+    }
+
+    //31. Next Permutation
+    public void nextPermutation(int[] nums) {
+        int n = nums.length;
+        int index = n - 1;
+        if (n < 2) {
+            return;
+        }
+        while (index > 0) {
+            if (nums[index - 1] < nums[index]) {
+                if (index > 0) {
+                    for (int i = n - 1; i >= index; i--) {
+                        if (nums[i] > nums[index - 1]) {
+                            swap(nums, i, index - 1);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            index--;
+        }
+
+        reverse(nums, index, n - 1);
     }
 }
