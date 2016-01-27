@@ -716,104 +716,6 @@ class LeetCode {
         return head;
     }
 
-    //209. Minimum Size Subarray Sum
-    public int minSubArrayLen(int s, int[] nums) {
-        int start = 0, end = 0, sum = 0, minLen = Integer.MAX_VALUE;
-        while (end < nums.length) {
-            while (end < nums.length && sum < s) {
-                sum += nums[end++];
-            }
-            if (sum < s) {
-                break;
-            }
-            while (start < end && sum >= s) {
-                sum -= nums[start++];
-            }
-            if (end - start + 1 < minLen) {
-                minLen = end - start + 1;
-            }
-        }
-        return minLen == Integer.MAX_VALUE ? 0 : minLen;
-    }
-
-    public int minSubArrayLen2(int s, int[] nums) {
-        int[] sums = new int[nums.length + 1];
-        for (int i = 1; i < nums.length + 1; i++) {
-            sums[i] = sums[i - 1] + nums[i - 1];
-        }
-        int min = sums.length + 1;
-        for (int i = 0; i < sums.length; i++) {
-            int end = binarySearch(sums, sums[i] + s, i + 1, sums.length - 1);
-            if (end == sums.length) {
-                break;
-            }
-            if (end - i < min) {
-                min = end - i;
-            }
-        }
-        return min == sums.length + 1 ? 0 : min;
-    }
-
-    int binarySearch(int[] sums, int v, int left, int right) {
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            if (sums[mid] >= v) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        }
-        return left;
-    }
-
-    //76. Minimum Window Substring
-    public String minWindow(String s, String t) {
-        if (t.length() <= 0 || s.length() < t.length()) {
-            return "";
-        }
-        int start = 0, end = 0, i = 0, j = 0, count = t.length(), min = s.length() + 1;
-        int[] table = new int[256];
-
-        for (int k = 0; k < count; k++) {
-            char c = t.charAt(k);
-            table[c]++;
-        }
-        for (int k = 0; k < 256; k++) {
-            if (table[k] < 1) {
-                table[k] = Integer.MIN_VALUE;
-            }
-        }
-        while (end < s.length()) {
-            while (end < s.length() && count > 0) {
-                char c = s.charAt(end++);
-                if (table[c] != Integer.MIN_VALUE) {
-                    if (table[c] > 0) {
-                        count--;
-                    }
-                    table[c]--;
-                }
-            }
-            if (count > 0) {
-                break;
-            }
-            while (start < s.length() && count <= 0) {
-                char c = s.charAt(start++);
-                if (table[c] != Integer.MIN_VALUE) {
-                    if (table[c] >= 0) {
-                        count++;
-                    }
-                    table[c]++;
-                }
-            }
-            if (end - start + 1 < min) {
-                min = end - start + 1;
-                i = start - 1;
-                j = end;
-            }
-        }
-        return min == s.length() + 1 ? "" : s.substring(i, j);
-    }
-
     //127. Word Ladder
     public int ladderLength(String start, String end, Set<String> dict) {
         Set<String> set1 = new HashSet<>();
@@ -1742,5 +1644,153 @@ class LeetCode {
         }
 
         reverse(nums, index, n - 1);
+    }
+
+    //115. Distinct Subsequences
+    public int numDistinct(String s, String t) {
+        int n = s.length(), m = t.length();
+        if (m < 1) {
+            return 0;
+        }
+        int[] count = new int[m];
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+            for (int j = Math.min(m - 1, i); j >= 0; j--) {
+                if (c == t.charAt(j)) {
+                    count[j] += (j < 1 ? 1 : count[j - 1]);
+                }
+            }
+        }
+
+        return count[m - 1];
+    }
+
+    //152. Maximum Product Subarray
+    public int maxProduct(int[] nums) {
+        int n = nums.length;
+        if (n < 1) {
+            return 0;
+        }
+
+        int max, dpmax, dpmin;
+        max = dpmax = dpmin = nums[0];
+        for (int i = 1; i < n; i++) {
+            int tempmax = Math.max(nums[i], Math.max(dpmax * nums[i], dpmin * nums[i]));
+            int tempmin = Math.min(nums[i], Math.min(dpmax * nums[i], dpmin * nums[i]));
+            dpmax = tempmax;
+            dpmin = tempmin;
+            max = Math.max(dpmax, max);
+        }
+
+        return max;
+    }
+
+    //209. Minimum Size Subarray Sum
+    public int minSubArrayLen(int s, int[] nums) {
+        int start = 0, end = 0, sum = 0, minLen = Integer.MAX_VALUE;
+        while (end < nums.length) {
+            while (end < nums.length && sum < s) {
+                sum += nums[end++];
+            }
+            if (sum < s) {
+                break;
+            }
+            while (start < end && sum >= s) {
+                sum -= nums[start++];
+            }
+            if (end - start + 1 < minLen) {
+                minLen = end - start + 1;
+            }
+        }
+        return minLen == Integer.MAX_VALUE ? 0 : minLen;
+    }
+
+    //76. Minimum Window Substring
+    public String minWindow(String s, String t) {
+        if (t.length() <= 0 || s.length() < t.length()) {
+            return "";
+        }
+        int start = 0, end = 0, i = 0, j = 0, count = t.length(), min = s.length() + 1;
+        int[] table = new int[256];
+
+        for (int k = 0; k < count; k++) {
+            char c = t.charAt(k);
+            table[c]++;
+        }
+        for (int k = 0; k < 256; k++) {
+            if (table[k] < 1) {
+                table[k] = Integer.MIN_VALUE;
+            }
+        }
+        while (end < s.length()) {
+            while (end < s.length() && count > 0) {
+                char c = s.charAt(end++);
+                if (table[c] != Integer.MIN_VALUE) {
+                    if (table[c] > 0) {
+                        count--;
+                    }
+                    table[c]--;
+                }
+            }
+            if (count > 0) {
+                break;
+            }
+            while (start < s.length() && count <= 0) {
+                char c = s.charAt(start++);
+                if (table[c] != Integer.MIN_VALUE) {
+                    if (table[c] >= 0) {
+                        count++;
+                    }
+                    table[c]++;
+                }
+            }
+            if (end - start + 1 < min) {
+                min = end - start + 1;
+                i = start - 1;
+                j = end;
+            }
+        }
+        return min == s.length() + 1 ? "" : s.substring(i, j);
+    }
+
+    //1. Two Sum
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int[] res = new int[2];
+
+        for (int i = 0; i < nums.length; i++) {
+            int r = target - nums[i];
+            if (map.containsKey(r)) {
+                res[1] = i + 1;
+                res[0] = map.get(r) + 1;
+                break;
+            } else {
+                map.put(nums[i], i);
+            }
+        }
+        return res;
+    }
+
+    //5. Longest Palindromic Substring
+    public String longestPalindrome(String s) {
+        int[] res = new int[2];
+        int n = s.length();
+        for (int i = 0; i < n - 1; i++) {
+            longestPalindromeHelper(s, i, i, res);
+            longestPalindromeHelper(s, i, i + 1, res);
+        }
+        return s.substring(res[0], res[1] + 1);
+    }
+
+    public void longestPalindromeHelper(String s, int l, int r, int[] res) {
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
+        }
+        if (r - l - 1 > res[1] - res[0] + 1) {
+            res[0] = l + 1;
+            res[1] = r - 1;
+        }
     }
 }
