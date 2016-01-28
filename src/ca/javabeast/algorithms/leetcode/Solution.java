@@ -1793,4 +1793,126 @@ class LeetCode {
             res[1] = r - 1;
         }
     }
+
+    //Array Questions:
+    //153. Find Minimum in Rotated Sorted Array
+    public int findMin(int[] nums) {
+        int n = nums.length;
+        int l = 0, r = n - 1;
+        while (l < r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] < nums[r]) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return nums[l];
+    }
+
+    //154. Find Minimum in Rotated Sorted Array II
+    public int findMinWithDup(int[] nums) {
+        int n = nums.length;
+        int l = 0, r = n - 1;
+        while (l < r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] < nums[r]) {
+                r = mid;
+            } else if (nums[mid] > nums[r]) {
+                l = mid + 1;
+            } else {
+                r--;
+            }
+        }
+        return nums[l];
+    }
+
+    //41. First Missing Positive
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n;) {
+            if (nums[i] == i + 1) {
+                i++;
+            } else if (nums[i] < i + 1 || nums[i] > n || nums[i] == nums[nums[i] - 1]) {
+                nums[i] = nums[--n];
+            } else {
+                swap(nums, i, nums[i] - 1);
+            }
+        }
+        return n + 1;
+    }
+
+    //164. Maximum Gap
+    public int maximumGap(int[] nums) {
+        int n = nums.length;
+        if (n < 2) {
+            return 0;
+        }
+        int max = nums[0], min = nums[0];
+        int[] bucketsMin = new int[n + 1];
+        int[] bucketsMax = new int[n + 1];
+        Arrays.fill(bucketsMin, Integer.MAX_VALUE);
+        Arrays.fill(bucketsMax, Integer.MIN_VALUE);
+
+        for (int i = 0; i < n; i++) {
+            min = Math.min(min, nums[i]);
+            max = Math.max(max, nums[i]);
+        }
+
+        //d=(max-min)/(n+1); k = (r-min)*(n+1)/(max-min)
+        int gap = (int) Math.ceil((double) (max - min) / (n + 1));
+        for (int i = 0; i < n; i++) {
+            int k = (nums[i] == max ? n : (nums[i] - min) / gap);
+            bucketsMin[k] = Math.min(bucketsMin[k], nums[i]);
+            bucketsMax[k] = Math.max(bucketsMax[k], nums[i]);
+        }
+
+        gap = 0;
+        for (int i = 1, pre = bucketsMax[0]; i < n + 1; i++) {
+            // empty bucket
+            if (bucketsMin[i] == Integer.MAX_VALUE && bucketsMax[i] == Integer.MIN_VALUE) {
+                continue;
+            }
+
+            gap = Math.max(gap, bucketsMin[i] - pre);
+            pre = bucketsMax[i];
+        }
+        return gap;
+    }
+
+    //136. Single Number
+    public int singleNumber(int[] nums) {
+        int n = 0;
+        for (int i = 0; i < nums.length; i++) {
+            n ^= nums[i];
+        }
+        return n;
+    }
+
+    //137. Single Number II
+    //https://leetcode.com/discuss/6632/challenge-me-thx
+    public int singleNumberWithThreeDup(int[] nums) {
+        int one = 0, two = 0;
+        for (int i = 0; i < nums.length; i++) {
+            one = (one ^ nums[i]) & ~two;
+            two = (two ^ nums[i]) & ~one;
+        }
+        return one;
+    }
+
+    //260. Single Number III
+    public int[] singleNumberWithTwoUnique(int[] nums) {
+        int xor = 0;
+        for (int n : nums) {
+            xor ^= n;
+        }
+        //get the Least significant bit
+        xor &= -xor;
+
+        int[] res = {0, 0};
+        for (int n : nums) {
+            res[(n & xor) == 0 ? 0 : 1] ^= n;
+        }
+        return res;
+    }
 }
