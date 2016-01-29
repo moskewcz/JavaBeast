@@ -1949,12 +1949,13 @@ class LeetCode {
         return result;
     }
 
+    //
     public int largestRectangleArea(int[] heights) {
         int n = heights.length;
-        Deque<Integer> s = new ArrayDeque<>();
+        Deque<Integer> s = new ArrayDeque<>(n);
         int max = 0;
         for (int i = 0; i < n; i++) {
-            while (s.size() > 0 || s.peek() >= heights[i]) {
+            while (s.size() > 0 && heights[s.peek()] >= heights[i]) {
                 int h = heights[s.pop()];
                 max = Math.max(max, (i - 1 - (s.size() == 0 ? -1 : s.peek())) * h);
             }
