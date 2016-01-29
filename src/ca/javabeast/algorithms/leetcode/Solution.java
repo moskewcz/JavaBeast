@@ -1949,21 +1949,24 @@ class LeetCode {
         return result;
     }
 
-    //
+    //84. Largest Rectangle in Histogram
     public int largestRectangleArea(int[] heights) {
         int n = heights.length;
-        Deque<Integer> s = new ArrayDeque<>(n);
-        int max = 0;
+        int[] s = new int[n + 1];
+        int max = 0, top = 0, size = 0;
         for (int i = 0; i < n; i++) {
-            while (s.size() > 0 && heights[s.peek()] >= heights[i]) {
-                int h = heights[s.pop()];
-                max = Math.max(max, (i - 1 - (s.size() == 0 ? -1 : s.peek())) * h);
+            while (size > 0 && heights[s[top]] >= heights[i]) {
+                int h = heights[s[top--]];
+                size--;
+                max = Math.max(max, (i - 1 - (size == 0 ? -1 : s[top])) * h);
             }
-            s.push(i);
+            s[++top] = i;
+            size++;
         }
-        while (s.size() > 0) {
-            int h = heights[s.pop()];
-            max = Math.max(max, (n - 1 - (s.size() == 0 ? -1 : s.peek())) * h);
+        while (size > 0) {
+            int h = heights[s[top--]];
+            size--;
+            max = Math.max(max, (n - 1 - (size == 0 ? -1 : s[top])) * h);
         }
         return max;
     }
