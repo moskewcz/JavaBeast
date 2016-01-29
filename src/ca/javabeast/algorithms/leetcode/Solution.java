@@ -1915,4 +1915,55 @@ class LeetCode {
         }
         return res;
     }
+
+    //Stack And Queue Questions:
+    //239. Sliding Window Maximum
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (k == 0) {
+            return new int[0];
+        }
+        if (k == 1) {
+            return nums;
+        }
+        int[] result = new int[nums.length - k + 1];
+        int max = -2147483648, j = 0;
+        for (int i = 0; i < k; i++) {
+            if (nums[i] > max) {
+                max = nums[i];
+            }
+        }
+        result[j++] = max;
+        for (int i = k; i < nums.length; i++) {
+            if (nums[i] >= max) {
+                max = nums[i];
+            } else if (max == nums[i - k]) {
+                max = -2147483648;
+                for (int m = i - k + 1; m <= i; m++) {
+                    if (nums[m] > max) {
+                        max = nums[m];
+                    }
+                }
+            }
+            result[j++] = max;
+        }
+        return result;
+    }
+
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        Deque<Integer> s = new ArrayDeque<>();
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            while (s.size() > 0 || s.peek() >= heights[i]) {
+                int h = heights[s.pop()];
+                max = Math.max(max, (i - 1 - (s.size() == 0 ? -1 : s.peek())) * h);
+            }
+            s.push(i);
+        }
+        while (s.size() > 0) {
+            int h = heights[s.pop()];
+            max = Math.max(max, (n - 1 - (s.size() == 0 ? -1 : s.peek())) * h);
+        }
+        return max;
+    }
 }
