@@ -677,45 +677,6 @@ class LeetCode {
         }
     }
 
-    //138. Copy List with Random Pointer
-    public RandomListNode copyRandomList(RandomListNode head) {
-        RandomListNode cur = head, next, copy;
-
-        //insert copy into every cur's next;
-        while (cur != null) {
-            next = cur.next;
-            copy = new RandomListNode(cur.label);
-            copy.next = next;
-            cur.next = copy;
-            cur = next;
-        }
-
-        //assign random code point for copy
-        cur = head;
-        while (cur != null) {
-            copy = cur.next;
-            if (cur.random != null) {
-                copy.random = cur.random.next;
-            }
-            cur = copy.next;
-        }
-
-        //link copy into a list
-        cur = head;
-        if (head != null) {
-            head = head.next;
-        }
-        while (cur != null) {
-            copy = cur.next;
-            cur.next = copy.next;
-            if (copy.next != null) {
-                copy.next = cur.next.next;
-            }
-            cur = cur.next;
-        }
-        return head;
-    }
-
     //127. Word Ladder
     public int ladderLength(String start, String end, Set<String> dict) {
         Set<String> set1 = new HashSet<>();
@@ -1969,5 +1930,190 @@ class LeetCode {
             max = Math.max(max, (n - 1 - (size == 0 ? -1 : s[top])) * h);
         }
         return max;
+    }
+
+    //LinkedList Questions:
+    //92. Reverse Linked List II
+    public ListNode reverseBetween(ListNode head, int m, int n) {
+        if (n > m) {
+            ListNode pre = null, cur = head, rev = null;
+            for (int i = 1; i < m; i++) {
+                pre = cur;
+                cur = cur.next;
+            }
+            for (int i = m; i <= n; i++) {
+                ListNode temp = cur.next;
+                cur.next = rev;
+                rev = cur;
+                cur = temp;
+            }
+            if (pre == null) {
+                head.next = cur;
+                head = rev;
+            } else {
+                pre.next.next = cur;
+                pre.next = rev;
+            }
+        }
+        return head;
+    }
+
+    //25. Reverse Nodes in k-Group
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (k < 2) {
+            return head;
+        }
+        ListNode pre = null, cur = head, rev = null, curR = head;
+
+        for (int l = 0, r = 0; curR != null; r++) {
+            curR = curR.next;
+
+            if (r - l + 1 == k) {
+                for (; l <= r; l++) {
+                    ListNode temp = cur.next;
+                    cur.next = rev;
+                    rev = cur;
+                    cur = temp;
+                }
+                if (pre == null) {
+                    pre = head;
+                    pre.next = cur;
+                    head = rev;
+                } else {
+                    pre.next.next = cur;
+                    ListNode temp = pre.next;
+                    pre.next = rev;
+                    pre = temp;
+                }
+            }
+        }
+        return head;
+    }
+
+    //141. Linked List Cycle
+    public boolean hasCycle(ListNode head) {
+        boolean res = false;
+        ListNode slow = head, fast = head;
+        while (fast != null && fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast.val == slow.val) {
+                res = true;
+                break;
+            }
+        }
+        return res;
+    }
+
+    //142. Linked List Cycle II
+    public ListNode detectCycle(ListNode head) {
+        ListNode meet = null, slow = head, fast = head;
+        while (fast != null && fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                for (fast = head; fast != slow; fast = fast.next, slow = slow.next);
+                meet = slow;
+                break;
+            }
+        }
+        return meet;
+    }
+
+    //160. Intersection of Two Linked Lists
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode meet = null, cur = headA, slow = headB, fast = headB;
+        while (cur != null) {
+            if (cur.next == null) {
+                cur.next = headA;
+                break;
+            }
+            cur = cur.next;
+        }
+        while (fast != null && fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                for (fast = headB; fast != slow; fast = fast.next, slow = slow.next);
+                meet = slow;
+                break;
+            }
+        }
+        if (cur != null) {
+            cur.next = null;
+        }
+        return meet;
+    }
+
+    //138. Copy List with Random Pointer
+    public RandomListNode copyRandomList(RandomListNode head) {
+        RandomListNode cur = head, next, copy;
+
+        //insert copy into every cur's next;
+        while (cur != null) {
+            next = cur.next;
+            copy = new RandomListNode(cur.label);
+            copy.next = next;
+            cur.next = copy;
+            cur = next;
+        }
+
+        //assign random code point for copy
+        cur = head;
+        while (cur != null) {
+            copy = cur.next;
+            if (cur.random != null) {
+                copy.random = cur.random.next;
+            }
+            cur = copy.next;
+        }
+
+        //link copy into a list
+        cur = head;
+        if (head != null) {
+            head = head.next;
+        }
+        while (cur != null) {
+            copy = cur.next;
+            cur.next = copy.next;
+            if (copy.next != null) {
+                copy.next = cur.next.next;
+            }
+            cur = cur.next;
+        }
+        return head;
+    }
+
+    //86. Partition List
+    public ListNode partition(ListNode head, int x) {
+        ListNode pre = null, cur = head;
+        if (head == null) {
+            return head;
+        }
+
+        while (cur.next != null) {
+            ListNode next = cur.next;
+            if (cur.val < x) {
+                if (next.val < x) {
+                    pre = next;
+                } else {
+                    pre = cur;
+                }
+                cur = next;
+            } else if (next.val < x) {
+                cur.next = next.next;
+                if (pre == null) {
+                    next.next = head;
+                    head = next;
+                } else {
+                    next.next = pre.next;
+                    pre.next = next;
+                }
+                pre = next;
+            } else {
+                cur = next;
+            }
+        }
+        return head;
     }
 }
