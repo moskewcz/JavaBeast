@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
@@ -41,6 +42,25 @@ public class Solution {
         //String s = "boo:and:foo";
         //System.out.println(Arrays.asList(s.split("o")));
         System.out.println(lc.reverseWords(" "));
+        //original:[53,64,72,85,91,97,120,131,132,139,140,152,77,78,90,51,52,126,74,4,75]
+        int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
+        shuffle(deck);
+        System.out.println(Arrays.toString(deck));
+        //[97, 126, 77, 139, 64, 53, 78, 152, 91, 131, 72, 120, 52, 85, 51, 90, 132]
+    }
+
+    static void shuffle(int[] arr) {
+        Random rnd = new Random();
+        int n = arr.length;
+        for (int i = n - 1; i >= 0; i--) {
+            swap(arr, i, rnd.nextInt(i + 1));
+        }
+    }
+
+    private static void swap(int[] arr, int a, int b) {
+        int temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
     }
 
 }
@@ -903,6 +923,40 @@ class LeetCode {
             }
         }
         return cost[m][n];
+    }
+
+    //140. Word Break II
+    public List<String> wordBreak2(String s, Set<String> dict) {
+        List<String> res = new LinkedList<>();
+        boolean[] isBad = new boolean[s.length() + 1];
+        int min = 0, max = 0;
+        for (String w : dict) {
+            min = Math.min(min, w.length());
+            max = Math.max(max, w.length());
+        }
+        wordBreakhelper(s.toCharArray(), dict, isBad, min, max, "", 0, res);
+        return res;
+    }
+
+    boolean wordBreakhelper(char[] a, Set<String> d, boolean[] isBad, int min, int max, String s, int cur, List<String> res) {
+        boolean notFound = true;
+        for (int i = cur + min; i <= a.length && i <= cur + max; i++) {
+            String w = new String(a, cur, i - cur);
+            if (d.contains(w)) {
+                if (i == a.length) {
+                    res.add(s + w);
+                    notFound = false;
+                } else if (isBad[i]) {
+                    continue;
+                } else if (!wordBreakhelper(a, d, isBad, min, max, s + w + " ", i, res)) {
+                    notFound = false;
+                }
+            }
+        }
+        if (notFound) {
+            isBad[cur] = true;
+        }
+        return notFound;
     }
 
     //Sorting Questions:74,4,75
