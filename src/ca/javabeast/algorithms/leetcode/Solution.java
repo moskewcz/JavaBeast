@@ -46,7 +46,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[97, 126, 77, 139, 64, 53, 78, 152, 91, 131, 72, 120, 52, 85, 51, 90, 132]
+        //[126, 77, 139, 64, 53, 78, 152, 91, 131, 72, 120, 52, 85, 51, 90, 132]
     }
 
     static void shuffle(int[] arr) {
@@ -957,6 +957,37 @@ class LeetCode {
             isBad[cur] = true;
         }
         return notFound;
+    }
+
+    //97. Interleaving String
+    public static boolean isInterleave(String s1, String s2, String s3) {
+        if (s3.length() != s1.length() + s2.length()) {
+            return false;
+        }
+        Set<Integer> visited = new HashSet<>();
+        return isInterleave(s1, 0, s2, 0, s3, 0, visited);
+    }
+
+    private static boolean isInterleave(String s1, int i1, String s2, int i2, String s3, int i3, Set<Integer> visited) {
+        int hash = i1 * s3.length() + i2;
+        if (visited.contains(hash)) {
+            return false;
+        }
+
+        if (i1 == s1.length()) {
+            return s2.substring(i2).equals(s3.substring(i3));
+        }
+        if (i2 == s2.length()) {
+            return s1.substring(i1).equals(s3.substring(i3));
+        }
+
+        if (s3.charAt(i3) == s1.charAt(i1) && isInterleave(s1, i1 + 1, s2, i2, s3, i3 + 1, visited)
+                || s3.charAt(i3) == s2.charAt(i2) && isInterleave(s1, i1, s2, i2 + 1, s3, i3 + 1, visited)) {
+            return true;
+        }
+
+        visited.add(hash);
+        return false;
     }
 
     //Sorting Questions:74,4,75
