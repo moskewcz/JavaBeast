@@ -46,7 +46,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[126, 77, 139, 64, 53, 78, 152, 91, 131, 72, 120, 52, 85, 51, 90, 132]
+        //[91, 131, 72, 120, 52, 85, 51, 132]
     }
 
     static void shuffle(int[] arr) {
@@ -857,6 +857,51 @@ class LeetCode {
             sol.add(word);
             generateList(word, end, map, sol, res);
             sol.remove(sol.size() - 1);
+        }
+    }
+
+    //78. Subsets
+    public List<List<Integer>> subsets(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        List<Integer> path = new ArrayList<>(n * 2);
+        List<List<Integer>> res = new LinkedList<>();
+        subsetsHelper(0, nums, path, res);
+        return res;
+    }
+
+    void subsetsHelper(int cur, int[] nums, List<Integer> path, List<List<Integer>> res) {
+        res.add(new ArrayList<>(path));
+        if (path.size() < nums.length) {
+            for (int i = cur; i < nums.length; i++) {
+                path.add(nums[i]);
+                subsetsHelper(i + 1, nums, path, res);
+                path.remove(path.size() - 1);
+            }
+        }
+    }
+
+    //90. Subsets II
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        List<Integer> path = new ArrayList<>(n * 2);
+        List<List<Integer>> res = new ArrayList<>();
+        subsetsHelper(0, nums, path, res);
+        return new ArrayList<>(res);
+    }
+
+    void subsetsWithDupHelper(int cur, int[] nums, List<Integer> path, List<List<Integer>> res) {
+        res.add(new ArrayList<>(path));
+        if (path.size() < nums.length) {
+            for (int i = cur; i < nums.length; i++) {
+                if (i > cur && nums[i] == nums[i - 1]) {
+                    continue;
+                }
+                path.add(nums[i]);
+                subsetsHelper(i + 1, nums, path, res);
+                path.remove(path.size() - 1);
+            }
         }
     }
 
