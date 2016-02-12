@@ -46,7 +46,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[91, 131, 72, 120, 52, 85, 51, 132]
+        //[72, 120, 52, 85, 51]
     }
 
     static void shuffle(int[] arr) {
@@ -903,6 +903,79 @@ class LeetCode {
                 path.remove(path.size() - 1);
             }
         }
+    }
+
+    //91. Decode Ways
+    public int numDecodings(String s) {
+        if (s == null || s.isEmpty() || s.charAt(0) == '0') {
+            return 0;
+        }
+        int n = s.length();
+        int[] dp = new int[n + 1];
+        dp[0] = dp[1] = 1;
+        for (int i = 2; i < n + 1; i++) {
+            char c2 = s.charAt(i - 2);
+            char c1 = s.charAt(i - 1);
+            int preTwo = (c2 == '1' || (c2 == '2' && c1 < '7')) ? dp[i - 2] : 0;
+            int preOne = (c1 != '0') ? dp[i - 1] : 0;
+            dp[i] = preTwo + preOne;
+        }
+        return dp[n];
+    }
+
+    //131. Palindrome Partitioning
+    public List<List<String>> partition(String s) {
+        List<String> path = new ArrayList<>();
+        List<List<String>> res = new LinkedList<>();
+        partitionHelper(0, s, path, res);
+        return res;
+    }
+
+    void partitionHelper(int cur, String s, List<String> path, List<List<String>> res) {
+        if (cur >= s.length()) {
+            res.add(new ArrayList<>(path));
+            return;
+        }
+
+        for (int i = cur; i < s.length(); i++) {
+            if (!isPalindrome(s, cur, i)) {
+                continue;
+            }
+            path.add(s.substring(cur, i + 1));
+            partitionHelper(i + 1, s, path, res);
+            path.remove(path.size() - 1);
+        }
+
+    }
+
+    boolean isPalindrome(String s, int l, int r) {
+        while (l <= r) {
+            if (s.charAt(l) != s.charAt(r)) {
+                return false;
+            }
+            l++;
+            r--;
+        }
+        return true;
+    }
+
+    //132. Palindrome Partitioning II
+    public int minCut(String s) {
+        int n = s.length();
+        char[] c = s.toCharArray();
+        int[] cuts = new int[n];
+        boolean[][] pal = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            int min = i;
+            for (int j = 0; j <= i; j++) {
+                if (c[i] == c[j] && (j + 1 > i - 1 || pal[j + 1][i - 1])) {
+                    pal[j][i] = true;
+                    min = j == 0 ? 0 : Math.min(min, cuts[j - 1] + 1);
+                }
+            }
+            cuts[i] = min;
+        }
+        return cuts[n - 1];
     }
 
     //
