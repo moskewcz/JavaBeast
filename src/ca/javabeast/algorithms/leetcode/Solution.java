@@ -46,7 +46,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[72, 120, 52, 85, 51]
+        //[52, 85, 51]
     }
 
     static void shuffle(int[] arr) {
@@ -978,8 +978,21 @@ class LeetCode {
         return cuts[n - 1];
     }
 
+    //120. Triangle
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int m = triangle.size();
+        int[] dp = new int[m + 1];
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = 0; j < i + 1; j++) {
+                dp[j] = Math.min(dp[j], dp[j + 1]) + triangle.get(i).get(j);
+            }
+        }
+        return dp[0];
+    }
+
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
+
     public int sumDividend(int n) {
         int i = n / 3, j = n / 5, k = n / 15;
         return 3 * i * (i + 1) / 2 + 5 * j * (j + 1) / 2 + 15 * k * (k + 1) / 2;
