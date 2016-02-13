@@ -38,13 +38,14 @@ public class Solution {
         LeetCode lc = new LeetCode();
         LeetCode.print(lc.longestValidParentheses("()(()"));
         LeetCode.print(lc.bulbSwitch(100));
+        System.out.println(Arrays.toString(lc.solveNQueens(8).get(0).toArray()));
 
         //String s = "boo:and:foo";
         //System.out.println(Arrays.asList(s.split("o")));
         System.out.println(lc.reverseWords(" "));
         //original:[53,64,72,85,91,97,120,131,132,139,140,152,77,78,90,51,52,126,74,4,75]
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
-        shuffle(deck);
+        //shuffle(deck);
         System.out.println(Arrays.toString(deck));
         //[52, 85, 51]
     }
@@ -990,9 +991,51 @@ class LeetCode {
         return dp[0];
     }
 
+    //51. N-Queens
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> res = new LinkedList<>();
+        List<String> path = new ArrayList<>();
+        char[] c = new char[n];
+        int[] q = new int[n];
+        Arrays.fill(c, '.');
+        Arrays.fill(q, -1);
+        QueenHelper(0, q, c, path, res);
+        return res;
+    }
+
+    void QueenHelper(int cur, int[] q, char[] c, List<String> p, List<List<String>> r) {
+        if (cur >= q.length) {
+            r.add(new ArrayList<>(p));
+            return;
+        }
+        for (int i = 0; i < q.length; i++) {
+            if (!isValid(q, cur, i)) {
+                continue;
+            }
+            q[cur] = i;
+            c[i] = 'Q';
+            p.add(new String(c));
+            c[i] = '.';
+            QueenHelper(cur + 1, q, c, p, r);
+            p.remove(p.size() - 1);
+            q[cur] = -1;
+        }
+    }
+
+    boolean isValid(int[] q, int x, int y) {
+        for (int i = 0; i < q.length; i++) {
+            if (q[i] == -1) {
+                return true;
+            } else if (x == i || y == q[i] || Math.abs(x - i) == Math.abs(y - q[i])) {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
-
     public int sumDividend(int n) {
         int i = n / 3, j = n / 5, k = n / 15;
         return 3 * i * (i + 1) / 2 + 5 * j * (j + 1) / 2 + 15 * k * (k + 1) / 2;
