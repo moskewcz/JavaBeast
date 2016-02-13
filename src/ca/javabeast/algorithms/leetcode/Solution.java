@@ -47,7 +47,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         //shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[52, 85, 51]
+        //[85]
     }
 
     static void shuffle(int[] arr) {
@@ -1032,6 +1032,30 @@ class LeetCode {
 
         }
         return true;
+    }
+
+    //52. N-Queens II
+    public int totalNQueens(int n) {
+        int[] res = new int[1];
+        int[] q = new int[n];
+        Arrays.fill(q, -1);
+        QueenHelper(0, q, res);
+        return res[0];
+    }
+
+    void QueenHelper(int cur, int[] q, int[] r) {
+        if (cur >= q.length) {
+            r[0]++;
+            return;
+        }
+        for (int i = 0; i < q.length; i++) {
+            if (!isValid(q, cur, i)) {
+                continue;
+            }
+            q[cur] = i;
+            QueenHelper(cur + 1, q, r);
+            q[cur] = -1;
+        }
     }
 
     //
