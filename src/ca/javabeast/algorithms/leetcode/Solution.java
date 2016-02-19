@@ -47,7 +47,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         //shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[85]
+        //[85, 300, 284]
     }
 
     static void shuffle(int[] arr) {
@@ -1056,6 +1056,39 @@ class LeetCode {
             QueenHelper(cur + 1, q, r);
             q[cur] = -1;
         }
+    }
+
+    //85. Maximal Rectangle
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int res = 0, m = matrix.length, n = matrix[0].length;
+        int[] left = new int[n], right = new int[n], height = new int[n];
+        Arrays.fill(right, n);
+        for (int i = 0; i < m; i++) {
+            int l = 0, r = n;
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    height[j]++;
+                    left[j] = Math.max(left[j], l);
+                } else {
+                    height[j] = 0;
+                    left[j] = 0;
+                    l = j + 1;
+                }
+                if (matrix[i][n - j - 1] == '1') {
+                    right[n - j - 1] = Math.min(right[n - j - 1], r);
+                } else {
+                    right[n - j - 1] = n;
+                    r = n - j - 1;
+                }
+            }
+            for (int j = 0; j < n; j++) {
+                res = Math.max(res, (right[j] - left[j]) * height[j]);
+            }
+        }
+        return res;
     }
 
     //
