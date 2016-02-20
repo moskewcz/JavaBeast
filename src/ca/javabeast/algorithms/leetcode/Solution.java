@@ -47,7 +47,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         //shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[85, 300, 284]
+        //[284]
     }
 
     static void shuffle(int[] arr) {
@@ -1091,6 +1091,40 @@ class LeetCode {
         return res;
     }
 
+    //300. Longest Increasing Subsequence
+    //O(N^2)
+    public int lengthOfLIS0(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        int res = 0;
+        for(int i=0; i<n; i++){
+            dp[i] = 1;
+            for(int j=i-1; j>=0; j--){
+                if(nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j]+1);
+                    break;
+                }
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+    }
+    
+    //O(Nlog(N))
+    public int lengthOfLIS(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        int len = 0;
+        for(int i=0; i<n; i++){
+            int p = Arrays.binarySearch(dp, 0, len, nums[i]);
+            if(p<0) p = -(p+1);
+            dp[p] = nums[i];
+            if(p==len) len++;
+        }
+        return len;
+    }
+    
+    
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
     public int sumDividend(int n) {
