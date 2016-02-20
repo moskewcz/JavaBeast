@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -1097,11 +1098,11 @@ class LeetCode {
         int n = nums.length;
         int[] dp = new int[n];
         int res = 0;
-        for(int i=0; i<n; i++){
+        for (int i = 0; i < n; i++) {
             dp[i] = 1;
-            for(int j=i-1; j>=0; j--){
-                if(nums[i] > nums[j]) {
-                    dp[i] = Math.max(dp[i], dp[j]+1);
+            for (int j = i - 1; j >= 0; j--) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
                     break;
                 }
             }
@@ -1109,22 +1110,61 @@ class LeetCode {
         }
         return res;
     }
-    
+
     //O(Nlog(N))
     public int lengthOfLIS(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
         int len = 0;
-        for(int i=0; i<n; i++){
+        for (int i = 0; i < n; i++) {
             int p = Arrays.binarySearch(dp, 0, len, nums[i]);
-            if(p<0) p = -(p+1);
+            if (p < 0) {
+                p = -(p + 1);
+            }
             dp[p] = nums[i];
-            if(p==len) len++;
+            if (p == len) {
+                len++;
+            }
         }
         return len;
     }
-    
-    
+
+    //284. Peeking Iterator
+    // Java Iterator interface reference:
+    // https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
+    class PeekingIterator implements Iterator<Integer> {
+
+        private Integer head = null;
+        private Iterator<Integer> iterator;
+
+        public PeekingIterator(Iterator<Integer> iterator) {
+            // initialize any member here.
+            this.iterator = iterator;
+            if (iterator.hasNext()) {
+                head = iterator.next();
+            }
+        }
+
+        // Returns the next element in the iteration without advancing the iterator.
+        public Integer peek() {
+            return head;
+        }
+
+	// hasNext() and next() should behave the same as in the Iterator interface.
+        // Override them if needed.
+        @Override
+        public Integer next() {
+            Integer h = head;
+            head = iterator.hasNext() ? iterator.next() : null;
+            return h;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return head != null;
+        }
+    }
+
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
     public int sumDividend(int n) {
