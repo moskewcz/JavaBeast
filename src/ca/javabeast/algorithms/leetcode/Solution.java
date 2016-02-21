@@ -1150,7 +1150,7 @@ class LeetCode {
             return head;
         }
 
-	// hasNext() and next() should behave the same as in the Iterator interface.
+        // hasNext() and next() should behave the same as in the Iterator interface.
         // Override them if needed.
         @Override
         public Integer next() {
@@ -1162,6 +1162,40 @@ class LeetCode {
         @Override
         public boolean hasNext() {
             return head != null;
+        }
+    }
+
+    //173. Binary Search Tree Iterator
+    public class BSTIterator {
+
+        private Deque<TreeNode> stack ;
+
+        public BSTIterator(TreeNode root) {
+            stack = new ArrayDeque<>();
+            pushAll(root);
+        }
+
+        /**
+         * @return whether we have a next smallest number
+         */
+        public boolean hasNext() {
+            return stack.size() > 0;
+        }
+
+        /**
+         * @return the next smallest number
+         */
+        public int next() {
+            TreeNode cur = stack.pop();
+            pushAll(cur.right);
+            return cur == null ? null : cur.val;
+        }
+
+        private void pushAll(TreeNode node) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
         }
     }
 
