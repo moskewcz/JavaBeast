@@ -48,7 +48,7 @@ public class Solution {
         int[] deck = {53, 64, 72, 85, 91, 97, 120, 131, 132, 139, 152, 77, 78, 90, 51, 52, 126};
         //shuffle(deck);
         System.out.println(Arrays.toString(deck));
-        //[284]
+        //[161]
     }
 
     static void shuffle(int[] arr) {
@@ -1168,7 +1168,7 @@ class LeetCode {
     //173. Binary Search Tree Iterator
     public class BSTIterator {
 
-        private Deque<TreeNode> stack ;
+        private Deque<TreeNode> stack;
 
         public BSTIterator(TreeNode root) {
             stack = new ArrayDeque<>();
@@ -1196,6 +1196,98 @@ class LeetCode {
                 stack.push(node);
                 node = node.left;
             }
+        }
+    }
+
+    //146. LRU Cache
+    public class LRUCache {
+
+        final class Node {
+
+            int key, value;
+            Node pre, next;
+
+            public Node(int key, int value) {
+                this.key = key;
+                this.value = value;
+                this.pre = null;
+                this.next = null;
+            }
+        }
+        private Node head, tail;
+        private Map<Integer, Node> map;
+        private int count, max;
+
+        public LRUCache(int capacity) {
+            this.max = capacity;
+            this.count = 0;
+            map = new HashMap<>();
+        }
+
+        public int get(int key) {
+            Node v = map.get(key);
+            if (v != null) {
+                prioritized(v);
+                return v.value;
+            }
+            return -1;
+        }
+
+        public void set(int key, int value) {
+            if (!map.containsKey(key)) {
+                Node n = new Node(key, value);
+                if (count >= max) {
+                    map.remove(head.key);
+                    removeNode(head);
+                }
+                addNode(n);
+                map.put(key, n);
+            } else {
+                Node n = map.get(key);
+                n.value = value;
+                prioritized(n);
+            }
+
+        }
+
+        private void removeNode(Node n) {
+            if (n.pre != null) {
+                n.pre.next = n.next;
+                if (n.next != null) {
+                    n.next.pre = n.pre;
+                } else {
+                    tail = n.pre;
+                }
+                n.pre = null;
+                n.next = null;
+            } else {
+                head = n.next;
+                if (head != null) {
+                    head.pre = null;
+                }
+                n.next = null;
+            }
+            count--;
+        }
+
+        private void addNode(Node n) {
+            if (head == null) {
+                head = n;
+            }
+            if (tail != null) {
+                tail.next = n;
+                n.pre = tail;
+            }
+            tail = n;
+            count++;
+        }
+
+        private void prioritized(Node n) {
+            if (count < 2) {
+                return;
+            }
+            removeNode(n);
+            addNode(n);
         }
     }
 
