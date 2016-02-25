@@ -1309,6 +1309,21 @@ class LeetCode {
         return dp[sl][pl];
     }
 
+    //330. Patching Array
+    public int minPatches(int[] nums, int n) {
+        int i = 0, res = 0, l = nums.length;
+        long top = 0;
+        while (top < n) {
+            if (i < l && nums[i] <= (top + 1)) {
+                top += nums[i++];
+            } else {
+                res++;
+                top = 2 * top + 1;
+            }
+        }
+        return res;
+    }
+
     //328. Odd Even Linked List
     public ListNode oddEvenList(ListNode head) {
         if (head != null) {
