@@ -1309,6 +1309,24 @@ class LeetCode {
         return dp[sl][pl];
     }
 
+    //328. Odd Even Linked List
+    public ListNode oddEvenList(ListNode head) {
+        if (head != null) {
+            ListNode eHead = head.next;
+            ListNode o = head, e = eHead;
+            while (e != null) {
+                o.next = e.next;
+                if (e.next != null) {
+                    e.next = e.next.next;
+                    o = o.next;
+                }
+                e = e.next;
+            }
+            o.next = eHead;
+        }
+        return head;
+    }
+
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
     public int sumDividend(int n) {
