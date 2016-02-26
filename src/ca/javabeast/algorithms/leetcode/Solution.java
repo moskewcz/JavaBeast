@@ -1342,8 +1342,28 @@ class LeetCode {
         return head;
     }
 
+    //322. Coin Change
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 0;
+        for (int sum = 1; sum <= amount; sum++) {
+            dp[sum] = Integer.MAX_VALUE;
+            for (int i = 0; i < coins.length; i++) {
+                if (sum >= coins[i] && dp[sum - coins[i]] >= 0) {
+                    dp[sum] = Math.min(dp[sum], dp[sum - coins[i]] + 1);
+                }
+            }
+            if (dp[sum] == Integer.MAX_VALUE) {
+                dp[sum] = -1;
+            }
+        }
+
+        return dp[amount];
+    }
+
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
+
     public int sumDividend(int n) {
         int i = n / 3, j = n / 5, k = n / 15;
         return 3 * i * (i + 1) / 2 + 5 * j * (j + 1) / 2 + 15 * k * (k + 1) / 2;
