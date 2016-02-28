@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class Solution {
         LeetCode.print(lc.longestValidParentheses("()(()"));
         LeetCode.print(lc.bulbSwitch(100));
         System.out.println(Arrays.toString(lc.solveNQueens(8).get(0).toArray()));
-
+        System.out.println(Math.log10(0) / Math.log10(3) % 1 == 0);
         //String s = "boo:and:foo";
         //System.out.println(Arrays.asList(s.split("o")));
         System.out.println(lc.reverseWords(" "));
@@ -1361,9 +1362,18 @@ class LeetCode {
         return dp[amount];
     }
 
+    //326. Power of Three
+    public boolean isPowerOfThree(int n) {
+        return (Math.log10(n) / Math.log10(3) % 1 == 0);
+    }
+
+    //231. Power of Two
+    public boolean isPowerOfTwo(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+
     //
     //G questions 1: for all i in  i .. n sum(i/3+i/5)
-
     public int sumDividend(int n) {
         int i = n / 3, j = n / 5, k = n / 15;
         return 3 * i * (i + 1) / 2 + 5 * j * (j + 1) / 2 + 15 * k * (k + 1) / 2;
