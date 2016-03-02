@@ -18,6 +18,7 @@ package ca.javabeast.algorithms.leetcode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1362,7 +1363,66 @@ class LeetCode {
         return dp[amount];
     }
 
+    //M/E
+    //334. Increasing Triplet Subsequence
+    public boolean increasingTriplet(int[] nums) {
+        int s = Integer.MAX_VALUE, b = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= s) {
+                s = nums[i];
+            } else if (nums[i] <= b) {
+                b = nums[i];
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //332. Reconstruct Itinerary
+    public List<String> findItinerary(String[][] tickets) {
+        Map<String, List<String>> graph = new HashMap<>();
+        List<String> res = new LinkedList<>();
+        for (String[] ticket : tickets) {
+            String s = ticket[0];
+            String d = ticket[1];
+            List<String> l = graph.get(s);
+            if (l == null) {
+                l = new ArrayList<>();
+                graph.put(s, l);
+            }
+            l.add(d);
+        }
+        for (Map.Entry<String, List<String>> entry : graph.entrySet()) {
+            Collections.sort(entry.getValue());
+        }
+        res.add("JFK");
+        findItineraryHelper("JFK", tickets.length, graph, res);
+        return res;
+    }
+
+    boolean findItineraryHelper(String s, int l, Map<String, List<String>> g, List<String> res) {
+        if (l <= 0) {
+            return true;
+        }
+
+        List<String> dest = g.get(s);
+        if (dest != null) {
+            for (int i = 0; i < dest.size(); i++) {
+                String d = dest.get(i);
+                res.add(d);
+                dest.remove(i);
+                if (findItineraryHelper(d, l - 1, g, res)) {
+                    return true;
+                }
+                res.remove(res.size() - 1);
+                dest.add(i, d);
+            }
+        }
+        return false;
+    }
     //326. Power of Three
+
     public boolean isPowerOfThree(int n) {
         return (Math.log10(n) / Math.log10(3) % 1 == 0);
     }
