@@ -1421,8 +1421,8 @@ class LeetCode {
         }
         return false;
     }
-    //326. Power of Three
 
+    //326. Power of Thre
     public boolean isPowerOfThree(int n) {
         return (Math.log10(n) / Math.log10(3) % 1 == 0);
     }
@@ -1430,6 +1430,21 @@ class LeetCode {
     //231. Power of Two
     public boolean isPowerOfTwo(int n) {
         return n > 0 && (n & (n - 1)) == 0;
+    }
+
+    //26. Remove Duplicates from Sorted Array
+    public int removeDuplicates(int[] nums) {
+        if (nums.length < 1) {
+            return 0;
+        }
+        int i = 0;
+        for (int j = 1; j < nums.length; j++) {
+            if (nums[j] != nums[i]) {
+                i++;
+                nums[i] = nums[j];
+            }
+        }
+        return i + 1;
     }
 
     //
@@ -2881,3 +2896,172 @@ class LeetCode {
         return head;
     }
 }
+/**
+ * Amazon # Title Acceptance Difficulty 49	Group Anagrams	26.7%	Medium 102
+ * Binary Tree Level Order Traversal	32.0%	Easy 199	Binary Tree Right Side View
+ * 33.3%	Medium 204	Count Primes	23.6%	Easy 89	Gray Code	35.6%	Medium 160
+ * Intersection of Two Linked Lists	30.1%	Easy 5	Longest Palindromic Substring
+ * 22.6%	Medium 235	Lowest Common Ancestor of a Binary Search Tree	38.0%	Easy
+ * 146	LRU Cache	15.7%	Hard 23	Merge k Sorted Lists	22.9%	Hard 21	Merge Two
+ * Sorted Lists	34.8%	Easy 155	Min Stack	21.6%	Easy 200	Number of Islands	26.9%
+ * Medium 206	Reverse Linked List	38.4%	Easy 186	Reverse Words in a String II
+ * 29.4%	Medium 48	Rotate Image	34.1%	Medium 8	String to Integer (atoi)	13.4%
+ * Easy 78	Subsets	30.7%	Medium 167	Two Sum II - Input array is sorted 47.2%
+ * Medium 1	Two Sum	21.5%	Medium 242	Valid Anagram	41.0%	Easy 20	Valid
+ * Parentheses	28.8%	Easy 98	Validate Binary Search Tree
+ */
+
+/**
+ * Google # Title Acceptance Difficulty 281	Zigzag Iterator 41.5%	Medium 140
+ * Word Break II	19.3%	Hard 44	Wildcard Matching	17.0%	Hard 280	Wiggle Sort
+ * 49.4%	Medium 324	Wiggle Sort II	21.5%	Medium 331	Verify Preorder
+ * Serialization of a Binary Tree	31.6%	Medium 20	Valid Parentheses	28.8%	Easy
+ * 288	Unique Word Abbreviation 15.5%	Easy 218	The Skyline Problem	21.2%	Hard
+ * 313	Super Ugly Number	32.4%	Medium 228	Summary Ranges	23.4%	Easy 246
+ * Strobogrammatic Number 35.8%	Easy 247	Strobogrammatic Number II 33.3%	Medium
+ * 302	Smallest Rectangle Enclosing Black Pixels 38.2%	Hard 214	Shortest
+ * Palindrome	19.1%	Hard 317	Shortest Distance from All Buildings 30.2%	Hard 240
+ * Search a 2D Matrix II	33.7%	Medium 316	Remove Duplicate Letters	24.0%	Medium
+ * 10	Regular Expression Matching	21.7%	Hard 332	Reconstruct Itinerary	23.0%
+ * Medium 158	Read N Characters Given Read4 II - Call multiple times 23.1%	Hard
+ * 326	Power of Three	35.8%	Easy 66	Plus One	32.8%	Easy 279	Perfect Squares
+ * 31.6%	Medium 284	Peeking Iterator	33.0%	Medium 330	Patching Array	28.3%
+ * Medium 266	Palindrome Permutation 50.1%	Easy 276	Paint Fence 30.4%	Easy 200
+ * Number of Islands	26.9%	Medium 305	Number of Islands II 33.2%	Hard 323	Number
+ * of Connected Components in an Undirected Graph 42.3%	Medium 163	Missing
+ * Ranges 28.6%	Medium 310	Minimum Height Trees	26.3%	Medium 155	Min Stack	21.6%
+ * Easy 23	Merge k Sorted Lists	22.9%	Hard 56	Merge Intervals	24.7%	Hard 253
+ * Meeting Rooms II 34.0%	Medium 4	Median of Two Sorted Arrays	18.2%	Hard 318
+ * Maximum Product of Word Lengths	38.9%	Medium 146	LRU Cache	15.7%	Hard 159
+ * Longest Substring with At Most Two Distinct Characters 33.8%	Hard 329	Longest
+ * Increasing Path in a Matrix	29.7%	Medium 230	Kth Smallest Element in a BST
+ * 36.4%	Medium 57	Insert Interval	23.3%	Hard 208	Implement Trie (Prefix Tree)
+ * 25.2%	Medium 274	H-Index	28.8%	Medium 249	Group Shifted Strings 31.0%	Easy
+ * 261	Graph Valid Tree 31.6%	Medium 22	Generate Parentheses	35.9%	Medium 320
+ * Generalized Abbreviation 39.7%	Medium 289	Game of Life	33.6%	Medium 166
+ * Fraction to Recurring Decimal	14.7%	Medium 293	Flip Game 49.0%	Easy 294	Flip
+ * Game II 40.5%	Medium 251	Flatten 2D Vector 33.0%	Medium 162	Find Peak Element
+ * 32.8%	Medium 295	Find Median from Data Stream	21.5%	Hard 282	Expression Add
+ * Operators	23.7%	Hard 271	Encode and Decode Strings 26.9%	Medium 321	Create
+ * Maximum Number	19.7%	Hard 315	Count of Smaller Numbers After Self	29.0%	Hard
+ * 327	Count of Range Sum	24.3%	Hard 270	Closest Binary Search Tree Value 33.5%
+ * Easy 272	Closest Binary Search Tree Value II 32.1%	Hard 312	Burst Balloons
+ * 34.7%	Hard 257	Binary Tree Paths	27.3%	Easy 298	Binary Tree Longest
+ * Consecutive Sequence 35.7%	Medium 173	Binary Search Tree Iterator	33.6%
+ * Medium 309	Best Time to Buy and Sell Stock with Cooldown	36.0%	Medium 224
+ * Basic Calculator	21.3%	Medium 269	Alien Dictionary 22.0%	Hard 259	3Sum
+ * Smaller 37.9%	Medium
+ *
+ */
+/**
+ * Facebook # Title Acceptance Difficulty 79	Word Search	22.4%	Medium 286	Walls
+ * and Gates 36.2%	Medium 125	Valid Palindrome	23.4%	Easy 1	Two Sum	21.5%	Medium
+ * 78	Subsets	30.7%	Medium 69	Sqrt(x)	24.9%	Medium 75	Sort Colors	34.3%	Medium
+ * 297	Serialize and Deserialize Binary Tree	26.9%	Medium 33	Search in Rotated
+ * Sorted Array	30.0%	Hard 25	Reverse Nodes in k-Group	27.0%	Hard 206	Reverse
+ * Linked List	38.4%	Easy 301	Remove Invalid Parentheses	31.1%	Hard 26	Remove
+ * Duplicates from Sorted Array	32.9%	Easy 80	Remove Duplicates from Sorted
+ * Array II	32.2%	Medium 10	Regular Expression Matching	21.7%	Hard 158	Read N
+ * Characters Given Read4 II - Call multiple times 23.1%	Hard 238	Product of
+ * Array Except Self	41.7%	Medium 50	Pow(x, n)	27.9%	Medium 117	Populating Next
+ * Right Pointers in Each Node II	32.7%	Hard 265	Paint House II 35.0%	Hard 161
+ * One Edit Distance 27.9%	Medium 200	Number of Islands	26.9%	Medium 43	Multiply
+ * Strings	22.9%	Medium 283	Move Zeroes	43.5%	Easy 76	Minimum Window Substring
+ * 20.7%	Hard 209	Minimum Size Subarray Sum	26.2%	Medium 88	Merge Sorted Array
+ * 29.9%	Easy 23	Merge k Sorted Lists	22.9%	Hard 252	Meeting Rooms 41.2%	Easy
+ * 253	Meeting Rooms II 34.0%	Medium 221	Maximal Square	23.0%	Medium 236	Lowest
+ * Common Ancestor of a Binary Tree	28.6%	Medium 235	Lowest Common Ancestor of a
+ * Binary Search Tree	38.0%	Easy 17	Letter Combinations of a Phone Number	28.0%
+ * Medium 215	Kth Largest Element in an Array	32.1%	Medium 273	Integer to
+ * English Words	18.2%	Medium 334	Increasing Triplet Subsequence	32.8%	Medium
+ * 208	Implement Trie (Prefix Tree)	25.2%	Medium 28	Implement strStr()	24.4%
+ * Easy 274	H-Index	28.8%	Medium 275	H-Index II	32.3%	Medium 261	Graph Valid
+ * Tree 31.6%	Medium 278	First Bad Version	21.9%	Easy 168	Excel Sheet Column
+ * Title	21.0%	Easy 91	Decode Ways	17.2%	Medium 210	Course Schedule II	20.8%
+ * Medium 38	Count and Say	28.2%	Easy 133	Clone Graph	24.7%	Medium 314	Binary
+ * Tree Vertical Order Traversal 30.7%	Medium 257	Binary Tree Paths	27.3%	Easy
+ * 102	Binary Tree Level Order Traversal	32.0%	Easy 173	Binary Search Tree
+ * Iterator	33.6%	Medium 121	Best Time to Buy and Sell Stock	35.4%	Medium 49
+ * Group Anagrams	26.7%	Medium 269	Alien Dictionary 22.0%	Hard 67	Add Binary
+ * 26.8%	Easy 211	Add and Search Word - Data structure design	20.2%	Medium 15
+ * 3Sum
+ */
+/**
+ * LinkedIn # Title Acceptance Difficulty 127	Word Ladder	19.6%	Medium 65	Valid
+ * Number	11.9%	Hard 170	Two Sum III - Data structure design 24.2%	Easy 311
+ * Sparse Matrix Multiplication 47.0%	Medium 243	Shortest Word Distance 45.7%
+ * Easy 245	Shortest Word Distance III 45.7%	Medium 244	Shortest Word Distance
+ * II 34.9%	Medium 297	Serialize and Deserialize Binary Tree	26.9%	Medium 33
+ * Search in Rotated Sorted Array	30.0%	Hard 187	Repeated DNA Sequences	24.3%
+ * Medium 238	Product of Array Except Self	41.7%	Medium 50	Pow(x, n)	27.9%
+ * Medium 46	Permutations	34.9%	Medium 47	Permutations II	27.5%	Medium 256	Paint
+ * House 41.7%	Medium 76	Minimum Window Substring	20.7%	Hard 21	Merge Two Sorted
+ * Lists	34.8%	Easy 23	Merge k Sorted Lists	22.9%	Hard 56	Merge Intervals	24.7%
+ * Hard 53	Maximum Subarray	36.2%	Medium 152	Maximum Product Subarray	21.7%
+ * Medium 149	Max Points on a Line	14.0%	Hard 236	Lowest Common Ancestor of a
+ * Binary Tree	28.6%	Medium 205	Isomorphic Strings	28.8%	Easy 57	Insert Interval
+ * 23.3%	Hard 198	House Robber	33.4%	Easy 277	Find the Celebrity 34.8%	Medium
+ * 254	Factor Combinations 34.3%	Medium 150	Evaluate Reverse Polish Notation
+ * 23.1%	Medium 103	Binary Tree Zigzag Level Order Traversal	28.1%	Medium 102
+ * Binary Tree Level Order Traversal	32.0%	Easy 173	Binary Search Tree Iterator
+ * 33.6%	Medium
+ */
+
+
+/*
+ * Microsoft
+#       Title                          Acceptance          Difficulty
+79	Word Search	22.4%	Medium
+212	Word Search II	18.6%	Hard
+98	Validate Binary Search Tree	20.8%	Medium
+125	Valid Palindrome	23.4%	Easy
+218	The Skyline Problem	21.2%	Hard
+101	Symmetric Tree	33.4%	Easy
+24	Swap Nodes in Pairs	34.6%	Medium
+8	String to Integer (atoi)	13.4%	Easy
+54	Spiral Matrix	22.1%	Medium
+71	Simplify Path	21.5%	Medium
+73	Set Matrix Zeroes	33.0%	Medium
+297	Serialize and Deserialize Binary Tree	26.9%	Medium
+48	Rotate Image	34.1%	Medium
+189	Rotate Array	20.6%	Easy
+186	Reverse Words in a String II 	29.4%	Medium
+25	Reverse Nodes in k-Group	27.0%	Hard
+117	Populating Next Right Pointers in Each Node II	32.7%	Hard
+46	Permutations	34.9%	Medium
+47	Permutations II	27.5%	Medium
+112	Path Sum	30.9%	Easy
+200	Number of Islands	26.9%	Medium
+21	Merge Two Sorted Lists	34.8%	Easy
+23	Merge k Sorted Lists	22.9%	Hard
+56	Merge Intervals	24.7%	Hard
+146	LRU Cache	15.7%	Hard
+236	Lowest Common Ancestor of a Binary Tree	28.6%	Medium
+5	Longest Palindromic Substring	22.6%	Medium
+300	Longest Increasing Subsequence	33.7%	Medium
+333	Largest BST Subtree 	26.2%	Medium
+215	Kth Largest Element in an Array	32.1%	Medium
+55	Jump Game	28.0%	Medium
+160	Intersection of Two Linked Lists	30.1%	Easy
+285	Inorder Successor in BST 	35.1%	Medium
+208	Implement Trie (Prefix Tree)	25.2%	Medium
+28	Implement strStr()	24.4%	Easy
+232	Implement Queue using Stacks	33.9%	Easy
+213	House Robber II	29.8%	Medium
+114	Flatten Binary Tree to Linked List	30.6%	Medium
+162	Find Peak Element	32.8%	Medium
+153	Find Minimum in Rotated Sorted Array	35.6%	Medium
+168	Excel Sheet Column Title	21.0%	Easy
+91	Decode Ways	17.2%	Medium
+138	Copy List with Random Pointer	25.9%	Hard
+106	Construct Binary Tree from Inorder and Postorder Traversal	28.6%	Medium
+165	Compare Version Numbers	17.0%	Easy
+270	Closest Binary Search Tree Value 	33.5%	Easy
+103	Binary Tree Zigzag Level Order Traversal	28.1%	Medium
+124	Binary Tree Maximum Path Sum	23.0%	Hard
+102	Binary Tree Level Order Traversal	32.0%	Easy
+94	Binary Tree Inorder Traversal	38.9%	Medium
+173	Binary Search Tree Iterator	33.6%	Medium
+121	Best Time to Buy and Sell Stock	35.4%	Medium
+258	Add Digits	48.1%	Easy
+ */
