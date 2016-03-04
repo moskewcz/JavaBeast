@@ -1427,9 +1427,92 @@ class LeetCode {
         return (Math.log10(n) / Math.log10(3) % 1 == 0);
     }
 
+    //242. Valid Anagram
+    public boolean isAnagram(String s, String t) {
+        if (s == null || t == null || s.length() != t.length()) {
+            return false;
+        }
+        int[] alphabets = new int[256];
+        char[] sc = s.toCharArray();
+        char[] tc = t.toCharArray();
+        for (char c : sc) {
+            alphabets[c]++;
+        }
+        for (char c : tc) {
+            if (alphabets[c] > 0) {
+                alphabets[c]--;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //235. Lowest Common Ancestor of a Binary Search Tree
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || p == null || q == null) {
+            return null;
+        }
+        if (root.val < p.val && root.val < q.val) {
+            return lowestCommonAncestor(root.right, p, q);
+        } else if (root.val > p.val && root.val > q.val) {
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        return root;
+    }
+
     //231. Power of Two
     public boolean isPowerOfTwo(int n) {
         return n > 0 && (n & (n - 1)) == 0;
+    }
+
+    //206. Reverse Linked List
+    public ListNode reverseList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+        ListNode pre = head;
+        ListNode next = pre.next;
+        head.next = null;
+        while (next != null) {
+            ListNode temp = next.next;
+            next.next = pre;
+            pre = next;
+            next = temp;
+        }
+        return pre;
+    }
+
+    //204. Count Primes
+    public int countPrimes(int n) {
+        if (n < 3) {
+            return 0;
+        }
+        boolean[] marked = new boolean[n];
+        //int count = n/2;
+
+        for (int i = 3; i * i < n; i += 2) {
+            if (marked[i]) {
+                continue;
+            }
+            for (int j = i * i; j < n; j += 2 * i) {
+                marked[j] = true;
+            }
+            /*for(int j=i*i; j<n; j+=2*i){
+             if(!marked[j]){
+             marked[j] = true;
+             count--;
+             }
+             }*/
+        }
+
+        int count = 1;
+        for (int i = 3; i < n; i += 2) {
+            if (!marked[i]) {
+                count++;
+            }
+        }
+        return count;
     }
 
     //26. Remove Duplicates from Sorted Array
@@ -3006,62 +3089,60 @@ class LeetCode {
  * Binary Tree Level Order Traversal	32.0%	Easy 173	Binary Search Tree Iterator
  * 33.6%	Medium
  */
-
-
 /*
  * Microsoft
-#       Title                          Acceptance          Difficulty
-79	Word Search	22.4%	Medium
-212	Word Search II	18.6%	Hard
-98	Validate Binary Search Tree	20.8%	Medium
-125	Valid Palindrome	23.4%	Easy
-218	The Skyline Problem	21.2%	Hard
-101	Symmetric Tree	33.4%	Easy
-24	Swap Nodes in Pairs	34.6%	Medium
-8	String to Integer (atoi)	13.4%	Easy
-54	Spiral Matrix	22.1%	Medium
-71	Simplify Path	21.5%	Medium
-73	Set Matrix Zeroes	33.0%	Medium
-297	Serialize and Deserialize Binary Tree	26.9%	Medium
-48	Rotate Image	34.1%	Medium
-189	Rotate Array	20.6%	Easy
-186	Reverse Words in a String II 	29.4%	Medium
-25	Reverse Nodes in k-Group	27.0%	Hard
-117	Populating Next Right Pointers in Each Node II	32.7%	Hard
-46	Permutations	34.9%	Medium
-47	Permutations II	27.5%	Medium
-112	Path Sum	30.9%	Easy
-200	Number of Islands	26.9%	Medium
-21	Merge Two Sorted Lists	34.8%	Easy
-23	Merge k Sorted Lists	22.9%	Hard
-56	Merge Intervals	24.7%	Hard
-146	LRU Cache	15.7%	Hard
-236	Lowest Common Ancestor of a Binary Tree	28.6%	Medium
-5	Longest Palindromic Substring	22.6%	Medium
-300	Longest Increasing Subsequence	33.7%	Medium
-333	Largest BST Subtree 	26.2%	Medium
-215	Kth Largest Element in an Array	32.1%	Medium
-55	Jump Game	28.0%	Medium
-160	Intersection of Two Linked Lists	30.1%	Easy
-285	Inorder Successor in BST 	35.1%	Medium
-208	Implement Trie (Prefix Tree)	25.2%	Medium
-28	Implement strStr()	24.4%	Easy
-232	Implement Queue using Stacks	33.9%	Easy
-213	House Robber II	29.8%	Medium
-114	Flatten Binary Tree to Linked List	30.6%	Medium
-162	Find Peak Element	32.8%	Medium
-153	Find Minimum in Rotated Sorted Array	35.6%	Medium
-168	Excel Sheet Column Title	21.0%	Easy
-91	Decode Ways	17.2%	Medium
-138	Copy List with Random Pointer	25.9%	Hard
-106	Construct Binary Tree from Inorder and Postorder Traversal	28.6%	Medium
-165	Compare Version Numbers	17.0%	Easy
-270	Closest Binary Search Tree Value 	33.5%	Easy
-103	Binary Tree Zigzag Level Order Traversal	28.1%	Medium
-124	Binary Tree Maximum Path Sum	23.0%	Hard
-102	Binary Tree Level Order Traversal	32.0%	Easy
-94	Binary Tree Inorder Traversal	38.9%	Medium
-173	Binary Search Tree Iterator	33.6%	Medium
-121	Best Time to Buy and Sell Stock	35.4%	Medium
-258	Add Digits	48.1%	Easy
+ #       Title                          Acceptance          Difficulty
+ 79	Word Search	22.4%	Medium
+ 212	Word Search II	18.6%	Hard
+ 98	Validate Binary Search Tree	20.8%	Medium
+ 125	Valid Palindrome	23.4%	Easy
+ 218	The Skyline Problem	21.2%	Hard
+ 101	Symmetric Tree	33.4%	Easy
+ 24	Swap Nodes in Pairs	34.6%	Medium
+ 8	String to Integer (atoi)	13.4%	Easy
+ 54	Spiral Matrix	22.1%	Medium
+ 71	Simplify Path	21.5%	Medium
+ 73	Set Matrix Zeroes	33.0%	Medium
+ 297	Serialize and Deserialize Binary Tree	26.9%	Medium
+ 48	Rotate Image	34.1%	Medium
+ 189	Rotate Array	20.6%	Easy
+ 186	Reverse Words in a String II 	29.4%	Medium
+ 25	Reverse Nodes in k-Group	27.0%	Hard
+ 117	Populating Next Right Pointers in Each Node II	32.7%	Hard
+ 46	Permutations	34.9%	Medium
+ 47	Permutations II	27.5%	Medium
+ 112	Path Sum	30.9%	Easy
+ 200	Number of Islands	26.9%	Medium
+ 21	Merge Two Sorted Lists	34.8%	Easy
+ 23	Merge k Sorted Lists	22.9%	Hard
+ 56	Merge Intervals	24.7%	Hard
+ 146	LRU Cache	15.7%	Hard
+ 236	Lowest Common Ancestor of a Binary Tree	28.6%	Medium
+ 5	Longest Palindromic Substring	22.6%	Medium
+ 300	Longest Increasing Subsequence	33.7%	Medium
+ 333	Largest BST Subtree 	26.2%	Medium
+ 215	Kth Largest Element in an Array	32.1%	Medium
+ 55	Jump Game	28.0%	Medium
+ 160	Intersection of Two Linked Lists	30.1%	Easy
+ 285	Inorder Successor in BST 	35.1%	Medium
+ 208	Implement Trie (Prefix Tree)	25.2%	Medium
+ 28	Implement strStr()	24.4%	Easy
+ 232	Implement Queue using Stacks	33.9%	Easy
+ 213	House Robber II	29.8%	Medium
+ 114	Flatten Binary Tree to Linked List	30.6%	Medium
+ 162	Find Peak Element	32.8%	Medium
+ 153	Find Minimum in Rotated Sorted Array	35.6%	Medium
+ 168	Excel Sheet Column Title	21.0%	Easy
+ 91	Decode Ways	17.2%	Medium
+ 138	Copy List with Random Pointer	25.9%	Hard
+ 106	Construct Binary Tree from Inorder and Postorder Traversal	28.6%	Medium
+ 165	Compare Version Numbers	17.0%	Easy
+ 270	Closest Binary Search Tree Value 	33.5%	Easy
+ 103	Binary Tree Zigzag Level Order Traversal	28.1%	Medium
+ 124	Binary Tree Maximum Path Sum	23.0%	Hard
+ 102	Binary Tree Level Order Traversal	32.0%	Easy
+ 94	Binary Tree Inorder Traversal	38.9%	Medium
+ 173	Binary Search Tree Iterator	33.6%	Medium
+ 121	Best Time to Buy and Sell Stock	35.4%	Medium
+ 258	Add Digits	48.1%	Easy
  */
