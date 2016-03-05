@@ -1515,6 +1515,151 @@ class LeetCode {
         return count;
     }
 
+    //200. Number of Islands
+    public int numIslands(char[][] grid) {
+        int res = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    traversalIslands(grid, i, j);
+                    res++;
+                }
+            }
+        }
+        return res;
+    }
+
+    void traversalIslands(char[][] a, int x, int y) {
+        if (x < 0 || x >= a.length || y < 0 || y >= a[0].length || a[x][y] != '1') {
+            return;
+        }
+        a[x][y] = '0';
+        traversalIslands(a, x - 1, y);
+        traversalIslands(a, x, y - 1);
+        traversalIslands(a, x + 1, y);
+        traversalIslands(a, x, y + 1);
+    }
+
+    //199. Binary Tree Right Side View
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> res = new LinkedList<>();
+        rightSideViewHelper(root, 0, res);
+        return res;
+    }
+
+    void rightSideViewHelper(TreeNode root, int cur, List<Integer> res) {
+        if (root == null) {
+            return;
+        }
+        if (res.size() <= cur) {
+            res.add(root.val);
+        }
+        rightSideViewHelper(root.right, cur + 1, res);
+        rightSideViewHelper(root.left, cur + 1, res);
+    }
+
+    //186. Reverse Words in a String II(Locked)
+    public void reverseWords(char[] s) {
+        int n = s.length;
+        reverseChar(0, n - 1, s);
+        int l = 0, r = 0;
+        while (r < n) {
+            if (s[r] == ' ') {
+                reverseChar(l, r - 1, s);
+                l = r + 1;
+            }
+            r++;
+        }
+        if (l < n) {
+            reverseChar(l, n - 1, s);
+        }
+    }
+
+    void reverseChar(int l, int r, char[] s) {
+        while (l < r) {
+            char c = s[l];
+            s[l] = s[r];
+            s[r] = c;
+            l++;
+            r--;
+        }
+    }
+
+    //167. Two Sum II - Input array is sorted(Locked)
+    public int[] twoSum2(int[] nums, int t) {
+        int[] res = new int[2];
+        int l = 0, r = nums.length - 1, sum = 0;
+        while (l < r) {
+            sum = nums[l] + nums[r];
+            if (sum > t) {
+                r--;
+            } else if (sum < t) {
+                l++;
+            } else {
+                res[0] = l + 1;
+                res[1] = r + 1;
+                break;
+            }
+        }
+        return res;
+    }
+
+    //160. Intersection of Two Linked Lists
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode meet = null, cur = headA, slow = headB, fast = headB;
+        while (cur != null) {
+            if (cur.next == null) {
+                cur.next = headA;
+                break;
+            }
+            cur = cur.next;
+        }
+        while (fast != null && fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+            if (fast == slow) {
+                for (fast = headB; fast != slow; fast = fast.next, slow = slow.next);
+                meet = slow;
+                break;
+            }
+        }
+        if (cur != null) {
+            cur.next = null;
+        }
+        return meet;
+    }
+
+    //155. Min Stack
+    class MinStack {
+
+        Deque<int[]> stack;
+        int[] pair;
+
+        MinStack() {
+            stack = new ArrayDeque<>();
+        }
+
+        public void push(int x) {
+            pair = new int[]{x, x};
+            if (stack.size() > 0 && x > getMin()) {
+                pair[1] = getMin();
+            }
+            stack.push(pair);
+        }
+
+        public void pop() {
+            stack.pop();
+        }
+
+        public int top() {
+            return stack.peek()[0];
+        }
+
+        public int getMin() {
+            return stack.peek()[1];
+        }
+    }
+
     //26. Remove Duplicates from Sorted Array
     public int removeDuplicates(int[] nums) {
         if (nums.length < 1) {
@@ -1852,31 +1997,30 @@ class LeetCode {
         }
     }
 
-    //200. Number of Islands
-    public int numIslands(char[][] grid) {
-        int res = 0;
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] == '1') {
-                    traversalIslands(grid, i, j);
-                    res++;
-                }
-            }
-        }
-        return res;
-    }
-
-    void traversalIslands(char[][] a, int x, int y) {
-        if (x < 0 || x >= a.length || y < 0 || y >= a[0].length || a[x][y] != '1') {
-            return;
-        }
-        a[x][y] = '0';
-        traversalIslands(a, x - 1, y);
-        traversalIslands(a, x, y - 1);
-        traversalIslands(a, x + 1, y);
-        traversalIslands(a, x, y + 1);
-    }
-
+//    //200. Number of Islands
+//    public int numIslands(char[][] grid) {
+//        int res = 0;
+//        for (int i = 0; i < grid.length; i++) {
+//            for (int j = 0; j < grid[0].length; j++) {
+//                if (grid[i][j] == '1') {
+//                    traversalIslands(grid, i, j);
+//                    res++;
+//                }
+//            }
+//        }
+//        return res;
+//    }
+//
+//    void traversalIslands(char[][] a, int x, int y) {
+//        if (x < 0 || x >= a.length || y < 0 || y >= a[0].length || a[x][y] != '1') {
+//            return;
+//        }
+//        a[x][y] = '0';
+//        traversalIslands(a, x - 1, y);
+//        traversalIslands(a, x, y - 1);
+//        traversalIslands(a, x + 1, y);
+//        traversalIslands(a, x, y + 1);
+//    }
     //139. Word Break
     public boolean wordBreak(String s, Set<String> wordDict) {
         boolean[] visited = new boolean[s.length()];
@@ -2882,31 +3026,30 @@ class LeetCode {
         return meet;
     }
 
-    //160. Intersection of Two Linked Lists
-    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        ListNode meet = null, cur = headA, slow = headB, fast = headB;
-        while (cur != null) {
-            if (cur.next == null) {
-                cur.next = headA;
-                break;
-            }
-            cur = cur.next;
-        }
-        while (fast != null && fast.next != null && fast.next.next != null) {
-            fast = fast.next.next;
-            slow = slow.next;
-            if (fast == slow) {
-                for (fast = headB; fast != slow; fast = fast.next, slow = slow.next);
-                meet = slow;
-                break;
-            }
-        }
-        if (cur != null) {
-            cur.next = null;
-        }
-        return meet;
-    }
-
+//    //160. Intersection of Two Linked Lists
+//    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+//        ListNode meet = null, cur = headA, slow = headB, fast = headB;
+//        while (cur != null) {
+//            if (cur.next == null) {
+//                cur.next = headA;
+//                break;
+//            }
+//            cur = cur.next;
+//        }
+//        while (fast != null && fast.next != null && fast.next.next != null) {
+//            fast = fast.next.next;
+//            slow = slow.next;
+//            if (fast == slow) {
+//                for (fast = headB; fast != slow; fast = fast.next, slow = slow.next);
+//                meet = slow;
+//                break;
+//            }
+//        }
+//        if (cur != null) {
+//            cur.next = null;
+//        }
+//        return meet;
+//    }
     //138. Copy List with Random Pointer
     public RandomListNode copyRandomList(RandomListNode head) {
         RandomListNode cur = head, next, copy;
