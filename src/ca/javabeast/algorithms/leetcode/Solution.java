@@ -864,34 +864,33 @@ class LeetCode {
         }
     }
 
-    //78. Subsets
-    public List<List<Integer>> subsets(int[] nums) {
-        int n = nums.length;
-        Arrays.sort(nums);
-        List<Integer> path = new ArrayList<>(n * 2);
-        List<List<Integer>> res = new LinkedList<>();
-        subsetsHelper(0, nums, path, res);
-        return res;
-    }
-
-    void subsetsHelper(int cur, int[] nums, List<Integer> path, List<List<Integer>> res) {
-        res.add(new ArrayList<>(path));
-        if (path.size() < nums.length) {
-            for (int i = cur; i < nums.length; i++) {
-                path.add(nums[i]);
-                subsetsHelper(i + 1, nums, path, res);
-                path.remove(path.size() - 1);
-            }
-        }
-    }
-
+//    //78. Subsets
+//    public List<List<Integer>> subsets(int[] nums) {
+//        int n = nums.length;
+//        Arrays.sort(nums);
+//        List<Integer> path = new ArrayList<>(n * 2);
+//        List<List<Integer>> res = new LinkedList<>();
+//        subsetsHelper(0, nums, path, res);
+//        return res;
+//    }
+//
+//    void subsetsHelper(int cur, int[] nums, List<Integer> path, List<List<Integer>> res) {
+//        res.add(new ArrayList<>(path));
+//        if (path.size() < nums.length) {
+//            for (int i = cur; i < nums.length; i++) {
+//                path.add(nums[i]);
+//                subsetsHelper(i + 1, nums, path, res);
+//                path.remove(path.size() - 1);
+//            }
+//        }
+//    }
     //90. Subsets II
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         int n = nums.length;
         Arrays.sort(nums);
         List<Integer> path = new ArrayList<>(n * 2);
         List<List<Integer>> res = new ArrayList<>();
-        subsetsHelper(0, nums, path, res);
+        subsetsWithDupHelper(0, nums, path, res);
         return new ArrayList<>(res);
     }
 
@@ -903,7 +902,7 @@ class LeetCode {
                     continue;
                 }
                 path.add(nums[i]);
-                subsetsHelper(i + 1, nums, path, res);
+                subsetsWithDupHelper(i + 1, nums, path, res);
                 path.remove(path.size() - 1);
             }
         }
@@ -1198,98 +1197,6 @@ class LeetCode {
                 stack.push(node);
                 node = node.left;
             }
-        }
-    }
-
-    //146. LRU Cache
-    public class LRUCache {
-
-        final class Node {
-
-            int key, value;
-            Node pre, next;
-
-            public Node(int key, int value) {
-                this.key = key;
-                this.value = value;
-                this.pre = null;
-                this.next = null;
-            }
-        }
-        private Node head, tail;
-        private Map<Integer, Node> map;
-        private int count, max;
-
-        public LRUCache(int capacity) {
-            this.max = capacity;
-            this.count = 0;
-            map = new HashMap<>();
-        }
-
-        public int get(int key) {
-            Node v = map.get(key);
-            if (v != null) {
-                prioritized(v);
-                return v.value;
-            }
-            return -1;
-        }
-
-        public void set(int key, int value) {
-            if (!map.containsKey(key)) {
-                Node n = new Node(key, value);
-                if (count >= max) {
-                    map.remove(head.key);
-                    removeNode(head);
-                }
-                addNode(n);
-                map.put(key, n);
-            } else {
-                Node n = map.get(key);
-                n.value = value;
-                prioritized(n);
-            }
-
-        }
-
-        private void removeNode(Node n) {
-            if (n.pre != null) {
-                n.pre.next = n.next;
-                if (n.next != null) {
-                    n.next.pre = n.pre;
-                } else {
-                    tail = n.pre;
-                }
-                n.pre = null;
-                n.next = null;
-            } else {
-                head = n.next;
-                if (head != null) {
-                    head.pre = null;
-                }
-                n.next = null;
-            }
-            count--;
-        }
-
-        private void addNode(Node n) {
-            if (head == null) {
-                head = n;
-            }
-            if (tail != null) {
-                tail.next = n;
-                n.pre = tail;
-            }
-            tail = n;
-            count++;
-        }
-
-        private void prioritized(Node n) {
-            if (count < 2) {
-                return;
-            }
-            removeNode(n);
-            addNode(n);
         }
     }
 
@@ -1660,6 +1567,177 @@ class LeetCode {
         }
     }
 
+    //146. LRU Cache
+    public class LRUCache {
+
+        final class Node {
+
+            int key, value;
+            Node pre, next;
+
+            public Node(int key, int value) {
+                this.key = key;
+                this.value = value;
+                this.pre = null;
+                this.next = null;
+            }
+        }
+        private Node head, tail;
+        private Map<Integer, Node> map;
+        private int count, max;
+
+        public LRUCache(int capacity) {
+            this.max = capacity;
+            this.count = 0;
+            map = new HashMap<>();
+        }
+
+        public int get(int key) {
+            Node v = map.get(key);
+            if (v != null) {
+                prioritized(v);
+                return v.value;
+            }
+            return -1;
+        }
+
+        public void set(int key, int value) {
+            if (!map.containsKey(key)) {
+                Node n = new Node(key, value);
+                if (count >= max) {
+                    map.remove(head.key);
+                    removeNode(head);
+                }
+                addNode(n);
+                map.put(key, n);
+            } else {
+                Node n = map.get(key);
+                n.value = value;
+                prioritized(n);
+            }
+
+        }
+
+        private void removeNode(Node n) {
+            if (n.pre != null) {
+                n.pre.next = n.next;
+                if (n.next != null) {
+                    n.next.pre = n.pre;
+                } else {
+                    tail = n.pre;
+                }
+                n.pre = null;
+                n.next = null;
+            } else {
+                head = n.next;
+                if (head != null) {
+                    head.pre = null;
+                }
+                n.next = null;
+            }
+            count--;
+        }
+
+        private void addNode(Node n) {
+            if (head == null) {
+                head = n;
+            }
+            if (tail != null) {
+                tail.next = n;
+                n.pre = tail;
+            }
+            tail = n;
+            count++;
+        }
+
+        private void prioritized(Node n) {
+            if (count < 2) {
+                return;
+            }
+            removeNode(n);
+            addNode(n);
+        }
+    }
+
+    //102. Binary Tree Level Order Traversal
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        levelOrderHelper(root, 0, res);
+        return res;
+    }
+
+    void levelOrderHelper(TreeNode root, int cur, List<List<Integer>> res) {
+        if (root == null) {
+            return;
+        }
+        if (res.size() == cur) {
+            res.add(new ArrayList<>());
+        }
+        res.get(cur).add(root.val);
+        levelOrderHelper(root.left, cur + 1, res);
+        levelOrderHelper(root.right, cur + 1, res);
+    }
+
+    //98. Validate Binary Search Tree
+    public boolean isValidBST(TreeNode root) {
+        int[] last = new int[]{0};
+        boolean[] isFirst = new boolean[]{true};
+        return helper(root, isFirst, last);
+    }
+
+    public boolean helper(TreeNode root, boolean[] isFirst, int[] last) {
+        if (root == null) {
+            return true;
+        }
+        if (!helper(root.left, isFirst, last)) {
+            return false;
+        }
+
+        if (isFirst[0]) {
+            isFirst[0] = false;
+        } else if (last[0] >= root.val) {
+            return false;
+        }
+
+        last[0] = root.val;
+        return helper(root.right, isFirst, last);
+
+    }
+
+    //89. Gray Code
+    public List<Integer> grayCode(int n) {
+        List<Integer> res = new ArrayList<>();
+        res.add(0);
+        for (int i = 0; i < n; i++) {
+            int val = 1 << i;
+            for (int j = res.size() - 1; j >= 0; j--) {
+                res.add(val + res.get(j));
+            }
+        }
+        return res;
+    }
+
+    //78. Subsets
+    public List<List<Integer>> subsets(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums);
+        List<Integer> path = new ArrayList<>(n * 2);
+        List<List<Integer>> res = new LinkedList<>();
+        subsetsHelper(0, nums, path, res);
+        return res;
+    }
+
+    void subsetsHelper(int cur, int[] nums, List<Integer> path, List<List<Integer>> res) {
+        res.add(new ArrayList<>(path));
+        if (path.size() < nums.length) {
+            for (int i = cur; i < nums.length; i++) {
+                path.add(nums[i]);
+                subsetsHelper(i + 1, nums, path, res);
+                path.remove(path.size() - 1);
+            }
+        }
+    }
+
     //26. Remove Duplicates from Sorted Array
     public int removeDuplicates(int[] nums) {
         if (nums.length < 1) {
@@ -1673,6 +1751,48 @@ class LeetCode {
             }
         }
         return i + 1;
+    }
+
+    //5. Longest Palindromic Substring
+    public String longestPalindrome(String s) {
+        int[] res = new int[2];
+        int n = s.length();
+        for (int i = 0; i < n - 1; i++) {
+            longestPalindromeHelper(s, i, i, res);
+            longestPalindromeHelper(s, i, i + 1, res);
+        }
+        return s.substring(res[0], res[1] + 1);
+    }
+
+    // Given a center, either one letter or two letter, 
+    // Find longest palindrome
+    public void longestPalindromeHelper(String s, int l, int r, int[] res) {
+        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+            l--;
+            r++;
+        }
+        if (r - l - 1 > res[1] - res[0] + 1) {
+            res[0] = l + 1;
+            res[1] = r - 1;
+        }
+    }
+
+    //1. Two Sum
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        int[] res = new int[2];
+
+        for (int i = 0; i < nums.length; i++) {
+            int r = target - nums[i];
+            if (map.containsKey(r)) {
+                res[1] = i;
+                res[0] = map.get(r);
+                break;
+            } else {
+                map.put(nums[i], i);
+            }
+        }
+        return res;
     }
 
     //
@@ -2440,31 +2560,30 @@ class LeetCode {
         return q.val == p.val && isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
     }
 
-    //98. Validate Binary Search Tree
-    public boolean isValidBST(TreeNode root) {
-        int[] last = new int[]{0};
-        boolean[] first = new boolean[]{true};
-        return helper(root, first, last);
-    }
-
-    public boolean helper(TreeNode root, boolean[] first, int[] last) {
-        if (root == null) {
-            return true;
-        }
-        if (!helper(root.left, first, last)) {
-            return false;
-        }
-
-        if (first[0]) {
-            first[0] = false;
-        } else if (last[0] >= root.val) {
-            return false;
-        }
-
-        last[0] = root.val;
-        return helper(root.right, first, last);
-    }
-
+//    //98. Validate Binary Search Tree
+//    public boolean isValidBST(TreeNode root) {
+//        int[] last = new int[]{0};
+//        boolean[] first = new boolean[]{true};
+//        return helper(root, first, last);
+//    }
+//
+//    public boolean helper(TreeNode root, boolean[] first, int[] last) {
+//        if (root == null) {
+//            return true;
+//        }
+//        if (!helper(root.left, first, last)) {
+//            return false;
+//        }
+//
+//        if (first[0]) {
+//            first[0] = false;
+//        } else if (last[0] >= root.val) {
+//            return false;
+//        }
+//
+//        last[0] = root.val;
+//        return helper(root.right, first, last);
+//    }
     //114. Flatten Binary Tree to Linked List
     public void flatten(TreeNode root) {
         if (root == null) {
@@ -2721,45 +2840,44 @@ class LeetCode {
         return min == s.length() + 1 ? "" : s.substring(i, j);
     }
 
-    //1. Two Sum
-    public int[] twoSum(int[] nums, int target) {
-        Map<Integer, Integer> map = new HashMap<>();
-        int[] res = new int[2];
-
-        for (int i = 0; i < nums.length; i++) {
-            int r = target - nums[i];
-            if (map.containsKey(r)) {
-                res[1] = i + 1;
-                res[0] = map.get(r) + 1;
-                break;
-            } else {
-                map.put(nums[i], i);
-            }
-        }
-        return res;
-    }
-
-    //5. Longest Palindromic Substring
-    public String longestPalindrome(String s) {
-        int[] res = new int[2];
-        int n = s.length();
-        for (int i = 0; i < n - 1; i++) {
-            longestPalindromeHelper(s, i, i, res);
-            longestPalindromeHelper(s, i, i + 1, res);
-        }
-        return s.substring(res[0], res[1] + 1);
-    }
-
-    public void longestPalindromeHelper(String s, int l, int r, int[] res) {
-        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
-            l--;
-            r++;
-        }
-        if (r - l - 1 > res[1] - res[0] + 1) {
-            res[0] = l + 1;
-            res[1] = r - 1;
-        }
-    }
+//    //1. Two Sum
+//    public int[] twoSum(int[] nums, int target) {
+//        Map<Integer, Integer> map = new HashMap<>();
+//        int[] res = new int[2];
+//
+//        for (int i = 0; i < nums.length; i++) {
+//            int r = target - nums[i];
+//            if (map.containsKey(r)) {
+//                res[1] = i + 1;
+//                res[0] = map.get(r) + 1;
+//                break;
+//            } else {
+//                map.put(nums[i], i);
+//            }
+//        }
+//        return res;
+//    }
+//    //5. Longest Palindromic Substring
+//    public String longestPalindrome(String s) {
+//        int[] res = new int[2];
+//        int n = s.length();
+//        for (int i = 0; i < n - 1; i++) {
+//            longestPalindromeHelper(s, i, i, res);
+//            longestPalindromeHelper(s, i, i + 1, res);
+//        }
+//        return s.substring(res[0], res[1] + 1);
+//    }
+//
+//    public void longestPalindromeHelper(String s, int l, int r, int[] res) {
+//        while (l >= 0 && r < s.length() && s.charAt(l) == s.charAt(r)) {
+//            l--;
+//            r++;
+//        }
+//        if (r - l - 1 > res[1] - res[0] + 1) {
+//            res[0] = l + 1;
+//            res[1] = r - 1;
+//        }
+//    }
 
     //Array Questions:
     //153. Find Minimum in Rotated Sorted Array
