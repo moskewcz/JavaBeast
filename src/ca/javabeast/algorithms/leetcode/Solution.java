@@ -1777,6 +1777,76 @@ class LeetCode {
         return i + 1;
     }
 
+    //23. Merge k Sorted Lists
+    public ListNode mergeKLists(ListNode[] lists) {
+        if (lists == null || lists.length == 0) {
+            return null;
+        }
+        return mergeKLists(lists, 0, lists.length - 1);
+    }
+
+    ListNode mergeKLists(ListNode[] lists, int l, int r) {
+        if (l == r) {
+            return lists[l];
+        } else if (l < r) {
+            int mid = (r - l) / 2 + l;
+            ListNode left = mergeKLists(lists, l, mid);
+            ListNode right = mergeKLists(lists, mid + 1, r);
+            return mergeTwoLists(left, right);
+        } else {
+            return null;
+        }
+    }
+
+    //21. Merge Two Sorted Lists
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) {
+            return l2;
+        }
+        if (l2 == null) {
+            return l1;
+        }
+        ListNode head = new ListNode(0);
+        ListNode cur = head;
+        while (l1 != null && l2 != null) {
+            if (l1.val >= l2.val) {
+                cur.next = l2;
+                l2 = l2.next;
+            } else {
+                cur.next = l1;
+                l1 = l1.next;
+            }
+            cur = cur.next;
+        }
+        if (l1 != null) {
+            cur.next = l1;
+        } else if (l2 != null) {
+            cur.next = l2;
+        }
+        return head.next;
+    }
+
+    //20. Valid Parentheses
+    public boolean isValid(String s) {
+        if (s == null || s.length() < 1) {
+            return true;
+        }
+        Deque<Character> stack = new ArrayDeque<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '[' || c == '{') {
+                stack.push(c);
+            } else if (stack.size() == 0) {
+                return false;
+            } else if (stack.peek() == '(' && c == ')' || stack.peek() == '[' && c == ']' || stack.peek() == '{' && c == '}') {
+                stack.pop();
+            } else {
+                return false;
+            }
+        }
+        return stack.size() == 0;
+    }
+
     //8. String to Integer (atoi)
     public int myAtoi(String str) {
         if (str == null || str.length() < 1) {
