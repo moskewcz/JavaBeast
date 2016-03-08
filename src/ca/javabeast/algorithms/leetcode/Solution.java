@@ -115,26 +115,6 @@ class LeetCode {
         return max;
     }
 
-    //48. Rotate Image
-    public void Rotate2DMatrix(int[][] matrix) {
-        int n = matrix.length;
-        int[] temp = new int[4];
-        for (int i = 0, j = 0; i < n / 2; i++, j++) { //only start to rotate the node on the diagonal 
-            int e = n - 2 * i; //get length of the edge
-            for (int k = 0; e > 1 && k < e - 1; k++) {  //Rotate every node on the edge 
-                temp[1] = matrix[i][j + k];
-                temp[2] = matrix[i + k][j + e - 1];
-                temp[3] = matrix[i + e - 1][j + e - 1 - k];
-                temp[0] = matrix[i + e - 1 - k][j];
-                matrix[i][j + k] = temp[0];
-                matrix[i + k][j + e - 1] = temp[1];
-                matrix[i + e - 1][j + e - 1 - k] = temp[2];
-                matrix[i + e - 1 - k][j] = temp[3];
-            }
-
-        }
-    }
-
     public static String ezFormat(Object... args) {
         String format = new String(new char[args.length])
                 .replace("\0", "%s");
@@ -1738,6 +1718,50 @@ class LeetCode {
         }
     }
 
+    //49. Group Anagrams
+    public List<List<String>> groupAnagrams(String[] strs) {
+        if (strs == null) {
+            return null;
+        }
+        List<List<String>> res = new ArrayList<>();
+        Arrays.sort(strs);
+        Map<String, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < strs.length; i++) {
+            char[] sc = strs[i].toCharArray();
+            Arrays.sort(sc);
+            String key = new String(sc);
+            Integer index = map.get(key);
+            if (index == null) {
+                res.add(new ArrayList<>());
+                index = res.size() - 1;
+                map.put(key, index);
+            }
+            res.get(index).add(strs[i]);
+        }
+        return res;
+    }
+
+    //48. Rotate Image
+    public void Rotate2DMatrix(int[][] matrix) {
+        int n = matrix.length;
+        int[] temp = new int[4];
+        for (int i = 0, j = 0; i < n / 2; i++, j++) { //only start to rotate the node on the diagonal 
+            int e = n - 2 * i; //get length of the edge
+            for (int k = 0; e > 1 && k < e - 1; k++) {  //Rotate every node on the edge 
+                temp[1] = matrix[i][j + k];
+                temp[2] = matrix[i + k][j + e - 1];
+                temp[3] = matrix[i + e - 1][j + e - 1 - k];
+                temp[0] = matrix[i + e - 1 - k][j];
+                matrix[i][j + k] = temp[0];
+                matrix[i + k][j + e - 1] = temp[1];
+                matrix[i + e - 1][j + e - 1 - k] = temp[2];
+                matrix[i + e - 1 - k][j] = temp[3];
+            }
+
+        }
+    }
+
     //26. Remove Duplicates from Sorted Array
     public int removeDuplicates(int[] nums) {
         if (nums.length < 1) {
@@ -1751,6 +1775,39 @@ class LeetCode {
             }
         }
         return i + 1;
+    }
+
+    //8. String to Integer (atoi)
+    public int myAtoi(String str) {
+        if (str == null || str.length() < 1) {
+            return 0;
+        }
+
+        str = str.trim();
+        int i = 0;
+        boolean flag = false;
+        if (str.charAt(i) == '-') {
+            flag = true;
+            i++;
+        } else if (str.charAt(i) == '+') {
+            i++;
+        }
+
+        double res = 0;
+        while (str.length() > i && str.charAt(i) >= '0' && str.charAt(i) <= '9') {
+            res = res * 10 + (str.charAt(i) - '0');
+            i++;
+        }
+
+        if (flag) {
+            res = -res;
+        }
+        if (res >= Integer.MAX_VALUE) {
+            res = Integer.MAX_VALUE;
+        } else if (res <= Integer.MIN_VALUE) {
+            res = Integer.MIN_VALUE;
+        }
+        return (int) res;
     }
 
     //5. Longest Palindromic Substring
@@ -2878,7 +2935,6 @@ class LeetCode {
 //            res[1] = r - 1;
 //        }
 //    }
-
     //Array Questions:
     //153. Find Minimum in Rotated Sorted Array
     public int findMin(int[] nums) {
