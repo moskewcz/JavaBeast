@@ -1073,6 +1073,52 @@ class LeetCode {
         return res;
     }
 
+    //336. Palindrome Pairs
+    public List<List<Integer>> palindromePairs(String[] words) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (words == null || words.length < 1) {
+            return res;
+        }
+        int n = words.length;
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            map.put(words[i], i);
+        }
+        for (int i = 0; i < n; i++) {
+            int len = words[i].length(), l = 0, r = 0;
+            while (l <= r) {
+                String str1 = new StringBuilder(words[i].substring(l, r)).reverse().toString();
+                String str2 = words[i].substring(l == 0 ? r : 0, l == 0 ? len : l);
+                Integer j = map.get(str1);
+                if (j != null && j != i && isPalindrome(str2)) {
+                    List<Integer> pair = new ArrayList<>();
+                    pair.add(l == 0 ? i : j);
+                    pair.add(l == 0 ? j : i);
+                    res.add(pair);
+                }
+                if (r < len) {
+                    r++;
+                } else {
+                    l++;
+                }
+            }
+        }
+        return res;
+    }
+
+    boolean isPalindrome(String s) {
+        if (s == null && s.length() == 0) {
+            return true;
+        }
+        char[] arr = s.toCharArray();
+        for (int i = 0, j = s.length() - 1; i < j; i++, j--) {
+            if (arr[i] != arr[j]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
