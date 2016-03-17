@@ -15,6 +15,7 @@
  */
 package ca.javabeast.algorithms.leetcode;
 
+import ca.javabeast.algorithms.leetcode.LeetCode.TreeNode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +52,9 @@ public class Solution {
         //shuffle(deck);
         System.out.println(Arrays.toString(deck));
         //[161]
+        LeetCode.print("9,3,4,#,#,1,#,#,2,#,6,#,#".split(","));
+        TreeNode root = lc.deserializePreTree("9,3,4,#,#,1,#,#,2,#,6,#,#".split(","));
+        lc.preTraversal(root);
     }
 
     static void shuffle(int[] arr) {
@@ -70,6 +74,33 @@ public class Solution {
 }
 
 class LeetCode {
+
+    //deserialize preorder serialization binary tree
+    int i = 0;
+
+    public TreeNode deserializePreTree(String[] str) {
+        TreeNode root = null;
+        if (i < str.length) {
+            String s = str[i];
+            i++;
+            if (!s.equals("#")) {
+                root = new TreeNode(Integer.parseInt(s));
+                root.left = deserializePreTree(str);
+                root.right = deserializePreTree(str);
+            }
+        }
+        return root;
+    }
+
+    public void preTraversal(TreeNode root) {
+        if (root == null) {
+            System.out.print("#");
+            return;
+        }
+        System.out.print(root.val);
+        preTraversal(root.left);
+        preTraversal(root.right);
+    }
 
     //32. Longest Valid Parentheses
     public int longestValidParentheses(String s) {
@@ -1117,6 +1148,26 @@ class LeetCode {
             }
         }
         return true;
+    }
+
+    //331. Verify Preorder Serialization of a Binary Tree
+    public boolean isValidSerialization(String preorder) {
+        if (preorder == null || preorder.length() < 1) {
+            return false;
+        }
+        String[] strs = preorder.split(",");
+        int diff = 0;
+        for (String s : strs) {
+            if (diff > 0) {
+                return false;
+            }
+            if (s.equals("#")) {
+                diff++;
+            } else {
+                diff--;
+            }
+        }
+        return diff == 1;
     }
 
     //300. Longest Increasing Subsequence
