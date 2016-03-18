@@ -1150,6 +1150,49 @@ class LeetCode {
         return true;
     }
 
+    //332. Reconstruct Itinerary
+    public List<String> findItinerary(String[][] tickets) {
+        Map<String, List<String>> graph = new HashMap<>();
+        List<String> res = new LinkedList<>();
+        for (String[] ticket : tickets) {
+            String s = ticket[0];
+            String d = ticket[1];
+            List<String> l = graph.get(s);
+            if (l == null) {
+                l = new ArrayList<>();
+                graph.put(s, l);
+            }
+            l.add(d);
+        }
+        for (Map.Entry<String, List<String>> entry : graph.entrySet()) {
+            Collections.sort(entry.getValue());
+        }
+        res.add("JFK");
+        findItineraryHelper("JFK", tickets.length, graph, res);
+        return res;
+    }
+
+    boolean findItineraryHelper(String s, int l, Map<String, List<String>> g, List<String> res) {
+        if (l <= 0) {
+            return true;
+        }
+
+        List<String> dest = g.get(s);
+        if (dest != null) {
+            for (int i = 0; i < dest.size(); i++) {
+                String d = dest.get(i);
+                res.add(d);
+                dest.remove(i);
+                if (findItineraryHelper(d, l - 1, g, res)) {
+                    return true;
+                }
+                res.remove(res.size() - 1);
+                dest.add(i, d);
+            }
+        }
+        return false;
+    }
+
     //331. Verify Preorder Serialization of a Binary Tree
     public boolean isValidSerialization(String preorder) {
         if (preorder == null || preorder.length() < 1) {
@@ -1168,6 +1211,91 @@ class LeetCode {
             }
         }
         return diff == 1;
+    }
+
+    //330. Patching Array
+    public int minPatches(int[] nums, int n) {
+        int i = 0, res = 0, l = nums.length;
+        long top = 0;
+        while (top < n) {
+            if (i < l && nums[i] <= (top + 1)) {
+                top += nums[i++];
+            } else {
+                res++;
+                top = 2 * top + 1;
+            }
+        }
+        return res;
+    }
+
+    //329. Longest Increasing Path in a Matrix
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
+            return 0;
+        }
+        int m = matrix.length, n = matrix[0].length, res = 1;
+        int[][] cache = new int[m][n];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                res = Math.max(res, LIPHelper(matrix, cache, i, j, Integer.MAX_VALUE));
+            }
+        }
+        return res;
+    }
+
+    int LIPHelper(int[][] m, int[][] c, int i, int j, int pre) {
+        if (i < 0 || i > m.length - 1 || j < 0 || j > m[0].length - 1 || m[i][j] >= pre) {
+            return 0;
+        }
+        if (c[i][j] > 0) {
+            return c[i][j];
+        }
+        int cur = m[i][j], temp = 0;
+        temp = Math.max(LIPHelper(m, c, i + 1, j, cur), temp);
+        temp = Math.max(LIPHelper(m, c, i - 1, j, cur), temp);
+        temp = Math.max(LIPHelper(m, c, i, j + 1, cur), temp);
+        temp = Math.max(LIPHelper(m, c, i, j - 1, cur), temp);
+        c[i][j] = ++temp;
+        return temp;
+    }
+
+    //327. Count of Range Sum
+    public int countRangeSum(int[] nums, int lower, int upper) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        int n = nums.length, res = 0;
+        long[] sums = new long[n + 1];
+        for (int i = 0; i < n; i++) {
+            sums[i + 1] = nums[i] + sums[i];
+        }
+        return countRangeSumMergeSort(sums, 0, n + 1, lower, upper);
+    }
+
+    int countRangeSumMergeSort(long[] sums, int s, int e, int lo, int up) {
+        if (e - s <= 1) {
+            return 0;
+        }
+        int m = (s + e) / 2;
+        int count = countRangeSumMergeSort(sums, s, m, lo, up) + countRangeSumMergeSort(sums, m, e, lo, up);
+        long[] cache = new long[e - s];
+        int l = m, u = m, t = m;
+        for (int i = s, k = 0; i < m; i++, k++) {
+            while (l < e && sums[l] - sums[i] < lo) {
+                l++;
+            }
+            while (u < e && sums[u] - sums[i] <= up) {
+                u++;
+            }
+            while (t < e && sums[t] < sums[i]) {
+                cache[k++] = sums[t++];
+            }
+            cache[k] = sums[i];
+            count += u - l;
+        }
+        System.arraycopy(cache, 0, sums, s, t - s);
+        return count;
     }
 
     //300. Longest Increasing Subsequence
@@ -1295,21 +1423,6 @@ class LeetCode {
         return dp[sl][pl];
     }
 
-    //330. Patching Array
-    public int minPatches(int[] nums, int n) {
-        int i = 0, res = 0, l = nums.length;
-        long top = 0;
-        while (top < n) {
-            if (i < l && nums[i] <= (top + 1)) {
-                top += nums[i++];
-            } else {
-                res++;
-                top = 2 * top + 1;
-            }
-        }
-        return res;
-    }
-
     //328. Odd Even Linked List
     public ListNode oddEvenList(ListNode head) {
         if (head != null) {
@@ -1358,49 +1471,6 @@ class LeetCode {
                 b = nums[i];
             } else {
                 return true;
-            }
-        }
-        return false;
-    }
-
-    //332. Reconstruct Itinerary
-    public List<String> findItinerary(String[][] tickets) {
-        Map<String, List<String>> graph = new HashMap<>();
-        List<String> res = new LinkedList<>();
-        for (String[] ticket : tickets) {
-            String s = ticket[0];
-            String d = ticket[1];
-            List<String> l = graph.get(s);
-            if (l == null) {
-                l = new ArrayList<>();
-                graph.put(s, l);
-            }
-            l.add(d);
-        }
-        for (Map.Entry<String, List<String>> entry : graph.entrySet()) {
-            Collections.sort(entry.getValue());
-        }
-        res.add("JFK");
-        findItineraryHelper("JFK", tickets.length, graph, res);
-        return res;
-    }
-
-    boolean findItineraryHelper(String s, int l, Map<String, List<String>> g, List<String> res) {
-        if (l <= 0) {
-            return true;
-        }
-
-        List<String> dest = g.get(s);
-        if (dest != null) {
-            for (int i = 0; i < dest.size(); i++) {
-                String d = dest.get(i);
-                res.add(d);
-                dest.remove(i);
-                if (findItineraryHelper(d, l - 1, g, res)) {
-                    return true;
-                }
-                res.remove(res.size() - 1);
-                dest.add(i, d);
             }
         }
         return false;
