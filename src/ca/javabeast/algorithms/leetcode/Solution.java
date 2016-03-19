@@ -1104,6 +1104,95 @@ class LeetCode {
         return res;
     }
 
+    //284. Peeking Iterator
+    // Java Iterator interface reference:
+    // https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
+    class PeekingIterator implements Iterator<Integer> {
+
+        private Integer head = null;
+        private Iterator<Integer> iterator;
+
+        public PeekingIterator(Iterator<Integer> iterator) {
+            // initialize any member here.
+            this.iterator = iterator;
+            if (iterator.hasNext()) {
+                head = iterator.next();
+            }
+        }
+
+        // Returns the next element in the iteration without advancing the iterator.
+        public Integer peek() {
+            return head;
+        }
+
+        // hasNext() and next() should behave the same as in the Iterator interface.
+        // Override them if needed.
+        @Override
+        public Integer next() {
+            Integer h = head;
+            head = iterator.hasNext() ? iterator.next() : null;
+            return h;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return head != null;
+        }
+    }
+
+    //173. Binary Search Tree Iterator
+    public class BSTIterator {
+
+        private Deque<TreeNode> stack;
+
+        public BSTIterator(TreeNode root) {
+            stack = new ArrayDeque<>();
+            pushAll(root);
+        }
+
+        /**
+         * @return whether we have a next smallest number
+         */
+        public boolean hasNext() {
+            return stack.size() > 0;
+        }
+
+        /**
+         * @return the next smallest number
+         */
+        public int next() {
+            TreeNode cur = stack.pop();
+            pushAll(cur.right);
+            return cur == null ? null : cur.val;
+        }
+
+        private void pushAll(TreeNode node) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+        }
+    }
+
+    //10. Regular Expression Matching
+    public boolean isMatch(String s, String p) {
+        int sl = s.length(), pl = p.length();
+        boolean[][] dp = new boolean[sl + 1][pl + 1];
+        dp[0][0] = true;
+        for (int i = 0; i <= sl; i++) {
+            for (int j = 1; j <= pl; j++) {
+                char c = p.charAt(j - 1);
+                if (c == '*') {
+                    dp[i][j] = (j > 1 && dp[i][j - 2]) || (i > 0 && dp[i - 1][j] && (p.charAt(j - 2) == '.' || p.charAt(j - 2) == s.charAt(i - 1)));
+                } else {
+                    dp[i][j] = i > 0 && dp[i - 1][j - 1] && (c == '.' || c == s.charAt(i - 1));
+                }
+            }
+        }
+        return dp[sl][pl];
+    }
+
+    //M/E
     //336. Palindrome Pairs
     public List<List<Integer>> palindromePairs(String[] words) {
         List<List<Integer>> res = new ArrayList<>();
@@ -1148,6 +1237,21 @@ class LeetCode {
             }
         }
         return true;
+    }
+
+    //334. Increasing Triplet Subsequence
+    public boolean increasingTriplet(int[] nums) {
+        int s = Integer.MAX_VALUE, b = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= s) {
+                s = nums[i];
+            } else if (nums[i] <= b) {
+                b = nums[i];
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
 
     //332. Reconstruct Itinerary
@@ -1260,6 +1364,24 @@ class LeetCode {
         return temp;
     }
 
+    //328. Odd Even Linked List
+    public ListNode oddEvenList(ListNode head) {
+        if (head != null) {
+            ListNode eHead = head.next;
+            ListNode o = head, e = eHead;
+            while (e != null) {
+                o.next = e.next;
+                if (e.next != null) {
+                    e.next = e.next.next;
+                    o = o.next;
+                }
+                e = e.next;
+            }
+            o.next = eHead;
+        }
+        return head;
+    }
+
     //327. Count of Range Sum
     public int countRangeSum(int[] nums, int lower, int upper) {
         if (nums == null || nums.length < 1) {
@@ -1298,6 +1420,88 @@ class LeetCode {
         return count;
     }
 
+    //326. Power of Thre
+    public boolean isPowerOfThree(int n) {
+        return (Math.log10(n) / Math.log10(3) % 1 == 0);
+    }
+
+    //324. Wiggle Sort II
+    public void wiggleSort(int[] nums) {
+        int n = nums.length;
+        if (n < 2) {
+            return;
+        }
+        // find median
+        int i = 0, j = n - 1;
+        int median = 0;
+        while (i <= j) {
+            int p = i, a = i + 1, b = j;
+            while (a <= b) {
+                if (nums[a] <= nums[p]) {
+                    swap(nums, a, b--);
+                } else {
+                    a++;
+                }
+            }
+            swap(nums, p, b);
+            if (b == (n - 1) / 2) {
+                median = nums[b];
+                break;
+            } else if (b < (n - 1) / 2) {
+                i = b + 1;
+            } else {
+                j = b - 1;
+            }
+        }
+
+        // three way partition
+        i = 1;
+        j = n % 2 == 0 ? n - 2 : n - 1;
+        int k = 1;
+        boolean reachEnd = false;
+        while (!reachEnd || k <= j) {
+            if (nums[k] > median) {
+                swap(nums, i, k);
+                i += 2;
+                if (k < nums.length - 2 || reachEnd) {
+                    k = k + 2;
+                } else {
+                    k = 0;
+                    reachEnd = true;
+                }
+            } else if (nums[k] < median) {
+                swap(nums, j, k);
+                j -= 2;
+            } else {
+                if (k < nums.length - 2 || reachEnd) {
+                    k = k + 2;
+                } else {
+                    k = 0;
+                    reachEnd = true;
+                }
+            }
+        }
+    }
+
+    //322. Coin Change
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 0;
+        for (int sum = 1; sum <= amount; sum++) {
+            dp[sum] = Integer.MAX_VALUE;
+            for (int i = 0; i < coins.length; i++) {
+                if (sum >= coins[i] && dp[sum - coins[i]] >= 0) {
+                    dp[sum] = Math.min(dp[sum], dp[sum - coins[i]] + 1);
+                }
+            }
+            if (dp[sum] == Integer.MAX_VALUE) {
+                dp[sum] = -1;
+            }
+        }
+
+        return dp[amount];
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
@@ -1333,152 +1537,6 @@ class LeetCode {
             }
         }
         return len;
-    }
-
-    //284. Peeking Iterator
-    // Java Iterator interface reference:
-    // https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
-    class PeekingIterator implements Iterator<Integer> {
-
-        private Integer head = null;
-        private Iterator<Integer> iterator;
-
-        public PeekingIterator(Iterator<Integer> iterator) {
-            // initialize any member here.
-            this.iterator = iterator;
-            if (iterator.hasNext()) {
-                head = iterator.next();
-            }
-        }
-
-        // Returns the next element in the iteration without advancing the iterator.
-        public Integer peek() {
-            return head;
-        }
-
-        // hasNext() and next() should behave the same as in the Iterator interface.
-        // Override them if needed.
-        @Override
-        public Integer next() {
-            Integer h = head;
-            head = iterator.hasNext() ? iterator.next() : null;
-            return h;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return head != null;
-        }
-    }
-
-    //173. Binary Search Tree Iterator
-    public class BSTIterator {
-
-        private Deque<TreeNode> stack;
-
-        public BSTIterator(TreeNode root) {
-            stack = new ArrayDeque<>();
-            pushAll(root);
-        }
-
-        /**
-         * @return whether we have a next smallest number
-         */
-        public boolean hasNext() {
-            return stack.size() > 0;
-        }
-
-        /**
-         * @return the next smallest number
-         */
-        public int next() {
-            TreeNode cur = stack.pop();
-            pushAll(cur.right);
-            return cur == null ? null : cur.val;
-        }
-
-        private void pushAll(TreeNode node) {
-            while (node != null) {
-                stack.push(node);
-                node = node.left;
-            }
-        }
-    }
-
-    //10. Regular Expression Matching
-    public boolean isMatch(String s, String p) {
-        int sl = s.length(), pl = p.length();
-        boolean[][] dp = new boolean[sl + 1][pl + 1];
-        dp[0][0] = true;
-        for (int i = 0; i <= sl; i++) {
-            for (int j = 1; j <= pl; j++) {
-                char c = p.charAt(j - 1);
-                if (c == '*') {
-                    dp[i][j] = (j > 1 && dp[i][j - 2]) || (i > 0 && dp[i - 1][j] && (p.charAt(j - 2) == '.' || p.charAt(j - 2) == s.charAt(i - 1)));
-                } else {
-                    dp[i][j] = i > 0 && dp[i - 1][j - 1] && (c == '.' || c == s.charAt(i - 1));
-                }
-            }
-        }
-        return dp[sl][pl];
-    }
-
-    //328. Odd Even Linked List
-    public ListNode oddEvenList(ListNode head) {
-        if (head != null) {
-            ListNode eHead = head.next;
-            ListNode o = head, e = eHead;
-            while (e != null) {
-                o.next = e.next;
-                if (e.next != null) {
-                    e.next = e.next.next;
-                    o = o.next;
-                }
-                e = e.next;
-            }
-            o.next = eHead;
-        }
-        return head;
-    }
-
-    //322. Coin Change
-    public int coinChange(int[] coins, int amount) {
-        int[] dp = new int[amount + 1];
-        dp[0] = 0;
-        for (int sum = 1; sum <= amount; sum++) {
-            dp[sum] = Integer.MAX_VALUE;
-            for (int i = 0; i < coins.length; i++) {
-                if (sum >= coins[i] && dp[sum - coins[i]] >= 0) {
-                    dp[sum] = Math.min(dp[sum], dp[sum - coins[i]] + 1);
-                }
-            }
-            if (dp[sum] == Integer.MAX_VALUE) {
-                dp[sum] = -1;
-            }
-        }
-
-        return dp[amount];
-    }
-
-    //M/E
-    //334. Increasing Triplet Subsequence
-    public boolean increasingTriplet(int[] nums) {
-        int s = Integer.MAX_VALUE, b = Integer.MAX_VALUE;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] <= s) {
-                s = nums[i];
-            } else if (nums[i] <= b) {
-                b = nums[i];
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //326. Power of Thre
-    public boolean isPowerOfThree(int n) {
-        return (Math.log10(n) / Math.log10(3) % 1 == 0);
     }
 
     //242. Valid Anagram
