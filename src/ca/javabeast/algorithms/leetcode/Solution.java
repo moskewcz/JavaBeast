@@ -1420,24 +1420,60 @@ class LeetCode {
         return count;
     }
 
-    //326. Power of Thre
+    //326. Power of Three
     public boolean isPowerOfThree(int n) {
         return (Math.log10(n) / Math.log10(3) % 1 == 0);
     }
 
-    //324. Wiggle Sort II
-    public void wiggleSort(int[] nums) {
-        int n = nums.length;
-        if (n < 2) {
+    //324. Wiggle Sort II 
+    public void wiggleSort0(int[] nums) {//O(NlogN)
+        if (nums == null || nums.length < 2) {
             return;
         }
-        // find median
-        int i = 0, j = n - 1;
-        int median = 0;
+        int n = nums.length;
+        int[] sorted = Arrays.copyOf(nums, n);
+        Arrays.sort(sorted);
+        for (int i = (n - 1) / 2, j = n - 1, k = 0; k < n; k++) {
+            if (k % 2 == 1) {
+                nums[k] = sorted[j--];
+            } else {
+                nums[k] = sorted[i--];
+            }
+        }
+    }
+
+    public void wiggleSort(int[] nums) {//O(N)
+        if (nums == null || nums.length < 2) {
+            return;
+        }
+        int n = nums.length;
+        int median = findMedian(nums);
+        int l = 0, k = 0, r = n - 1;
+        while (k <= r) {
+            int l1 = mapping(l, n), k1 = mapping(k, n), r1 = mapping(r, n);
+            if (nums[k1] > median) {
+                swap(nums, k1, l1);
+                k++;
+                l++;
+            } else if (nums[k1] < median) {
+                swap(nums, k1, r1);
+                r--;
+            } else {
+                k++;
+            }
+        }
+    }
+
+    int mapping(int i, int n) {
+        return (2 * i + 1) % (n | 1);
+    }
+
+    int findMedian(int[] nums) {
+        int n = nums.length, median = 0, i = 0, j = n - 1;
         while (i <= j) {
             int p = i, a = i + 1, b = j;
             while (a <= b) {
-                if (nums[a] <= nums[p]) {
+                if (nums[a] < nums[p]) {
                     swap(nums, a, b--);
                 } else {
                     a++;
@@ -1453,34 +1489,7 @@ class LeetCode {
                 j = b - 1;
             }
         }
-
-        // three way partition
-        i = 1;
-        j = n % 2 == 0 ? n - 2 : n - 1;
-        int k = 1;
-        boolean reachEnd = false;
-        while (!reachEnd || k <= j) {
-            if (nums[k] > median) {
-                swap(nums, i, k);
-                i += 2;
-                if (k < nums.length - 2 || reachEnd) {
-                    k = k + 2;
-                } else {
-                    k = 0;
-                    reachEnd = true;
-                }
-            } else if (nums[k] < median) {
-                swap(nums, j, k);
-                j -= 2;
-            } else {
-                if (k < nums.length - 2 || reachEnd) {
-                    k = k + 2;
-                } else {
-                    k = 0;
-                    reachEnd = true;
-                }
-            }
-        }
+        return median;
     }
 
     //322. Coin Change
