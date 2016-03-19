@@ -1492,6 +1492,74 @@ class LeetCode {
         return median;
     }
 
+    //323. Number of Connected Components in an Undirected Graph
+    public int countComponents(int n, int[][] edges) {
+        int[] roots = new int[n];
+        for (int i = 0; i < n; i++) {
+            roots[i] = i;
+        }
+        for (int[] e : edges) {
+            int r1 = findRoot(roots, e[0]);
+            int r2 = findRoot(roots, e[1]);
+            if (r1 != r2) {
+                roots[r1] = r2;
+                n--;
+            }
+        }
+        return n;
+    }
+
+    int findRoot(int[] roots, int i) {
+        while (roots[i] != i) {
+            roots[i] = roots[roots[i]];
+            i = roots[i];
+        }
+        return i;
+    }
+
+    public int countComponents1(int n, int[][] edges) {
+        int res = 0;
+        if (n < 1) {
+            return res;
+        }
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        boolean[] visited = new boolean[n];
+        for (int[] e : edges) {
+            List<Integer> list0 = map.get(e[0]);
+            List<Integer> list1 = map.get(e[1]);
+            if (list0 == null) {
+                list0 = new ArrayList<>();
+                map.put(e[0], list0);
+            }
+            if (list1 == null) {
+                list1 = new ArrayList<>();
+                map.put(e[1], list1);
+            }
+            list0.add(e[1]);
+            list1.add(e[0]);
+        }
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                visited[i] = true;
+                res++;
+                countHelper(i, map, visited);
+            }
+        }
+        return res;
+    }
+
+    void countHelper(int i, Map<Integer, List<Integer>> map, boolean[] visited) {
+        List<Integer> list = map.get(i);
+        if (list != null) {
+            for (int j : list) {
+                if (!visited[j]) {
+                    visited[j] = true;
+                    countHelper(j, map, visited);
+                }
+            }
+        }
+    }
+
     //322. Coin Change
     public int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
