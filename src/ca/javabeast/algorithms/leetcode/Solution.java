@@ -1579,8 +1579,83 @@ class LeetCode {
         return dp[amount];
     }
 
+    //321. Create Maximum Number
+    public int[] maxNumber(int[] ma, int[] na, int k) {
+        if (k < 0) {
+            return null;
+        }
+        if (ma == null) {
+            ma = new int[0];
+        }
+        if (na == null) {
+            na = new int[0];
+        }
+        int[] ka = new int[k];
+        int m = ma.length;
+        int n = na.length;
+        for (int i = 0; i < k + 1; i++) {
+            if (m < i || n < k - i) {
+                continue;
+            }
+            int[] left = maxNumberGetChunk(ma, i);
+            int[] right = maxNumberGetChunk(na, k - i);
+            ka = maxNumberMerge(ka, left, right);
+        }
+        return ka;
+    }
+
+    int[] maxNumberGetChunk(int[] nums, int t) {
+        int[] res = new int[t];
+        int n = nums.length;
+        for (int i = 0, len = 0; i < n; i++) {
+            while (len > 0 && n - i + len > t && nums[i] > res[len - 1]) {
+                len--;
+            }
+            if (len < t) {
+                res[len++] = nums[i];
+            }
+        }
+        return res;
+    }
+
+    boolean maxNumberGreater(int[] nums1, int s1, int[] nums2, int s2) {
+        for (; s1 < nums1.length && s2 < nums2.length; s1++, s2++) {
+            if (nums1[s1] > nums2[s2]) {
+                return true;
+            }
+            if (nums1[s1] < nums2[s2]) {
+                return false;
+            }
+        }
+        return s1 != nums1.length;
+    }
+
+    int[] maxNumberMerge(int[] ka, int[] left, int[] right) {
+        int k = ka.length, m = left.length, n = right.length;
+        int i = 0, j = 0, t = 0;
+        int[] res = new int[k];
+        while (i < m && j < n) {
+            if (maxNumberGreater(left, i, right, j)) {
+                res[t++] = left[i++];
+            } else {
+                res[t++] = right[j++];
+            }
+        }
+        while (i < m) {
+            res[t++] = left[i++];
+        }
+        while (j < n) {
+            res[t++] = right[j++];
+        }
+        if (maxNumberGreater(res, 0, ka, 0)) {
+            ka = res;
+        }
+        return ka;
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
+
     public int lengthOfLIS0(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
