@@ -55,6 +55,7 @@ public class Solution {
         LeetCode.print("9,3,4,#,#,1,#,#,2,#,6,#,#".split(","));
         TreeNode root = lc.deserializePreTree("9,3,4,#,#,1,#,#,2,#,6,#,#".split(","));
         lc.preTraversal(root);
+        System.out.println("abc".compareTo("ab"));
     }
 
     static void shuffle(int[] arr) {
@@ -1653,9 +1654,130 @@ class LeetCode {
         return ka;
     }
 
+    //320. Generalized Abbreviation
+    public List<String> generateAbbreviations(String word) {
+        List<String> res = new ArrayList<>();
+        if (word != null) {
+            generateAbbreviationsHelper(new StringBuilder(), res, word.toCharArray(), 0, 0);
+        }
+        return res;
+    }
+
+    void generateAbbreviationsHelper(StringBuilder sb, List<String> res, char[] c, int i, int n) {
+        int len = sb.length();
+        if (i >= c.length) {
+            if (n != 0) {
+                sb.append(n);
+            }
+            res.add(sb.toString());
+        } else {
+            generateAbbreviationsHelper(sb, res, c, i + 1, n + 1);
+            if (n != 0) {
+                sb.append(n);
+            }
+            generateAbbreviationsHelper(sb.append(c[i]), res, c, i + 1, 0);
+        }
+        sb.setLength(len);
+    }
+
+    //318. Maximum Product of Word Lengths
+    public int maxProduct(String[] words) {
+        int res = 0;
+        if (words != null) {
+
+            int n = words.length;
+            int[] dict = new int[n];
+            for (int i = 0; i < n; i++) {
+                String s1 = words[i];
+                for (char c : s1.toCharArray()) {
+                    dict[i] |= 1 << (c - 'a');
+                }
+                for (int j = 0; j < i; j++) {
+                    if ((dict[i] & dict[j]) == 0) {
+                        res = Math.max(res, s1.length() * words[j].length());
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    //317. Shortest Distance from All Buildings
+    public int shortestDistance(int[][] grid) {
+        if (grid == null || grid.length == 0 || grid[0].length == 0) {
+            return -1;
+        }
+        int m = grid.length;
+        int n = grid[0].length;
+        int num = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    num++;
+                }
+            }
+        }
+
+        int[][] dis = new int[m][n];
+        int[][] nb = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    if (!shortestDistanceBFS(grid, new boolean[m][n], dis, nb, i, j, num)) {
+                        return -1;
+                    }
+                }
+            }
+        }
+
+        int res = -1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0 && dis[i][j] != 0 && nb[i][j] == num && (res == -1 || res > dis[i][j])) {
+                    res = dis[i][j];
+                }
+            }
+        }
+        return res;
+    }
+
+    boolean shortestDistanceBFS(int[][] grid, boolean[][] visited, int[][] dis, int[][] nb, int i, int j, int num) {
+        Deque<Integer> is = new ArrayDeque<>();
+        Deque<Integer> js = new ArrayDeque<>();
+        Deque<Integer> ds = new ArrayDeque<>();
+        is.add(i);
+        js.add(j);
+        ds.add(0);
+        int[] xx = new int[]{-1, 0, 1, 0};
+        int[] yy = new int[]{0, -1, 0, 1};
+        int neigh = 0;
+        while (is.size() > 0) {
+            i = is.poll();
+            j = js.poll();
+            int d = ds.poll();
+            for (int k = 0; k < 4; k++) {
+                int x = i + xx[k];
+                int y = j + yy[k];
+                if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length && !visited[x][y]) {
+                    if (grid[x][y] == 0) {
+                        nb[x][y]++;
+                        dis[x][y] += d + 1;
+                        is.add(x);
+                        js.add(y);
+                        ds.add(d + 1);
+                        neigh++;
+                    } else if (grid[x][y] == 1) {
+                        num--;
+                    }
+                    visited[x][y] = true;
+                }
+            }
+        }
+        return num <= 1 && neigh > 0;
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
-
     public int lengthOfLIS0(int[] nums) {
         int n = nums.length;
         int[] dp = new int[n];
