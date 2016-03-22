@@ -56,6 +56,7 @@ public class Solution {
         TreeNode root = lc.deserializePreTree("9,3,4,#,#,1,#,#,2,#,6,#,#".split(","));
         lc.preTraversal(root);
         System.out.println("abc".compareTo("ab"));
+        System.out.println(Arrays.equals(new String[]{"abc", "cba"}, new String[]{"abc", "cba"}));
     }
 
     static void shuffle(int[] arr) {
@@ -1811,6 +1812,48 @@ class LeetCode {
             }
         }
         return len;
+    }
+
+    //264. Ugly Number II
+    public int nthUglyNumber(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        int[] res = new int[n];
+        int next_2 = 2, next_3 = 3, next_5 = 5;
+        int index_2 = 0, index_3 = 0, index_5 = 0;
+        res[0] = 1;
+        for (int i = 1; i < n; i++) {
+            int min = Math.min(next_2, Math.min(next_3, next_5));
+            res[i] = min;
+            if (min == next_2) {
+                next_2 = 2 * res[++index_2];
+            }
+            if (min == next_3) {
+                next_3 = 3 * res[++index_3];
+            }
+            if (min == next_5) {
+                next_5 = 5 * res[++index_5];
+            }
+        }
+        return res[n - 1];
+    }
+
+    //263. Ugly Number
+    public boolean isUgly(int num) {
+        if (num < 1) {
+            return false;
+        }
+        if (num == 1) {
+            return true;
+        }
+        int[] primes = new int[]{2, 3, 5};
+        for (int i = 0; i < primes.length; i++) {
+            while (num % primes[i] == 0) {
+                num /= primes[i];
+            }
+        }
+        return num == 1;
     }
 
     //242. Valid Anagram
