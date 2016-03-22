@@ -1777,6 +1777,32 @@ class LeetCode {
         return num <= 1 && neigh > 0;
     }
 
+    //313. Super Ugly Number
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        if (n < 1 || primes == null || primes.length < 1) {
+            return 0;
+        }
+        int m = primes.length;
+        int[] idx = new int[m];
+        int[] nextVal = new int[m];
+        int[] res = new int[n];
+        Arrays.fill(nextVal, 1);
+        int next = 1;
+        for (int i = 0; i < n; i++) {
+            res[i] = next;
+            next = Integer.MAX_VALUE;
+            for (int p = 0; p < m; p++) {
+                if (res[i] == nextVal[p]) {
+                    nextVal[p] = primes[p] * res[idx[p]++];
+                }
+                if (next > nextVal[p]) {
+                    next = nextVal[p];
+                }
+            }
+        }
+        return res[n - 1];
+    }
+    
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
