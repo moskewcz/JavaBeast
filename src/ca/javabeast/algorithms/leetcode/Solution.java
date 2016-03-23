@@ -1802,7 +1802,66 @@ class LeetCode {
         }
         return res[n - 1];
     }
-    
+
+    //312. Burst Balloons
+    public int maxCoins(int[] old_nums) {
+        int n = old_nums.length + 2;
+        if (n < 3) {
+            return 0;
+        }
+        int[] nums = new int[n];
+        nums[0] = nums[n - 1] = 1;
+        System.arraycopy(old_nums, 0, nums, 1, n - 2);
+        int[][] dp = new int[n][n];
+        for (int len = 3; len < n + 1; len++) {
+            for (int i = 0; i + len < n + 1; i++) {
+                int j = i + len - 1;
+                for (int k = i + 1; k < j; k++) {
+                    dp[i][j] = Math.max(dp[i][j], (dp[i][k] + dp[k][j] + nums[i] * nums[k] * nums[j]));
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+
+    //310. Minimum Height Trees
+    public List<Integer> findMinHeightTrees0(int n, int[][] edges) {
+        List<Integer> res = new ArrayList<>();
+
+        if (n == 1) {
+            res.add(0);
+        }
+        if (n <= 1) {
+            return res;
+        }
+        List<Set<Integer>> map = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            map.add(new HashSet<>());
+        }
+        for (int[] edge : edges) {
+            map.get(edge[0]).add(edge[1]);
+            map.get(edge[1]).add(edge[0]);
+        }
+        for (int i = 0; i < n; i++) {
+            if (map.get(i).size() == 1) {
+                res.add(i);
+            }
+        }
+        while (n > 2) {
+            n -= res.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i : res) {
+                int j = map.get(i).iterator().next();
+                map.get(j).remove(i);
+                if (map.get(j).size() == 1) {
+                    list.add(j);
+                }
+            }
+            res = list;
+        }
+        return res;
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
@@ -3030,7 +3089,7 @@ class LeetCode {
 
     //312. Burst Balloons
     //DP,https://leetcode.com/discuss/72216/share-some-analysis-and-explanations
-    public int maxCoins(int[] old_nums) {
+    public int maxCoins1(int[] old_nums) {
         int n = old_nums.length + 2;
         if (n < 3) {
             return 0;
