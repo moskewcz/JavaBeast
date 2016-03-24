@@ -16,10 +16,12 @@
 package ca.javabeast.algorithms.leetcode;
 
 import ca.javabeast.algorithms.leetcode.LeetCode.TreeNode;
+import java.io.InputStream;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,6 +41,214 @@ import java.util.Stack;
 public class Solution {
 
     public static void main(String[] args) {
+        Solution s = new Solution();
+        int[] arr = {0, 5, 0, 2, 3, 0, 3, 5, 0};
+        LeetCode.print(s.getNumOfSwap(arr));
+        //getFirstLetter
+        LeetCode.print(s.getFirstLetter("aabbccdee"));
+    }
+
+    public int getNumOfSwap(int[] nums) {
+        if (nums == null || nums.length < 3) {
+            return 0;
+        }
+        int n = nums.length;
+        int count = 0;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 0) {
+                count++;
+            }
+
+        }
+        int leftCount = count, rightCount = count;
+        for (int i = 0; i < count; i++) {
+            if (nums[i] == 0) {
+                leftCount--;
+            }
+            if (nums[n - 1 - i] == 0) {
+                rightCount--;
+            }
+        }
+        return Math.min(leftCount, rightCount);
+    }
+
+    public int getNumOfSwap1(int[] nums) {
+        if (nums == null || nums.length < 3) {
+            return 0;
+        }
+        int n = nums.length;
+        int left = 0, right = n - 1;
+        int res1 = 0, res2 = 0;
+        while (true) {
+            while (nums[left] == 0) {
+                left++;
+            }
+            while (nums[right] != 0) {
+                right--;
+            }
+            if (left < right) {
+                left++;
+                right--;
+                res1++;
+            } else {
+                break;
+            }
+        }
+        left = 0;
+        right = n - 1;
+        while (true) {
+            while (nums[left] != 0) {
+                left++;
+            }
+            while (nums[right] == 0) {
+                right--;
+            }
+            if (left < right) {
+                left++;
+                right--;
+                res2++;
+            } else {
+                break;
+            }
+        }
+        return Math.min(res1, res2);
+    }
+
+    //287. Find the Duplicate Number
+    //Floyd loop detection(https://leetcode.com/problems/find-the-duplicate-number/)
+    public int getDuplicateNum(int[] nums) {
+        if (nums == null || nums.length < 2) {
+            return 0;
+        }
+        int n = nums.length - 1;
+        int slow = 0, fast = 0;
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+        fast = 0;
+        while (fast != slow) {
+            fast = nums[fast];
+            slow = nums[slow];
+        }
+        return slow;
+    }
+
+    class Interval {
+
+        int start;
+        int end;
+
+        public Interval() {
+            start = 0;
+            end = 0;
+        }
+
+        public Interval(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    public List<Interval> mergeIntervals(List<Interval> intervals) {
+        if (intervals == null || intervals.size() < 2) {
+            return intervals;
+        }
+        Collections.sort(intervals, new Comparator<Interval>() {
+            public int compare(Interval i1, Interval i2) {
+                return i1.start - i2.start;
+            }
+        });
+        List<Interval> res = new ArrayList<>();
+        Interval temp = null;
+        for (Interval in : intervals) {
+            if (temp == null) {
+                temp = in;
+            } else {
+                if (temp.end >= in.start) {
+                    temp.end = Math.max(temp.end, in.end);
+                } else {
+                    res.add(temp);
+                    temp = in;
+                }
+            }
+        }
+        res.add(temp);
+        return res;
+    }
+
+    //given a string, find the first letter in that string which appears only once in this string.
+    //example: aabbccdee, return d
+    public char getFirstLetter(String str) {
+        if (str == null || str.length() < 1) {
+            return 0;
+        }
+
+        char[] arr = str.toCharArray();
+        int n = arr.length;
+        int[] letters = new int[26];
+        for (int i = 0; i < n; i++) {
+            int j = arr[i] - 'a';
+            if (letters[j] < 2) {
+                letters[j]++;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            int j = arr[i] - 'a';
+            if (letters[j] == 1) {
+                return (char) ('a' + j);
+            }
+        }
+        return 0;
+    }
+
+    //if the input is not a string. It is a internet Stream. What situation should you handle?
+    public char getFirstLetterFromStream(InputStream in) {
+        int c = 0;
+        try {
+            if (in == null) {
+                return (char) c;
+            }
+            int[] letters = new int[26];
+            int[] pos = new int[26];
+            int count = 0;
+            try {
+                while ((c = in.read()) != -1) {
+                    int i = c - 'a';
+                    if (i <= 25 && i >= 0) {
+                        if (letters[i] < 2) {
+                            letters[i]++;
+                        }
+                        pos[i] = count;
+                    }
+                    count++;
+                    if (count == 1000) {
+                        count -= 999;
+                        for (int j = 0; j < 26; j++) {
+                            pos[j] -= 999;
+                        }
+
+                    }
+                }
+            } finally {
+                for (int i = 0; i < 26; i++) {
+                    if (letters[i] == 1) {
+                        if (pos[i] < count) {
+                            c = 'a' + i;
+                            count = pos[i];
+                        }
+                    }
+                }
+                in.close();
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return (char) c;
+    }
+
+    public static void main1(String[] args) {
         LeetCode lc = new LeetCode();
         LeetCode.print(lc.longestValidParentheses("()(()"));
         LeetCode.print(lc.bulbSwitch(100));
@@ -2343,6 +2553,51 @@ class LeetCode {
                 path.remove(path.size() - 1);
             }
         }
+    }
+
+    class Interval {
+
+        int start;
+        int end;
+
+        Interval() {
+            start = 0;
+            end = 0;
+        }
+
+        Interval(int s, int e) {
+            start = s;
+            end = e;
+        }
+    }
+
+    //56. Merge Intervals
+    public List<Interval> merge(List<Interval> intervals) {
+        if (intervals == null || intervals.size() < 2) {
+            return intervals;
+        }
+        Collections.sort(intervals, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval i1, Interval i2) {
+                return i1.start - i2.start;
+            }
+        });
+        List<Interval> res = new ArrayList<>();
+        Interval temp = null;
+        for (Interval in : intervals) {
+            if (temp == null) {
+                temp = in;
+            } else {
+                if (temp.end >= in.start) {
+                    temp.end = Math.max(temp.end, in.end);
+                } else {
+                    res.add(temp);
+                    temp = in;
+                }
+            }
+        }
+        res.add(temp);
+        return res;
     }
 
     //49. Group Anagrams
