@@ -2109,6 +2109,20 @@ class LeetCode {
         return len;
     }
 
+    //268. Missing Number
+    public int missingNumber(int[] nums) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        int n = nums.length;
+        int res = 0;
+        for (int i = 0; i < n; i++) {
+            res ^= (i ^ nums[i]);
+        }
+        res ^= n;
+        return res;
+    }
+
     //264. Ugly Number II
     public int nthUglyNumber(int n) {
         if (n < 1) {
