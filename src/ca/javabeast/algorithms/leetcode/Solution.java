@@ -2072,6 +2072,22 @@ class LeetCode {
         return res;
     }
 
+    //309. Best Time to Buy and Sell Stock with Cooldown
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+        int pre_buy = Integer.MIN_VALUE, pre_pre_sell = 0, pre_sell = 0;
+        for (int i = 0; i < prices.length; i++) {
+            int temp_buy = Math.max(pre_pre_sell - prices[i], pre_buy);
+            int temp_sell = Math.max(pre_buy + prices[i], pre_sell);
+            pre_buy = temp_buy;
+            pre_pre_sell = pre_sell;
+            pre_sell = temp_sell;
+        }
+        return Math.max(pre_buy, pre_sell);
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
