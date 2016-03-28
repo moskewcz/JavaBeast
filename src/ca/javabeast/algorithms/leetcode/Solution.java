@@ -2090,115 +2090,169 @@ class LeetCode {
 
     //305. Number of Islands II
     /*public List<Integer> numIslands20(int m, int n, int[][] positions) {
-        List<Integer> res = new ArrayList<>();
-        if(m < 1 || n < 1)
-            return res;
-        int[][] grid = new int[m][n];
-        int[][] mark = new int[m][n];
-        int num = 0;
-        for(int i = 0; i < positions.length; i++){
-            num += addLand(positions[i][0], positions[i][1], grid, mark, -1, i);
-            res.add(num);
-        }
-        return res;
-    }
-    int addLand(int x, int y, int[][] grid, int[][] mark, int pre, int target){
-        if(x < 0 || x > grid.length-1 || y < 0 || y > grid[0].length-1 || (pre == -1 && grid[x][y] == 1))
-            return 0;
+     List<Integer> res = new ArrayList<>();
+     if(m < 1 || n < 1)
+     return res;
+     int[][] grid = new int[m][n];
+     int[][] mark = new int[m][n];
+     int num = 0;
+     for(int i = 0; i < positions.length; i++){
+     num += addLand(positions[i][0], positions[i][1], grid, mark, -1, i);
+     res.add(num);
+     }
+     return res;
+     }
+     int addLand(int x, int y, int[][] grid, int[][] mark, int pre, int target){
+     if(x < 0 || x > grid.length-1 || y < 0 || y > grid[0].length-1 || (pre == -1 && grid[x][y] == 1))
+     return 0;
         
-        int res = 0 ;
-        if(pre == -1){
-            mark[x][y] = target;
-            grid[x][y] = 1;
-            pre = target;
-            res++;
-            //System.out.println(res);
-        } else if(grid[x][y] == 0 || mark[x][y] == target){
-            return res;
-        } else if(pre == mark[x][y]){
-            mark[x][y] = target;
-        } else {
-            pre = mark[x][y];
-            mark[x][y] = target;
-            res--;
-        }
+     int res = 0 ;
+     if(pre == -1){
+     mark[x][y] = target;
+     grid[x][y] = 1;
+     pre = target;
+     res++;
+     //System.out.println(res);
+     } else if(grid[x][y] == 0 || mark[x][y] == target){
+     return res;
+     } else if(pre == mark[x][y]){
+     mark[x][y] = target;
+     } else {
+     pre = mark[x][y];
+     mark[x][y] = target;
+     res--;
+     }
         
-        res += addLand(x-1, y, grid, mark, pre, target);
-        res += addLand(x, y-1, grid, mark, pre, target);
-        res += addLand(x+1, y, grid, mark, pre, target);
-        res += addLand(x, y+1, grid, mark, pre, target);
-        return res;
-    }*/
+     res += addLand(x-1, y, grid, mark, pre, target);
+     res += addLand(x, y-1, grid, mark, pre, target);
+     res += addLand(x+1, y, grid, mark, pre, target);
+     res += addLand(x, y+1, grid, mark, pre, target);
+     return res;
+     }*/
     public List<Integer> numIslands2(int m, int n, int[][] positions) {
         List<Integer> res = new ArrayList<>();
-        if(m < 1 || n < 1)
+        if (m < 1 || n < 1) {
             return res;
+        }
         UnionFind2D uf = new UnionFind2D(m, n);
         int[][] dir = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
-        for(int i = 0; i < positions.length; i++){
+        for (int i = 0; i < positions.length; i++) {
             int x = positions[i][0], y = positions[i][1];
             int p = uf.add(x, y);
-            for(int[] d : dir){
-                int q = uf.getID(x+d[0], y+d[1]);
-                if(q > 0 && !uf.find(p, q))
+            for (int[] d : dir) {
+                int q = uf.getID(x + d[0], y + d[1]);
+                if (q > 0 && !uf.find(p, q)) {
                     uf.unite(p, q);
+                }
             }
             res.add(uf.size());
         }
         return res;
     }
-    
+
     class UnionFind2D {
+
         private int[] id;
         private int[] sz;
         private int m, n, count;
 
-    public UnionFind2D(int m, int n) {
+        public UnionFind2D(int m, int n) {
             this.count = 0;
             this.n = n;
             this.m = m;
             this.id = new int[m * n + 1];
             this.sz = new int[m * n + 1];
         }
-    
-        public int index(int x, int y) { return x * n + y + 1; }
-    
-        public int size() { return this.count; }
-    
+
+        public int index(int x, int y) {
+            return x * n + y + 1;
+        }
+
+        public int size() {
+            return this.count;
+        }
+
         public int getID(int x, int y) {
-            if (0 <= x && x < m && 0<= y && y < n)
+            if (0 <= x && x < m && 0 <= y && y < n) {
                 return id[index(x, y)];
+            }
             return 0;
         }
-    
+
         public int add(int x, int y) {
             int i = index(x, y);
-            id[i] = i; sz[i] = 1;
+            id[i] = i;
+            sz[i] = 1;
             ++count;
             return i;
         }
-    
+
         public boolean find(int p, int q) {
             return root(p) == root(q);
         }
-    
+
         public void unite(int p, int q) {
             int i = root(p), j = root(q);
             if (sz[i] < sz[j]) { //weighted quick union
-                id[i] = j; sz[j] += sz[i];
+                id[i] = j;
+                sz[j] += sz[i];
             } else {
-                id[j] = i; sz[i] += sz[j];
+                id[j] = i;
+                sz[i] += sz[j];
             }
             --count;
         }
-    
+
         private int root(int i) {
-            for (;i != id[i]; i = id[i])
+            for (; i != id[i]; i = id[i]) {
                 id[i] = id[id[i]]; //path compression
+            }
             return i;
         }
     }
-    
+
+    //302. Smallest Rectangle Enclosing Black Pixels
+    public int minArea(char[][] image, int x, int y) {
+        int m = image.length, n = image[0].length;
+        int left = searchColumn(0, y, 0, m, true, image);
+        int right = searchColumn(y + 1, n, 0, m, false, image);
+        int top = searchRow(0, x, left, right, true, image);
+        int bottom = searchRow(x + 1, m, left, right, false, image);
+        return (right - left) * (bottom - top);
+    }
+
+    int searchColumn(int i, int j, int top, int bottom, boolean left, char[][] image) {
+        if (i >= j) {
+            return i;
+        }
+        int k = top, mid = (i + j) / 2;
+        while (k < bottom && image[k][mid] == '0') {
+            k++;
+        }
+        if (k < bottom == left) {
+            j = mid;
+        } else {
+            i = mid + 1;
+        }
+        return searchColumn(i, j, top, bottom, left, image);
+    }
+
+    int searchRow(int i, int j, int left, int right, boolean top, char[][] image) {
+        if (i >= j) {
+            return i;
+        }
+        int k = left, mid = (i + j) / 2;
+        while (k < right && image[mid][k] == '0') {
+            k++;
+        }
+        if (k < right == top) {
+            j = mid;
+        } else {
+            i = mid + 1;
+        }
+        return searchRow(i, j, left, right, top, image);
+    }
+
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
