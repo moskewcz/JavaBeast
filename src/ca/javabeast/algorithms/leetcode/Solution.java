@@ -2088,6 +2088,117 @@ class LeetCode {
         return Math.max(pre_buy, pre_sell);
     }
 
+    //305. Number of Islands II
+    /*public List<Integer> numIslands20(int m, int n, int[][] positions) {
+        List<Integer> res = new ArrayList<>();
+        if(m < 1 || n < 1)
+            return res;
+        int[][] grid = new int[m][n];
+        int[][] mark = new int[m][n];
+        int num = 0;
+        for(int i = 0; i < positions.length; i++){
+            num += addLand(positions[i][0], positions[i][1], grid, mark, -1, i);
+            res.add(num);
+        }
+        return res;
+    }
+    int addLand(int x, int y, int[][] grid, int[][] mark, int pre, int target){
+        if(x < 0 || x > grid.length-1 || y < 0 || y > grid[0].length-1 || (pre == -1 && grid[x][y] == 1))
+            return 0;
+        
+        int res = 0 ;
+        if(pre == -1){
+            mark[x][y] = target;
+            grid[x][y] = 1;
+            pre = target;
+            res++;
+            //System.out.println(res);
+        } else if(grid[x][y] == 0 || mark[x][y] == target){
+            return res;
+        } else if(pre == mark[x][y]){
+            mark[x][y] = target;
+        } else {
+            pre = mark[x][y];
+            mark[x][y] = target;
+            res--;
+        }
+        
+        res += addLand(x-1, y, grid, mark, pre, target);
+        res += addLand(x, y-1, grid, mark, pre, target);
+        res += addLand(x+1, y, grid, mark, pre, target);
+        res += addLand(x, y+1, grid, mark, pre, target);
+        return res;
+    }*/
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        List<Integer> res = new ArrayList<>();
+        if(m < 1 || n < 1)
+            return res;
+        UnionFind2D uf = new UnionFind2D(m, n);
+        int[][] dir = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+        for(int i = 0; i < positions.length; i++){
+            int x = positions[i][0], y = positions[i][1];
+            int p = uf.add(x, y);
+            for(int[] d : dir){
+                int q = uf.getID(x+d[0], y+d[1]);
+                if(q > 0 && !uf.find(p, q))
+                    uf.unite(p, q);
+            }
+            res.add(uf.size());
+        }
+        return res;
+    }
+    
+    class UnionFind2D {
+        private int[] id;
+        private int[] sz;
+        private int m, n, count;
+
+    public UnionFind2D(int m, int n) {
+            this.count = 0;
+            this.n = n;
+            this.m = m;
+            this.id = new int[m * n + 1];
+            this.sz = new int[m * n + 1];
+        }
+    
+        public int index(int x, int y) { return x * n + y + 1; }
+    
+        public int size() { return this.count; }
+    
+        public int getID(int x, int y) {
+            if (0 <= x && x < m && 0<= y && y < n)
+                return id[index(x, y)];
+            return 0;
+        }
+    
+        public int add(int x, int y) {
+            int i = index(x, y);
+            id[i] = i; sz[i] = 1;
+            ++count;
+            return i;
+        }
+    
+        public boolean find(int p, int q) {
+            return root(p) == root(q);
+        }
+    
+        public void unite(int p, int q) {
+            int i = root(p), j = root(q);
+            if (sz[i] < sz[j]) { //weighted quick union
+                id[i] = j; sz[j] += sz[i];
+            } else {
+                id[j] = i; sz[i] += sz[j];
+            }
+            --count;
+        }
+    
+        private int root(int i) {
+            for (;i != id[i]; i = id[i])
+                id[i] = id[id[i]]; //path compression
+            return i;
+        }
+    }
+    
     //300. Longest Increasing Subsequence
     //O(N^2)
     public int lengthOfLIS0(int[] nums) {
