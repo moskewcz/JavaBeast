@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
@@ -2313,7 +2314,53 @@ class LeetCode {
         helper(root.left, res, cur, root.val + 1);
         helper(root.right, res, cur, root.val + 1);
     }
+    
+    //295. Find Median from Data Stream
+    class MedianFinder {
 
+        PriorityQueue<Integer> maxHeap;
+        PriorityQueue<Integer> minHeap;
+        double median;
+        public MedianFinder(){
+            median = 0.0;
+            maxHeap = new PriorityQueue<>(10, new Comparator<Integer>(){
+                public int compare(Integer i1, Integer i2){
+                    return i2 - i1;
+                }
+            });
+            minHeap = new PriorityQueue<>(10, new Comparator<Integer>(){
+                public int compare(Integer i1, Integer i2){
+                    return i1 - i2;
+                }
+            });
+        }
+        // Adds a number into the data structure.
+        public void addNum(int num) {
+            int minSize = minHeap.size(), maxSize = maxHeap.size();
+            if(num > median){
+                minHeap.offer(num);
+                if(minSize > maxSize){
+                    maxHeap.offer(minHeap.poll());
+                }
+                median = minHeap.peek();
+            } else {
+                maxHeap.offer(num);
+                if(minSize < maxSize){
+                    minHeap.offer(maxHeap.poll());
+                }
+                median = maxHeap.peek();
+            }
+            if(minSize != maxSize){
+                median = (minHeap.peek() + maxHeap.peek())/2.0;
+            }
+        }
+
+        // Returns the median of current data stream
+        public double findMedian() {
+            return median;
+        }
+    }
+    
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
