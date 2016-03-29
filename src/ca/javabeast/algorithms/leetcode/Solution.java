@@ -2290,6 +2290,30 @@ class LeetCode {
         return len;
     }
 
+    //298. Binary Tree Longest Consecutive Sequence
+    public int longestConsecutive(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int[] res = new int[1];
+        helper(root, res, 0, root.val);
+        return res[0];
+    }
+
+    void helper(TreeNode root, int[] res, int cur, int target) {
+        if (root == null) {
+            return;
+        }
+        if (root.val == target) {
+            cur++;
+        } else {
+            cur = 1;
+        }
+        res[0] = Math.max(res[0], cur);
+        helper(root.left, res, cur, root.val + 1);
+        helper(root.right, res, cur, root.val + 1);
+    }
+
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
