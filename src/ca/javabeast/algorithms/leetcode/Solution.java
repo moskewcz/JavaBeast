@@ -2314,44 +2314,46 @@ class LeetCode {
         helper(root.left, res, cur, root.val + 1);
         helper(root.right, res, cur, root.val + 1);
     }
-    
+
     //295. Find Median from Data Stream
     class MedianFinder {
 
         PriorityQueue<Integer> maxHeap;
         PriorityQueue<Integer> minHeap;
         double median;
-        public MedianFinder(){
+
+        public MedianFinder() {
             median = 0.0;
-            maxHeap = new PriorityQueue<>(10, new Comparator<Integer>(){
-                public int compare(Integer i1, Integer i2){
+            maxHeap = new PriorityQueue<>(10, new Comparator<Integer>() {
+                public int compare(Integer i1, Integer i2) {
                     return i2 - i1;
                 }
             });
-            minHeap = new PriorityQueue<>(10, new Comparator<Integer>(){
-                public int compare(Integer i1, Integer i2){
+            minHeap = new PriorityQueue<>(10, new Comparator<Integer>() {
+                public int compare(Integer i1, Integer i2) {
                     return i1 - i2;
                 }
             });
         }
+
         // Adds a number into the data structure.
         public void addNum(int num) {
             int minSize = minHeap.size(), maxSize = maxHeap.size();
-            if(num > median){
+            if (num > median) {
                 minHeap.offer(num);
-                if(minSize > maxSize){
+                if (minSize > maxSize) {
                     maxHeap.offer(minHeap.poll());
                 }
                 median = minHeap.peek();
             } else {
                 maxHeap.offer(num);
-                if(minSize < maxSize){
+                if (minSize < maxSize) {
                     minHeap.offer(maxHeap.poll());
                 }
                 median = maxHeap.peek();
             }
-            if(minSize != maxSize){
-                median = (minHeap.peek() + maxHeap.peek())/2.0;
+            if (minSize != maxSize) {
+                median = (minHeap.peek() + maxHeap.peek()) / 2.0;
             }
         }
 
@@ -2360,7 +2362,54 @@ class LeetCode {
             return median;
         }
     }
-    
+
+    //294. Flip Game II
+    public boolean canWin(String s) {
+        if (s == null || s.length() < 2) {
+            return false;
+        }
+        Map<String, Boolean> res = new HashMap<>();
+        return canWin(s, res);
+    }
+
+    public boolean canWin(String s, Map<String, Boolean> res) {
+        char[] chs = s.toCharArray();
+        Boolean flag = res.get(s);
+        if (flag != null) {
+            return flag;
+        }
+        for (int i = 0; i < chs.length - 1; i++) {
+            if (chs[i] == '+' && chs[i + 1] == '+') {
+                chs[i] = chs[i + 1] = '-';
+                boolean win = !canWin(new String(chs), res);
+                chs[i] = chs[i + 1] = '+';
+                if (win) {
+                    res.put(s, win);
+                    return true;
+                }
+            }
+        }
+        res.put(s, false);
+        return false;
+    }
+
+    //293. Flip Game
+    public List<String> generatePossibleNextMoves(String s) {
+        List<String> res = new ArrayList<>();
+        if (s == null || s.length() < 2) {
+            return res;
+        }
+        char[] chs = s.toCharArray();
+        for (int i = 0; i < chs.length - 1; i++) {
+            if (chs[i] == '+' && chs[i + 1] == '+') {
+                chs[i] = chs[i + 1] = '-';
+                res.add(new String(chs));
+                chs[i] = chs[i + 1] = '+';
+            }
+        }
+        return res;
+    }
+
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
