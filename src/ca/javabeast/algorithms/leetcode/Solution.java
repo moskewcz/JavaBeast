@@ -2409,6 +2409,33 @@ class LeetCode {
         return res;
     }
 
+    //289. Game of Life
+    public void gameOfLife(int[][] board) {
+        if(board == null)
+            return;
+        int m = board.length, n = board[0].length;
+        int[][] dir = {{-1,0},{0,-1},{1,0},{0,1},{-1,1},{-1,-1},{1,-1},{1,1}};
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                int num = 0;
+                for(int k = 0; k < dir.length; k++){
+                    int x = i+dir[k][0], y = j+dir[k][1];
+                    if(x >= 0 && x < m && y >= 0 && y < n && (board[x][y] & 1) == 1)
+                        num++;
+                }
+                if((board[i][j] & 1) == 1 && (num == 2 || num == 3))
+                    board[i][j] = 3;
+                else if(num == 3)
+                    board[i][j] = 2;
+            }
+        }
+        for(int i = 0; i < m; i++) {
+            for(int j = 0; j < n; j++) {
+                board[i][j] >>= 1;  // Get the 2nd state.
+            }
+        }
+    }
+        
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
