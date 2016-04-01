@@ -1729,49 +1729,6 @@ class LeetCode {
         return i;
     }
 
-    public int countComponents1(int n, int[][] edges) {
-        int res = 0;
-        if (n < 1) {
-            return res;
-        }
-        Map<Integer, List<Integer>> map = new HashMap<>();
-        boolean[] visited = new boolean[n];
-        for (int[] e : edges) {
-            List<Integer> list0 = map.get(e[0]);
-            List<Integer> list1 = map.get(e[1]);
-            if (list0 == null) {
-                list0 = new ArrayList<>();
-                map.put(e[0], list0);
-            }
-            if (list1 == null) {
-                list1 = new ArrayList<>();
-                map.put(e[1], list1);
-            }
-            list0.add(e[1]);
-            list1.add(e[0]);
-        }
-        for (int i = 0; i < n; i++) {
-            if (!visited[i]) {
-                visited[i] = true;
-                res++;
-                countHelper(i, map, visited);
-            }
-        }
-        return res;
-    }
-
-    void countHelper(int i, Map<Integer, List<Integer>> map, boolean[] visited) {
-        List<Integer> list = map.get(i);
-        if (list != null) {
-            for (int j : list) {
-                if (!visited[j]) {
-                    visited[j] = true;
-                    countHelper(j, map, visited);
-                }
-            }
-        }
-    }
-
     //322. Coin Change
     public int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
@@ -2089,46 +2046,6 @@ class LeetCode {
     }
 
     //305. Number of Islands II
-    /*public List<Integer> numIslands20(int m, int n, int[][] positions) {
-     List<Integer> res = new ArrayList<>();
-     if(m < 1 || n < 1)
-     return res;
-     int[][] grid = new int[m][n];
-     int[][] mark = new int[m][n];
-     int num = 0;
-     for(int i = 0; i < positions.length; i++){
-     num += addLand(positions[i][0], positions[i][1], grid, mark, -1, i);
-     res.add(num);
-     }
-     return res;
-     }
-     int addLand(int x, int y, int[][] grid, int[][] mark, int pre, int target){
-     if(x < 0 || x > grid.length-1 || y < 0 || y > grid[0].length-1 || (pre == -1 && grid[x][y] == 1))
-     return 0;
-        
-     int res = 0 ;
-     if(pre == -1){
-     mark[x][y] = target;
-     grid[x][y] = 1;
-     pre = target;
-     res++;
-     //System.out.println(res);
-     } else if(grid[x][y] == 0 || mark[x][y] == target){
-     return res;
-     } else if(pre == mark[x][y]){
-     mark[x][y] = target;
-     } else {
-     pre = mark[x][y];
-     mark[x][y] = target;
-     res--;
-     }
-        
-     res += addLand(x-1, y, grid, mark, pre, target);
-     res += addLand(x, y-1, grid, mark, pre, target);
-     res += addLand(x+1, y, grid, mark, pre, target);
-     res += addLand(x, y+1, grid, mark, pre, target);
-     return res;
-     }*/
     public List<Integer> numIslands2(int m, int n, int[][] positions) {
         List<Integer> res = new ArrayList<>();
         if (m < 1 || n < 1) {
@@ -2411,31 +2328,73 @@ class LeetCode {
 
     //289. Game of Life
     public void gameOfLife(int[][] board) {
-        if(board == null)
+        if (board == null) {
             return;
+        }
         int m = board.length, n = board[0].length;
-        int[][] dir = {{-1,0},{0,-1},{1,0},{0,1},{-1,1},{-1,-1},{1,-1},{1,1}};
-        for(int i = 0; i < m; i++){
-            for(int j = 0; j < n; j++){
+        int[][] dir = {{-1, 0}, {0, -1}, {1, 0}, {0, 1}, {-1, 1}, {-1, -1}, {1, -1}, {1, 1}};
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 int num = 0;
-                for(int k = 0; k < dir.length; k++){
-                    int x = i+dir[k][0], y = j+dir[k][1];
-                    if(x >= 0 && x < m && y >= 0 && y < n && (board[x][y] & 1) == 1)
+                for (int k = 0; k < dir.length; k++) {
+                    int x = i + dir[k][0], y = j + dir[k][1];
+                    if (x >= 0 && x < m && y >= 0 && y < n && (board[x][y] & 1) == 1) {
                         num++;
+                    }
                 }
-                if((board[i][j] & 1) == 1 && (num == 2 || num == 3))
+                if ((board[i][j] & 1) == 1 && (num == 2 || num == 3)) {
                     board[i][j] = 3;
-                else if(num == 3)
+                } else if (num == 3) {
                     board[i][j] = 2;
+                }
             }
         }
-        for(int i = 0; i < m; i++) {
-            for(int j = 0; j < n; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 board[i][j] >>= 1;  // Get the 2nd state.
             }
         }
     }
-        
+
+    //288. Unique Word Abbreviation
+    public class ValidWordAbbr {
+
+        private Map<String, String> map;
+
+        public ValidWordAbbr(String[] dictionary) {
+            map = new HashMap<>();
+            if (dictionary != null) {
+                for (String word : dictionary) {
+                    String abbr = abbreviate(word);
+                    String value = map.get(abbr);
+                    if (value != null && !value.equals(word)) {
+                        map.put(abbr, "");
+                    } else {
+                        map.put(abbr, word);
+                    }
+                }
+            }
+        }
+
+        private String abbreviate(String word) {
+            if (word.length() > 2) {
+                return word.charAt(0) + String.valueOf(word.length() - 2) + word.charAt(word.length() - 1);
+            } else {
+                return word;
+            }
+        }
+
+        public boolean isUnique(String word) {
+            if (word != null) {
+                String value = map.get(abbreviate(word));
+                if (value == null || value.equals(word)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
