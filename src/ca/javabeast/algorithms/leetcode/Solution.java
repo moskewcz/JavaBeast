@@ -2430,6 +2430,36 @@ class LeetCode {
         }
     }
 
+    //281. Zigzag Iterator
+    public class ZigzagIterator {
+
+        Deque<Iterator<Integer>> queue;
+
+        public ZigzagIterator(List<Integer> v1, List<Integer> v2) {
+            queue = new ArrayDeque<>();
+            if (!v1.isEmpty()) {
+                queue.offer(v1.iterator());
+            }
+            if (!v2.isEmpty()) {
+                queue.offer(v2.iterator());
+            }
+        }
+
+        public int next() {
+            Iterator<Integer> it = queue.poll();
+            int val = it.next();
+            if (it.hasNext()) {
+                queue.offer(it);
+            }
+            return val;
+        }
+
+        public boolean hasNext() {
+            return queue.size() > 0;
+        }
+
+    }
+
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
