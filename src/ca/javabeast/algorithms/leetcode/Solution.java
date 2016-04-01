@@ -1319,12 +1319,12 @@ class LeetCode {
     //284. Peeking Iterator
     // Java Iterator interface reference:
     // https://docs.oracle.com/javase/8/docs/api/java/util/Iterator.html
-    class PeekingIterator implements Iterator<Integer> {
+    class PeekingIterator<T> implements Iterator<T> {
 
-        private Integer head = null;
-        private Iterator<Integer> iterator;
+        private T head = null;
+        private Iterator<T> iterator;
 
-        public PeekingIterator(Iterator<Integer> iterator) {
+        public PeekingIterator(Iterator<T> iterator) {
             // initialize any member here.
             this.iterator = iterator;
             if (iterator.hasNext()) {
@@ -1333,15 +1333,15 @@ class LeetCode {
         }
 
         // Returns the next element in the iteration without advancing the iterator.
-        public Integer peek() {
+        public T peek() {
             return head;
         }
 
         // hasNext() and next() should behave the same as in the Iterator interface.
         // Override them if needed.
         @Override
-        public Integer next() {
-            Integer h = head;
+        public T next() {
+            T h = head;
             head = iterator.hasNext() ? iterator.next() : null;
             return h;
         }
@@ -1349,6 +1349,41 @@ class LeetCode {
         @Override
         public boolean hasNext() {
             return head != null;
+        }
+    }
+
+    //282. Expression Add Operators
+    public List<String> addOperators(String digits, int target) {
+        List<String> res = new ArrayList<>();
+        if (digits == null || digits.length() < 1) {
+            return res;
+        }
+        helper(digits, res, 0, 0, target + 0l, "");
+        return res;
+    }
+
+    void helper(String digits, List<String> res, long pre, int cur, long target, String exp) {
+        if (cur >= digits.length()) {
+            if (target == 0) {
+                res.add(exp);
+            }
+            return;
+        }
+        for (int i = cur + 1; i <= digits.length(); i++) {
+            long val = Long.parseLong(digits.substring(cur, i));
+            if (val > (long) Integer.MAX_VALUE || val < (long) Integer.MIN_VALUE) {
+                break;
+            }
+            if (cur == 0) {
+                helper(digits, res, val, i, target - val, exp + val);
+            } else {
+                helper(digits, res, val, i, target - val, exp + "+" + val);
+                helper(digits, res, -val, i, target + val, exp + "-" + val);
+                helper(digits, res, pre * val, i, target + pre - pre * val, exp + "*" + val);
+            }
+            if (val == 0) {
+                break;
+            }
         }
     }
 
