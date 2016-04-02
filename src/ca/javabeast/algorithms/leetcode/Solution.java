@@ -1673,7 +1673,7 @@ class LeetCode {
     }
 
     //324. Wiggle Sort II 
-    public void wiggleSort0(int[] nums) {//O(NlogN)
+    public void wiggleSort20(int[] nums) {//O(NlogN)
         if (nums == null || nums.length < 2) {
             return;
         }
@@ -1689,7 +1689,7 @@ class LeetCode {
         }
     }
 
-    public void wiggleSort(int[] nums) {//O(N)
+    public void wiggleSort2(int[] nums) {//O(N)
         if (nums == null || nums.length < 2) {
             return;
         }
@@ -2460,6 +2460,21 @@ class LeetCode {
 
     }
 
+    //280. Wiggle Sort
+    public void wiggleSort(int[] nums){
+        if(nums == null || nums.length < 2)
+            return;
+        int n = nums.length;
+        for(int i = 1; i < n; i++){
+            int a = nums[i-1];
+            if((i%2 == 1 && a > nums[i]) || (i%2 == 0 && a < nums[i])){
+                nums[i-1] = nums[i];
+                nums[i] = a;
+            }
+                
+        }
+    }
+        
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
