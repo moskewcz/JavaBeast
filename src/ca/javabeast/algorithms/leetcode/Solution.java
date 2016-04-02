@@ -2474,6 +2474,26 @@ class LeetCode {
                 
         }
     }
+    
+    //279. Perfect Squares
+    public int numSquares(int n) {
+        if( n < 4)
+            return n;
+        int[] dp = new int[n+1];
+        for(int i = 0; i < n+1; i++){
+            if(i < 4)
+                dp[i] = i;
+            else {
+                int k = (int)Math.sqrt(i+0d);
+                dp[i] = dp[i-1]+1;
+                for(int j = k; j > 1; j--){
+                    if(dp[i] > dp[i-(j*j)] + 1)
+                        dp[i] = dp[i- j*j] + 1;
+                }
+            }
+        }
+        return dp[n];
+    }
         
     //268. Missing Number
     public int missingNumber(int[] nums) {
