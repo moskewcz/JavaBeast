@@ -2582,6 +2582,15 @@ class LeetCode {
         helper(root.right, target, k, res);
     }
     
+    //270. Closest Binary Search Tree Value
+    public int closestValue(TreeNode root, double target) {
+        int a = root.val;
+        TreeNode child = target > a ? root.right : root.left;
+        if(child == null)
+            return a;
+        int b = closestValue(child, target);
+        return Math.abs(a - target) < Math.abs(b - target) ? a : b;
+    }
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
