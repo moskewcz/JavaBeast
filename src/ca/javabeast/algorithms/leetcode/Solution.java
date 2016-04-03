@@ -2461,54 +2461,84 @@ class LeetCode {
     }
 
     //280. Wiggle Sort
-    public void wiggleSort(int[] nums){
-        if(nums == null || nums.length < 2)
+    public void wiggleSort(int[] nums) {
+        if (nums == null || nums.length < 2) {
             return;
+        }
         int n = nums.length;
-        for(int i = 1; i < n; i++){
-            int a = nums[i-1];
-            if((i%2 == 1 && a > nums[i]) || (i%2 == 0 && a < nums[i])){
-                nums[i-1] = nums[i];
+        for (int i = 1; i < n; i++) {
+            int a = nums[i - 1];
+            if ((i % 2 == 1 && a > nums[i]) || (i % 2 == 0 && a < nums[i])) {
+                nums[i - 1] = nums[i];
                 nums[i] = a;
             }
-                
+
         }
     }
-    
+
     //279. Perfect Squares
     public int numSquares(int n) {
-        if( n < 4)
+        if (n < 4) {
             return n;
-        int[] dp = new int[n+1];
-        for(int i = 0; i < n+1; i++){
-            if(i < 4)
+        }
+        int[] dp = new int[n + 1];
+        for (int i = 0; i < n + 1; i++) {
+            if (i < 4) {
                 dp[i] = i;
-            else {
-                int k = (int)Math.sqrt(i+0d);
-                dp[i] = dp[i-1]+1;
-                for(int j = k; j > 1; j--){
-                    if(dp[i] > dp[i-(j*j)] + 1)
-                        dp[i] = dp[i- j*j] + 1;
+            } else {
+                int k = (int) Math.sqrt(i + 0d);
+                dp[i] = dp[i - 1] + 1;
+                for (int j = k; j > 1; j--) {
+                    if (dp[i] > dp[i - (j * j)] + 1) {
+                        dp[i] = dp[i - j * j] + 1;
+                    }
                 }
             }
         }
         return dp[n];
     }
-    
+
     //276. Paint Fence
     public int numWays(int n, int k) {
-        if(n == 0) return 0;
-        else if(n == 1) return k;
+        if (n == 0) {
+            return 0;
+        } else if (n == 1) {
+            return k;
+        }
         int same = k;
-        int diff = k*(k-1);
-        for(int i = 3; i < n+1; i++){
+        int diff = k * (k - 1);
+        for (int i = 3; i < n + 1; i++) {
             int newSame = diff;
             diff = (same + diff) * (k - 1);
             same = newSame;
         }
         return same + diff;
     }
-        
+
+    //274. H-Index
+    public int hIndex(int[] citations) {
+        if (citations == null || citations.length < 1) {
+            return 0;
+        }
+        int n = citations.length;
+        int[] count = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            if (citations[i] > n) {
+                count[n]++;
+            } else {
+                count[citations[i]]++;
+            }
+        }
+        int t = 0;
+        for (int i = n; i >= 0; i--) {
+            t += count[i];
+            if (t >= i) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
