@@ -2539,6 +2539,24 @@ class LeetCode {
         return 0;
     }
 
+    //275. H-Index II
+    public int hIndex2(int[] citations) {
+        if(citations == null || citations.length < 1)
+            return 0;
+        int n = citations.length;
+        int left = 0, right = n-1, res = 0;
+        while(left <= right){
+            int mid = (left + right)/2;
+            if(citations[mid] >= (n-mid)){
+                res = Math.max(res, n-mid);
+                right = mid-1;
+            } else{
+                left = mid+1;
+            }
+        }
+        return res;
+    }
+        
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
