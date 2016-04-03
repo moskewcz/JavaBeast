@@ -2548,7 +2548,7 @@ class LeetCode {
         while(left <= right){
             int mid = (left + right)/2;
             if(citations[mid] >= (n-mid)){
-                res = Math.max(res, n-mid);
+                res = n-mid;
                 right = mid-1;
             } else{
                 left = mid+1;
@@ -2556,7 +2556,32 @@ class LeetCode {
         }
         return res;
     }
-        
+    
+    //272. Closest Binary Search Tree Value II
+    public List<Integer> closestKValues(TreeNode root, double target, int k) {
+        List<Integer> res = new LinkedList<>();
+        if(k == 0)
+            return res;
+        helper(root, target, k, res);
+        return res;
+    }
+    void helper(TreeNode root, double target, int k, List<Integer> res){
+        if(root == null)
+            return;
+        helper(root.left, target, k, res);
+        if(res.size() < k)
+            res.add(root.val);
+        else {
+            if(Math.abs(root.val - target) < Math.abs(res.get(0) - target)){
+                res.remove(0);
+                res.add(root.val);
+            } else {
+                return;
+            }
+        }
+        helper(root.right, target, k, res);
+    }
+    
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
