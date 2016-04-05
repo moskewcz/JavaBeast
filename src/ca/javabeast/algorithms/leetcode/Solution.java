@@ -2605,6 +2605,23 @@ class LeetCode {
         return res;
     }
 
+    //266. Palindrome Permutation
+    public boolean canPermutePalindrome(String s) {
+        if(s == null || s.length() < 1)
+            return false;
+        char[] chs = s.toCharArray();
+        int[] ac = new int[256];
+        for(int i = 0; i < chs.length; i++){
+            ac[chs[i]]++;
+        }
+        int count = 0;
+        for(int i : ac){
+            if(i%2 != 0)
+                count++;
+        }
+        return count < 2;
+    }
+        
     //264. Ugly Number II
     public int nthUglyNumber(int n) {
         if (n < 1) {
