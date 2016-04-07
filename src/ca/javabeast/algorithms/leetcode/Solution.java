@@ -2541,38 +2541,42 @@ class LeetCode {
 
     //275. H-Index II
     public int hIndex2(int[] citations) {
-        if(citations == null || citations.length < 1)
+        if (citations == null || citations.length < 1) {
             return 0;
+        }
         int n = citations.length;
-        int left = 0, right = n-1, res = 0;
-        while(left <= right){
-            int mid = (left + right)/2;
-            if(citations[mid] >= (n-mid)){
-                res = n-mid;
-                right = mid-1;
-            } else{
-                left = mid+1;
+        int left = 0, right = n - 1, res = 0;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (citations[mid] >= (n - mid)) {
+                res = n - mid;
+                right = mid - 1;
+            } else {
+                left = mid + 1;
             }
         }
         return res;
     }
-    
+
     //272. Closest Binary Search Tree Value II
     public List<Integer> closestKValues(TreeNode root, double target, int k) {
         List<Integer> res = new LinkedList<>();
-        if(k == 0)
+        if (k == 0) {
             return res;
+        }
         helper(root, target, k, res);
         return res;
     }
-    void helper(TreeNode root, double target, int k, List<Integer> res){
-        if(root == null)
+
+    void helper(TreeNode root, double target, int k, List<Integer> res) {
+        if (root == null) {
             return;
+        }
         helper(root.left, target, k, res);
-        if(res.size() < k)
+        if (res.size() < k) {
             res.add(root.val);
-        else {
-            if(Math.abs(root.val - target) < Math.abs(res.get(0) - target)){
+        } else {
+            if (Math.abs(root.val - target) < Math.abs(res.get(0) - target)) {
                 res.remove(0);
                 res.add(root.val);
             } else {
@@ -2581,17 +2585,20 @@ class LeetCode {
         }
         helper(root.right, target, k, res);
     }
-    
+
     //270. Closest Binary Search Tree Value
     public int closestValue(TreeNode root, double target) {
         int a = root.val;
         TreeNode child = target > a ? root.right : root.left;
-        if(child == null)
+        if (child == null) {
             return a;
+        }
         int b = closestValue(child, target);
         return Math.abs(a - target) < Math.abs(b - target) ? a : b;
     }
+
     //268. Missing Number
+
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
             return 0;
@@ -2607,21 +2614,23 @@ class LeetCode {
 
     //266. Palindrome Permutation
     public boolean canPermutePalindrome(String s) {
-        if(s == null || s.length() < 1)
+        if (s == null || s.length() < 1) {
             return false;
+        }
         char[] chs = s.toCharArray();
         int[] ac = new int[256];
-        for(int i = 0; i < chs.length; i++){
+        for (int i = 0; i < chs.length; i++) {
             ac[chs[i]]++;
         }
         int count = 0;
-        for(int i : ac){
-            if(i%2 != 0)
+        for (int i : ac) {
+            if (i % 2 != 0) {
                 count++;
+            }
         }
         return count < 2;
     }
-        
+
     //264. Ugly Number II
     public int nthUglyNumber(int n) {
         if (n < 1) {
@@ -2819,6 +2828,44 @@ class LeetCode {
             s[r] = c;
             l++;
             r--;
+        }
+    }
+
+    //170. Two Sum III - Data structure design
+    public class TwoSum {
+
+        private Map<Integer, Boolean> nums;
+        private List<Integer> unique;
+
+        public TwoSum() {
+            nums = new HashMap<>();
+            unique = new ArrayList<>();
+        }
+
+        // Add the number to an internal data structure.
+
+        public void add(int number) {
+            Boolean flag = nums.get(number);
+            if (flag != null) {
+                flag = true;
+            } else {
+                flag = false;
+                unique.add(number);
+            }
+            nums.put(number, flag);
+        }
+
+        // Find if there exists any pair of numbers which sum is equal to the value.
+        public boolean find(int value) {
+            for (int i = 0; i < unique.size(); i++) {
+                int first = unique.get(i);
+                int second = value - first;
+                Boolean flag = nums.get(second);
+                if (flag != null && (first != second || flag)) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 
