@@ -3287,6 +3287,32 @@ class LeetCode {
         return stack.size() == 0;
     }
 
+    //16. 3Sum Closest
+    public int threeSumClosest(int[] nums, int target) {
+        if(nums == null || nums.length < 3)
+            return 0;
+        Arrays.sort(nums);
+        int res = nums[0]+nums[1]+nums[2];
+        int n = nums.length;
+        for(int i = 0; i < n-2; i++){
+            if (i > 0 && nums[i] == nums[i-1]) 
+                continue;
+            int lo = i+1, hi = n-1;
+            while(lo < hi){
+                int val = nums[lo] + nums[hi] + nums[i];
+                if(Math.abs(target - res) > Math.abs(target - val))
+                    res = val;
+                if(val < target)
+                    lo++;
+                else if(val > target)
+                    hi--;
+                else
+                    return res;
+            }
+        }
+        return res;
+    }
+        
     //15. 3Sum
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
