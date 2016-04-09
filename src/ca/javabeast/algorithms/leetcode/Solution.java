@@ -2672,6 +2672,29 @@ class LeetCode {
         return num == 1;
     }
 
+    //259. 3Sum Smaller
+    public int threeSumSmaller(int[] nums, int target) {
+        if (nums == null || nums.length < 3) {
+            return 0;
+        }
+        Arrays.sort(nums);
+        int res = 0;
+        int n = nums.length;
+        for (int i = 0; i < n - 2; i++) {
+            int lo = i + 1, hi = n - 1;
+            while (lo < hi) {
+                int val = nums[lo] + nums[hi] + nums[i];
+                if (val < target) {
+                    res += (hi - lo);
+                    lo++;
+                } else {
+                    hi--;
+                }
+            }
+        }
+        return res;
+    }
+
     //242. Valid Anagram
     public boolean isAnagram(String s, String t) {
         if (s == null || t == null || s.length() != t.length()) {
@@ -3289,30 +3312,34 @@ class LeetCode {
 
     //16. 3Sum Closest
     public int threeSumClosest(int[] nums, int target) {
-        if(nums == null || nums.length < 3)
+        if (nums == null || nums.length < 3) {
             return 0;
+        }
         Arrays.sort(nums);
-        int res = nums[0]+nums[1]+nums[2];
+        int res = nums[0] + nums[1] + nums[2];
         int n = nums.length;
-        for(int i = 0; i < n-2; i++){
-            if (i > 0 && nums[i] == nums[i-1]) 
+        for (int i = 0; i < n - 2; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
                 continue;
-            int lo = i+1, hi = n-1;
-            while(lo < hi){
+            }
+            int lo = i + 1, hi = n - 1;
+            while (lo < hi) {
                 int val = nums[lo] + nums[hi] + nums[i];
-                if(Math.abs(target - res) > Math.abs(target - val))
+                if (Math.abs(target - res) > Math.abs(target - val)) {
                     res = val;
-                if(val < target)
+                }
+                if (val < target) {
                     lo++;
-                else if(val > target)
+                } else if (val > target) {
                     hi--;
-                else
+                } else {
                     return res;
+                }
             }
         }
         return res;
     }
-        
+
     //15. 3Sum
     public List<List<Integer>> threeSum(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
