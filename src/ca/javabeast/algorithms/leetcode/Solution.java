@@ -164,13 +164,11 @@ public class Solution {
         for (Interval in : intervals) {
             if (temp == null) {
                 temp = in;
+            } else if (temp.end >= in.start) {
+                temp.end = Math.max(temp.end, in.end);
             } else {
-                if (temp.end >= in.start) {
-                    temp.end = Math.max(temp.end, in.end);
-                } else {
-                    res.add(temp);
-                    temp = in;
-                }
+                res.add(temp);
+                temp = in;
             }
         }
         res.add(temp);
@@ -322,17 +320,15 @@ class LeetCode {
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '(') {  //push '(' set v=0
                 stack.push(i);
+            } else if (stack.isEmpty()) {
+                //add the left char directly, as this char will never be matched
+                left = i + 1;
             } else {
+                stack.pop();
                 if (stack.isEmpty()) {
-                    //add the left char directly, as this char will never be matched
-                    left = i + 1;
+                    max = Math.max(max, i - left + 1);
                 } else {
-                    stack.pop();
-                    if (stack.isEmpty()) {
-                        max = Math.max(max, i - left + 1);
-                    } else {
-                        max = Math.max(max, i - stack.peek());
-                    }
+                    max = Math.max(max, i - stack.peek());
                 }
             }
             //print("left:", left);
@@ -2575,15 +2571,48 @@ class LeetCode {
         helper(root.left, target, k, res);
         if (res.size() < k) {
             res.add(root.val);
+        } else if (Math.abs(root.val - target) < Math.abs(res.get(0) - target)) {
+            res.remove(0);
+            res.add(root.val);
         } else {
-            if (Math.abs(root.val - target) < Math.abs(res.get(0) - target)) {
-                res.remove(0);
-                res.add(root.val);
-            } else {
-                return;
-            }
+            return;
         }
         helper(root.right, target, k, res);
+    }
+
+    //271. Encode and Decode Strings
+    public class Codec {
+
+        // Encodes a list of strings to a single string.
+        public String encode(List<String> strs) {
+            String encoded_str = null;
+            if (strs != null) {
+                StringBuilder sb = new StringBuilder();
+                for (String s : strs) {
+                    sb.append(s.length())
+                            .append('/')
+                            .append(s);
+                }
+                encoded_str = sb.toString();
+            }
+            return encoded_str;
+        }
+
+        // Decodes a single string to a list of strings.
+        public List<String> decode(String s) {
+            List<String> res = null;
+            if (s != null) {
+                res = new ArrayList<>();
+                int i = 0;
+                while (i < s.length()) {
+                    int slash = s.indexOf('/', i);
+                    int size = Integer.valueOf(s.substring(i, slash));
+                    res.add(s.substring(slash + 1, slash + size + 1));
+                    i = slash + size + 1;
+                }
+            }
+            return res;
+        }
     }
 
     //270. Closest Binary Search Tree Value
@@ -3168,13 +3197,11 @@ class LeetCode {
         for (Interval in : intervals) {
             if (temp == null) {
                 temp = in;
+            } else if (temp.end >= in.start) {
+                temp.end = Math.max(temp.end, in.end);
             } else {
-                if (temp.end >= in.start) {
-                    temp.end = Math.max(temp.end, in.end);
-                } else {
-                    res.add(temp);
-                    temp = in;
-                }
+                res.add(temp);
+                temp = in;
             }
         }
         res.add(temp);
@@ -4920,7 +4947,7 @@ class LeetCode {
  1	Two Sum	21.8%	Easy
  */
 
-/*
+ /*
  * Google
  #               Title           Acceptance Difficulty
  336	Palindrome Pairs	15.5%	Hard
@@ -4997,7 +5024,7 @@ class LeetCode {
  10	Regular Expression Matching	21.7%	Hard
  4	Median of Two Sorted Arrays	18.3%	Hard
  */
-/*
+ /*
  * Facebook
  #               Title                   Acceptance Difficulty 
  334	Increasing Triplet Subsequence	32.2%	Medium
@@ -5059,7 +5086,7 @@ class LeetCode {
  10	Regular Expression Matching	21.7%	Hard
  1	Two Sum	21.8%	Easy
  */
-/*
+ /*
  * LinkedIn
  #              Title                   Acceptance  Difficulty 
  311	Sparse Matrix Multiplication 	47.1%	Medium
@@ -5095,7 +5122,7 @@ class LeetCode {
  23	Merge k Sorted Lists	23.0%	Hard
  21	Merge Two Sorted Lists	34.9%	Easy
  */
-/*
+ /*
  * Microsoft
  #       Title                          Acceptance          Difficulty
  79	Word Search	22.4%	Medium
