@@ -2626,6 +2626,69 @@ class LeetCode {
         return Math.abs(a - target) < Math.abs(b - target) ? a : b;
     }
 
+    //269. Alien Dictionary
+    public String alienOrder(String[] words) { //["wrt","wrf","er","ett","rftt"],["zy","zx"],["aac","aabb","aaba"],["qjatu","ekp","daysdbi","ntbjwvta"]
+        if (words == null || words.length < 1) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        Map<Character, Set<Character>> map = new HashMap<>();
+        int[] degree = new int[26];
+        int n = words.length;
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                degree[c - 'a'] = 1;
+            }
+        }
+        for (int i = 0; i < n - 1; i++) {//max=4,2
+            int len = Math.min(words[i].length(), words[i + 1].length());
+            for (int j = 0; j < len; j++) {//i=0,zy
+                char c1 = words[i].charAt(j);
+                char c2 = words[i + 1].charAt(j);
+                if (c1 != c2) {
+                    Set<Character> set = map.get(c1);
+                    if (set == null) {
+                        set = new HashSet<>();
+                    }
+                    if (!set.contains(c2)) {
+                        set.add(c2);
+                        degree[c2 - 'a']++;
+                        map.put(c1, set);
+                    }
+                    break;
+                }
+            }
+        }
+
+        Deque<Character> q = new ArrayDeque<>();
+        int size = 0;
+        for (int i = 0; i < degree.length; i++) {
+            if (degree[i] > 0) {
+                size++;
+            }
+            if (degree[i] == 1) {
+                q.offer((char) (i + 'a'));
+            }
+        }
+        while (q.size() > 0) {
+            char c = q.poll();
+            sb.append(c);
+            Set<Character> set = map.get(c);
+            if (set != null) {
+                for (char v : set) {
+                    degree[v - 'a']--;
+                    if (degree[v - 'a'] == 1) {
+                        q.offer(v);
+                    }
+                }
+            }
+        }
+        if (sb.length() != size) {
+            return "";
+        }
+        return sb.toString();
+    }
+
     //268. Missing Number
     public int missingNumber(int[] nums) {
         if (nums == null || nums.length < 1) {
