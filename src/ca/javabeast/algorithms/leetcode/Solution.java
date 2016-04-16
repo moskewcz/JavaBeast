@@ -2764,6 +2764,59 @@ class LeetCode {
         return num == 1;
     }
 
+    //261. Graph Valid Tree
+    class UnionFind {
+
+        int[] graph;
+
+        public UnionFind(int n) {
+            graph = new int[n];
+            for (int i = 0; i < n; i++) {
+                graph[i] = i;
+            }
+        }
+
+        void union(int x, int y) {
+            int rx = find(x);
+            int ry = find(y);
+            if (rx != ry) {
+                graph[rx] = ry;
+            }
+        }
+
+        int find(int x) {
+            int root = graph[x];
+            while (root != graph[root]) {
+                root = graph[root];
+            }
+            int temp = -1;
+            int parent = graph[x];
+            while (parent != graph[parent]) {
+                temp = graph[parent];
+                graph[parent] = root;
+                parent = temp;
+            }
+            return root;
+        }
+
+    }
+
+    public boolean validTree(int n, int[][] edges) {
+        if (n - 1 != edges.length) {
+            return false;
+        }
+        UnionFind uf = new UnionFind(n);
+        for (int[] edge : edges) {
+            int r1 = uf.find(edge[0]);
+            int r2 = uf.find(edge[1]);
+            if (r1 == r2) {
+                return false;
+            }
+            uf.union(edge[0], edge[1]);
+        }
+        return true;
+    }
+
     //259. 3Sum Smaller
     public int threeSumSmaller(int[] nums, int target) {
         if (nums == null || nums.length < 3) {
