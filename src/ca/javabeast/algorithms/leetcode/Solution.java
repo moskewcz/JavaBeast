@@ -2840,6 +2840,27 @@ class LeetCode {
         return res;
     }
 
+    //257. Binary Tree Paths
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        String path = "";
+        helper(root, path, res);
+        return res;
+    }
+    
+    void helper(TreeNode root, String path, List<String> res){
+        if(root == null)
+            return;
+        path += root.val;
+        if(root.left == null && root.right == null){
+            res.add(path);
+            return;
+        }
+        path += "->";
+        helper(root.left, path , res);
+        helper(root.right, path , res);
+    }
+    
     //242. Valid Anagram
     public boolean isAnagram(String s, String t) {
         if (s == null || t == null || s.length() != t.length()) {
