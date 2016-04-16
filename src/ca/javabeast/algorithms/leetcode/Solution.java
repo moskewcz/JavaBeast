@@ -2847,20 +2847,59 @@ class LeetCode {
         helper(root, path, res);
         return res;
     }
-    
-    void helper(TreeNode root, String path, List<String> res){
-        if(root == null)
+
+    void helper(TreeNode root, String path, List<String> res) {
+        if (root == null) {
             return;
+        }
         path += root.val;
-        if(root.left == null && root.right == null){
+        if (root.left == null && root.right == null) {
             res.add(path);
             return;
         }
         path += "->";
-        helper(root.left, path , res);
-        helper(root.right, path , res);
+        helper(root.left, path, res);
+        helper(root.right, path, res);
     }
-    
+
+    //253. Meeting Rooms II 
+    public int minMeetingRooms(Interval[] meets) {
+        int n = meets.length;
+        int[] starts = new int[n];
+        int[] ends = new int[n];
+        for (int i = 0; i < n; i++) {
+            starts[i] = meets[i].start;
+            ends[i] = meets[i].end;
+        }
+        Arrays.sort(starts);
+        Arrays.sort(ends);
+        int res = 0, ei = 0;
+        for (int i = 0; i < n; i++) {
+            if (starts[i] < ends[ei]) {
+                res++;
+            } else {
+                ei++;
+            }
+        }
+        return res;
+    }
+
+    //252. Meeting Rooms
+    public boolean canAttendMeetings(Interval[] meets) {
+        Arrays.sort(meets, new Comparator<Interval>() {
+            @Override
+            public int compare(Interval i1, Interval i2) {
+                return i1.start - i2.start;
+            }
+        });
+        for (int i = 0; i < meets.length - 1; i++) {
+            if (meets[i].end > meets[i + 1].start) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //242. Valid Anagram
     public boolean isAnagram(String s, String t) {
         if (s == null || t == null || s.length() != t.length()) {
