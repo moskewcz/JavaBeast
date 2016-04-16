@@ -1975,6 +1975,50 @@ class LeetCode {
         return num <= 1 && neigh > 0;
     }
 
+    //314. Binary Tree Vertical Order Traversal
+    public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
+        Deque<TreeNode> q = new ArrayDeque<>();
+        Deque<Integer> cols = new ArrayDeque<>();
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        int min = 0, max = 0;
+        q.offer(root);
+        cols.offer(0);
+        while (q.size() > 0) {
+            TreeNode node = q.poll();
+            int col = cols.poll();
+            List<Integer> list = map.get(col);
+            if (list == null) {
+                list = new ArrayList<>();
+                map.put(col, list);
+            }
+            list.add(node.val);
+
+            if (node.left != null) {
+                q.offer(node.left);
+                cols.offer(col - 1);
+                if (min > col - 1) {
+                    min = col - 1;
+                }
+            }
+
+            if (node.right != null) {
+                q.offer(node.right);
+                cols.offer(col + 1);
+                if (max < col + 1) {
+                    max = col + 1;
+                }
+            }
+        }
+        for (int i = min; i <= max; i++) {
+            res.add(map.get(i));
+        }
+        return res;
+    }
+
     //313. Super Ugly Number
     public int nthSuperUglyNumber(int n, int[] primes) {
         if (n < 1 || primes == null || primes.length < 1) {
