@@ -2986,21 +2986,33 @@ class LeetCode {
     //228. Summary Ranges
     public List<String> summaryRanges(int[] nums) {
         List<String> res = new ArrayList<>();
-        if(nums == null || nums.length < 1)
+        if (nums == null || nums.length < 1) {
             return res;
+        }
         int n = nums.length;
-        for(int i = 0; i < n; i++){
-            int cur = nums[i];
-            while(i+1 < n && nums[i+1] - nums[i] == 1)
-                i++;
-            if(cur == nums[i])
-                res.add(cur+"");
-            else
-                res.add(cur + "->" + nums[i]);
+        for (int i = 0, k; i < n; i = k + 1) {
+            k = helper(nums, i, n);
+            if (i == k) {
+                res.add(nums[i] + "");
+            } else {
+                res.add(nums[i] + "->" + nums[k]);
+            }
         }
         return res;
     }
-        
+
+    int helper(int[] nums, int l, int r) {
+        while (l + 1 < r) {
+            int m = (l + r) / 2;
+            if (nums[m] - nums[l] == m - l) {
+                l = m;
+            } else {
+                r = m;
+            }
+        }
+        return l;
+    }
+
     //206. Reverse Linked List
     public ListNode reverseList(ListNode head) {
         if (head == null) {
