@@ -3188,6 +3188,27 @@ class LeetCode {
         return res;
     }
 
+    //163. Missing Ranges
+    public List<String> findMissingRanges(int[] nums, int lower, int upper) {
+        List<String> res = new ArrayList<>();
+        for (int n : nums) {
+            int cur = n - 1;
+            if (cur == lower) {
+                res.add(lower + "");
+            } else if (lower < cur) {
+                res.add(lower + "->" + cur);
+            }
+            lower = n + 1;
+        }
+        if (upper == lower) {
+            res.add(upper + "");
+        } else if (upper > lower) {
+            res.add(lower + "->" + upper);
+        }
+        return res;
+
+    }
+
     //160. Intersection of Two Linked Lists
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         ListNode meet = null, cur = headA, slow = headB, fast = headB;
