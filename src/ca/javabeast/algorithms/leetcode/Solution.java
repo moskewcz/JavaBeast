@@ -2983,6 +2983,24 @@ class LeetCode {
         return n > 0 && (n & (n - 1)) == 0;
     }
 
+    //228. Summary Ranges
+    public List<String> summaryRanges(int[] nums) {
+        List<String> res = new ArrayList<>();
+        if(nums == null || nums.length < 1)
+            return res;
+        int n = nums.length;
+        for(int i = 0; i < n; i++){
+            int cur = nums[i];
+            while(i+1 < n && nums[i+1] - nums[i] == 1)
+                i++;
+            if(cur == nums[i])
+                res.add(cur+"");
+            else
+                res.add(cur + "->" + nums[i]);
+        }
+        return res;
+    }
+        
     //206. Reverse Linked List
     public ListNode reverseList(ListNode head) {
         if (head == null) {
