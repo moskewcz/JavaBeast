@@ -33,6 +33,7 @@ import java.util.PriorityQueue;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 
 /**
  *
@@ -3011,6 +3012,54 @@ class LeetCode {
             }
         }
         return l;
+    }
+
+    //218. The Skyline Problem 
+    public List<int[]> getSkyline(int[][] buildings) {
+        List<int[]> res = new ArrayList<>();
+        List<int[]> heights = new ArrayList<>();
+        if (buildings == null || buildings.length < 1) {
+            return res;
+        }
+        for (int[] b : buildings) {
+            heights.add(new int[]{b[0], -b[2]});
+            heights.add(new int[]{b[1], b[2]});
+        }
+        Collections.sort(heights, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] a, int[] b) {
+                if (a[0] != b[0]) {
+                    return a[0] - b[0];
+                }
+                return a[1] - b[1];
+            }
+        });
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        map.put(0, 1);
+        int pre = 0;
+        for (int[] h : heights) {
+            if (h[1] < 0) {
+                Integer count = map.get(-h[1]);
+                if (count == null) {
+                    map.put(-h[1], 1);
+                } else {
+                    map.put(-h[1], count + 1);
+                }
+            } else {
+                Integer count = map.get(h[1]);
+                if (count == 1) {
+                    map.remove(h[1]);
+                } else {
+                    map.put(h[1], count - 1);
+                }
+            }
+            int cur = map.lastKey();
+            if (pre != cur) {
+                res.add(new int[]{h[0], cur});
+                pre = cur;
+            }
+        }
+        return res;
     }
 
     //206. Reverse Linked List
