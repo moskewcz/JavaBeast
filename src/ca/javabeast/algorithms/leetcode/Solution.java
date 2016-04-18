@@ -3237,6 +3237,39 @@ class LeetCode {
         return res;
     }
 
+    //166. Fraction to Recurring Decimal 
+    public String fractionToDecimal(int num, int den) {
+        String neg = "-";
+        if (num > 0 && den > 0 || num < 0 && den < 0) {
+            neg = "";
+        }
+        if (den == 0) {
+            return "";
+        }
+        if (num == 0) {
+            return "0";
+        }
+        long n = Math.abs((long) num);
+        long d = Math.abs((long) den);
+        Map<Long, Integer> idx = new HashMap<>();
+        String res = "" + n / d;
+        long r = n % d;
+        if (r != 0) {
+            res += ".";
+        }
+        while (r != 0) {
+            Integer i = idx.get(r);
+            if (i != null) {
+                res = res.substring(0, i) + "(" + res.substring(i, res.length()) + ")";
+                break;
+            }
+            idx.put(r, res.length());
+            res += (r * 10) / d;
+            r = (r * 10) % d;
+        }
+        return neg + res;
+    }
+
     //163. Missing Ranges 
     public List<String> findMissingRanges(int[] nums, int lower, int upper) {
         List<String> res = new ArrayList<>();
