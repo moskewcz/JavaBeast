@@ -2983,7 +2983,44 @@ class LeetCode {
     public boolean isPowerOfTwo(int n) {
         return n > 0 && (n & (n - 1)) == 0;
     }
+    
+    //230. Kth Smallest Element in a BST 
+    public int kthSmallest(TreeNode root, int k) {
+        TreeNodeWithCount rootWithCount = buildTreeWithCount(root);
+        return kthSmallest(rootWithCount, k);
+    }
 
+    private TreeNodeWithCount buildTreeWithCount(TreeNode root) {
+        if (root == null) return null;
+        TreeNodeWithCount rootWithCount = new TreeNodeWithCount(root.val);
+        rootWithCount.left = buildTreeWithCount(root.left);
+        rootWithCount.right = buildTreeWithCount(root.right);
+        if (rootWithCount.left != null) rootWithCount.count += rootWithCount.left.count;
+        if (rootWithCount.right != null) rootWithCount.count += rootWithCount.right.count;
+        return rootWithCount;
+    }
+
+    private int kthSmallest(TreeNodeWithCount root, int k) {
+        int count = 0;
+        if(root.left != null)
+            count = root.left.count;
+        if (k <= count) {
+            return kthSmallest(root.left, k);
+        } else if (k > count + 1) {
+            return kthSmallest(root.right, k-1-count); // 1 is counted as current node
+        }
+
+        return root.val;
+    }
+    
+    class TreeNodeWithCount {
+        int val;
+        int count;
+        TreeNodeWithCount left;
+        TreeNodeWithCount right;
+        TreeNodeWithCount(int x) {val = x; count = 1;};
+    }
+    
     //228. Summary Ranges
     public List<String> summaryRanges(int[] nums) {
         List<String> res = new ArrayList<>();
