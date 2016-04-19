@@ -2983,7 +2983,7 @@ class LeetCode {
     public boolean isPowerOfTwo(int n) {
         return n > 0 && (n & (n - 1)) == 0;
     }
-    
+
     //230. Kth Smallest Element in a BST 
     public int kthSmallest(TreeNode root, int k) {
         TreeNodeWithCount rootWithCount = buildTreeWithCount(root);
@@ -2991,34 +2991,48 @@ class LeetCode {
     }
 
     private TreeNodeWithCount buildTreeWithCount(TreeNode root) {
-        if (root == null) return null;
+        if (root == null) {
+            return null;
+        }
         TreeNodeWithCount rootWithCount = new TreeNodeWithCount(root.val);
         rootWithCount.left = buildTreeWithCount(root.left);
         rootWithCount.right = buildTreeWithCount(root.right);
-        if (rootWithCount.left != null) rootWithCount.count += rootWithCount.left.count;
-        if (rootWithCount.right != null) rootWithCount.count += rootWithCount.right.count;
+        if (rootWithCount.left != null) {
+            rootWithCount.count += rootWithCount.left.count;
+        }
+        if (rootWithCount.right != null) {
+            rootWithCount.count += rootWithCount.right.count;
+        }
         return rootWithCount;
     }
 
     private int kthSmallest(TreeNodeWithCount root, int k) {
         int count = 0;
-        if(root.left != null)
+        if (root.left != null) {
             count = root.left.count;
+        }
         if (k <= count) {
             return kthSmallest(root.left, k);
         } else if (k > count + 1) {
-            return kthSmallest(root.right, k-1-count); // 1 is counted as current node
+            return kthSmallest(root.right, k - 1 - count); // 1 is counted as current node
         }
 
         return root.val;
     }
-    
+
     class TreeNodeWithCount {
+
         int val;
         int count;
         TreeNodeWithCount left;
         TreeNodeWithCount right;
-        TreeNodeWithCount(int x) {val = x; count = 1;};
+
+        TreeNodeWithCount(int x) {
+            val = x;
+            count = 1;
+        }
+    ;
+
     }
     
     //228. Summary Ranges
@@ -3585,6 +3599,30 @@ class LeetCode {
         }
     }
 
+    //57. Insert Interval 
+    public List<Interval> insert(List<Interval> ins, Interval newIn) {
+        List<Interval> res = new ArrayList<>();
+        if (ins == null || ins.size() < 1 || ins.get(0).start >= newIn.start && ins.get(ins.size() - 1).end <= newIn.end) {
+            res.add(newIn);
+            return res;
+        }
+        int pos = 0;
+        for (int i = 0; i < ins.size(); i++) {
+            Interval in = ins.get(i);
+            if (in.end < newIn.start) {
+                res.add(in);
+                pos++;
+            } else if (in.start > newIn.end) {
+                res.add(in);
+            } else {
+                newIn.start = Math.min(newIn.start, in.start);
+                newIn.end = Math.max(newIn.end, in.end);
+            }
+        }
+        res.add(pos, newIn);
+        return res;
+    }
+
     //56. Merge Intervals
     public List<Interval> merge(List<Interval> intervals) {
         if (intervals == null || intervals.size() < 2) {
@@ -3654,6 +3692,36 @@ class LeetCode {
             }
 
         }
+    }
+
+    //44. Wildcard Matching
+    public boolean isMatch2(String s, String p) {
+        if (s == null || p == null) {
+            return false;
+        }
+        int m = s.length(), n = p.length();
+        char[] sc = s.toCharArray(), pc = p.toCharArray();
+        int i = 0, j = 0, star = -1, mark = 0;
+        while (i < m) {
+            if (j < n && (sc[i] == pc[j] || pc[j] == '?')) {
+                i++;
+                j++;
+            } else if (j < n && pc[j] == '*') {
+                star = j;
+                mark = i;
+                j++;
+            } else if (star != -1) {
+                mark++;
+                i = mark;
+                j = star + 1;
+            } else {
+                return false;
+            }
+        }
+        while (j < n && pc[j] == '*') {
+            j++;
+        }
+        return j == n;
     }
 
     //26. Remove Duplicates from Sorted Array
