@@ -2966,6 +2966,25 @@ class LeetCode {
         return true;
     }
 
+    //240. Search a 2D Matrix II
+    public boolean searchMatrix2(int[][] matrix, int target) {
+        if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
+            return false;
+        }
+        int m = matrix.length, n = matrix[0].length;
+        int i = 0, j = n - 1;
+        while (i >= 0 && i < m && j >= 0 && j < n) {
+            if (matrix[i][j] == target) {
+                return true;
+            } else if (matrix[i][j] > target) {
+                j--;
+            } else {
+                i++;
+            }
+        }
+        return false;
+    }
+
     //235. Lowest Common Ancestor of a Binary Search Tree
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null || p == null || q == null) {
@@ -3599,6 +3618,41 @@ class LeetCode {
         }
     }
 
+    //Sorting Questions:74,4,75
+    //74. Search a 2D Matrix
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
+            return false;
+        }
+        int m = matrix.length, n = matrix[0].length;
+
+        int mr = binarySearch(matrix, target, 0, m - 1, n - 1, true);
+        if (mr < m) {
+            if (matrix[mr][n - 1] == target) {
+                return true;
+            }
+            int mc = binarySearch(matrix, target, 0, n - 1, mr, false);
+            if (mc < n && matrix[mr][mc] == target) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    int binarySearch(int[][] matrix, int target, int low, int high, int roc, boolean isCol) {
+        while (low < high) {
+            int m = (low + high) / 2;
+            if (isCol && matrix[m][roc] == target || (!isCol && matrix[roc][m] == target)) {
+                return m;
+            } else if (isCol && matrix[m][roc] > target || (!isCol && matrix[roc][m] > target)) {
+                high = m;
+            } else {
+                low = m + 1;
+            }
+        }
+        return low;
+    }
+
     //57. Insert Interval 
     public List<Interval> insert(List<Interval> ins, Interval newIn) {
         List<Interval> res = new ArrayList<>();
@@ -4185,21 +4239,6 @@ class LeetCode {
     }
 
     //Sorting Questions:74,4,75
-    //74. Search a 2D Matrix
-    public boolean searchMatrix(int[][] matrix, int target) {
-        int m = matrix.length, n = matrix[0].length;
-        for (int i = 0, j = n - 1; i < m && j >= 0;) {
-            if (matrix[i][j] < target) {
-                i++;
-            } else if (matrix[i][j] > target) {
-                j--;
-            } else {
-                return true;
-            }
-        }
-        return false;
-    }
-
     //4. Median of Two Sorted Arrays
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
         int m = nums1.length, n = nums2.length;
