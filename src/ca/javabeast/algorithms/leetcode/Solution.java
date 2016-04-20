@@ -47,6 +47,18 @@ public class Solution {
         LeetCode.print(s.getNumOfSwap(arr));
         //getFirstLetter
         LeetCode.print(s.getFirstLetter("aabbccdee"));
+        System.out.println(findRoot(16.0));
+    }
+
+    public static double findRoot(double n) {
+        double x = n;
+        double y = 1;
+        while (x > y) {
+            System.out.println(x + "-" + y);
+            x = (x + y) / 2;
+            y = n / x;
+        }
+        return x;
     }
 
     public int getNumOfSwap(int[] nums) {
@@ -632,6 +644,31 @@ class LeetCode {
         }
 
         return res;
+    }
+
+    // add One
+    public int[] addOne(int[] digits) { //[9,9,9]
+        int n = digits.length;//3
+        int[] res = new int[n + 1];
+        int sum = digits[n - 1] + 1;//10
+        int c = sum / 10;//1
+        for (int i = n - 1; i >= 0; i--) {//i=1
+            res[i] = sum % 10;//[9,0,0]
+            if (i == 0) {
+                break;
+            }
+            sum = digits[i - 1] + c;//10
+            c = sum / 10;//1
+
+        }
+        //res[1] = sum%10;//[0,0,0]
+        if (c > 0) {//c=1
+            res[0] = c;//[1,0,0,0]
+            //for(int i = 1; i < n+1; i++){//i=1,2,3
+            //	res[i] = temp[i-1];
+            //}
+        }//[0,9,0,0]
+        return res;//[1,0,0,0]
     }
 
 //    public List<List<Integer>> combine(int n, int k) {
