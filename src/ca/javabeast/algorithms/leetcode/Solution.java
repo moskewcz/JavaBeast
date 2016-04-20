@@ -2143,6 +2143,7 @@ class LeetCode {
         return res;
     }
 
+    //https://www.cs.princeton.edu/~rs/AlgsDS07/01UnionFind.pdf
     class UnionFind2D {
 
         private int[] id;
@@ -2983,6 +2984,16 @@ class LeetCode {
             }
         }
         return false;
+    }
+
+    //236. Lowest Common Ancestor of a Binary Tree
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) {
+            return root;
+        }
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        return left == null ? right : right == null ? left : root;
     }
 
     //235. Lowest Common Ancestor of a Binary Search Tree
