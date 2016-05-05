@@ -24,7 +24,7 @@ import java.util.Set;
  *
  * @author alpenliebe <alpseinstein@gmail.com>
  */
-public class CharacterProcessor {
+public abstract  class CharacterProcessor {
     
     public static String findFirstNonrepeatedCharacter(String str) {
         HashMap<Integer, Object> charHash = new HashMap<>();
