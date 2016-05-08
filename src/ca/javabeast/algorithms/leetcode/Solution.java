@@ -2897,6 +2897,11 @@ class LeetCode {
         return res;
     }
 
+    //292. Nim Game
+    public boolean canWinNim(int n) {
+        return !(n % 4 == 0);
+    }
+
     //289. Game of Life
     public void gameOfLife(int[][] board) {
         if (board == null) {
