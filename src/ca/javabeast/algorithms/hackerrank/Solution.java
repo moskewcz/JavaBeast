@@ -30,6 +30,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -486,21 +487,22 @@ public class Solution {
 
     INPUT: ["a(1)","a(6)","a","a","a","a","a","a","a","a","a","a"]//1,1,10,1,1,1,1,1,1,1,1
     OUTPUT: ["a(1)","a(6)","a","a(2)","a(3)","a(4)","a(5)","a(7)","a(8)","a(9)","a(10)","a(11)"]
-    */
-    public static String[] renameFilenames(String[] names){
+     */
+    public static String[] renameFilenames(String[] names) {
         Map<String, Integer> map = new HashMap<>();
-        for(int i = 0; i < names.length; i++){
+        for (int i = 0; i < names.length; i++) {
             String name = names[i];
             Integer count = map.get(name);
-            if(count == null){
+            if (count == null) {
                 count = 0;
             }
             map.put(name, count + 1);
-            
-            if(count == 0)
+
+            if (count == 0) {
                 continue;
-            
-            while(map.get(name + "(" + count + ")") != null){
+            }
+
+            while (map.get(name + "(" + count + ")") != null) {
                 count++;
             }
             names[i] = name + "(" + count + ")";
@@ -508,4 +510,5 @@ public class Solution {
         }
         return names;
     }
+    
 }

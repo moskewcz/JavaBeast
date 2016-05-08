@@ -58,8 +58,7 @@ public class Solution {
         System.out.println(findRoot(16.0));
     }
 
-    
-        //https://www.hackerrank.com/challenges/plus-minus  
+    //https://www.hackerrank.com/challenges/plus-minus  
     public static void plusMinus(int[] arr) {
         int n = arr.length;
         int pos = 0, neg = 0, zero = 0;
@@ -484,21 +483,22 @@ public class Solution {
 
     INPUT: ["a(1)","a(6)","a","a","a","a","a","a","a","a","a","a"]//1,1,10,1,1,1,1,1,1,1,1
     OUTPUT: ["a(1)","a(6)","a","a(2)","a(3)","a(4)","a(5)","a(7)","a(8)","a(9)","a(10)","a(11)"]
-    */
-    public static String[] renameFilenames(String[] names){
+     */
+    public static String[] renameFilenames(String[] names) {
         Map<String, Integer> map = new HashMap<>();
-        for(int i = 0; i < names.length; i++){
+        for (int i = 0; i < names.length; i++) {
             String name = names[i];
             Integer count = map.get(name);
-            if(count == null){
+            if (count == null) {
                 count = 0;
             }
             map.put(name, count + 1);
-            
-            if(count == 0)
+
+            if (count == 0) {
                 continue;
-            
-            while(map.get(name + "(" + count + ")") != null){
+            }
+
+            while (map.get(name + "(" + count + ")") != null) {
                 count++;
             }
             names[i] = name + "(" + count + ")";
@@ -506,7 +506,7 @@ public class Solution {
         }
         return names;
     }
-    
+
     public static double findRoot(double n) {
         double x = n;
         double y = 1;
@@ -3686,6 +3686,23 @@ class LeetCode {
         return count;
     }
 
+    //203. Remove Linked List Elements 
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur = dummy;
+        while (cur.next != null) {
+            if (cur.next.val == val) {
+                ListNode next = cur.next;
+                cur.next = next.next;
+                next.next = null;
+            } else {
+                cur = cur.next;
+            }
+        }
+        return dummy.next;
+    }
+
     //200. Number of Islands
     public int numIslands(char[][] grid) {
         int res = 0;
@@ -3754,6 +3771,31 @@ class LeetCode {
             l++;
             r--;
         }
+    }
+
+    //179. Largest Number 
+    public String largestNumber(int[] nums) {
+        if (nums == null || nums.length < 1) {
+            return "";
+        }
+        int n = nums.length;
+        String[] strs = new String[n];
+        for (int i = 0; i < n; i++) {
+            strs[i] = String.valueOf(nums[i]);
+        }
+        Arrays.sort(strs, new Comparator<String>() {
+            @Override
+            public int compare(String str1, String str2) {
+                String s1 = str1 + str2;
+                String s2 = str2 + str1;
+                return s2.compareTo(s1);
+            }
+        });
+        StringBuilder sb = new StringBuilder();
+        for (String str : strs) {
+            sb.append(str);
+        }
+        return sb.charAt(0) == '0' ? "0" : sb.toString();
     }
 
     //170. Two Sum III - Data structure design
@@ -5935,4 +5977,3 @@ class LeetCode {
         return head;
     }
 }
-
