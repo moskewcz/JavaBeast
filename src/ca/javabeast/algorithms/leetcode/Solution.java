@@ -4415,6 +4415,44 @@ class LeetCode {
         return stack.size() == 0;
     }
 
+    //18. 4Sum
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        int n = nums.length;
+        for (int i = 0; i < n - 3 && 4 * nums[i] <= target; i++) {
+            if (i == 0 || (i > 0 && nums[i - 1] != nums[i])) {
+
+                for (int j = i + 1; j < n - 2 && 3 * nums[j] <= target - nums[i]; j++) {
+                    if (j == i + 1 || (j > i + 1 && nums[j - 1] != nums[j])) {
+                        //System.out.println(i+","+j+",|"+(target - nums[i])+",");
+                        int left = j + 1, right = n - 1;
+                        while (left < right) {
+                            if (nums[left] + nums[right] > target - nums[j] - nums[i]) {
+                                right--;
+                            } else if (nums[left] + nums[right] < target - nums[j] - nums[i]) {
+                                left++;
+                            } else {
+                                res.add(Arrays.asList(nums[i], nums[j], nums[left], nums[right]));
+                                while (left < right && nums[left] == nums[left + 1]) {
+                                    left++;
+                                }
+                                while (left < right && nums[right] == nums[right - 1]) {
+                                    right--;
+                                }
+                                left++;
+                                right--;
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }
+        return res;
+    }
+
     //16. 3Sum Closest
     public int threeSumClosest(int[] nums, int target) {
         if (nums == null || nums.length < 3) {
