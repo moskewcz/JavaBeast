@@ -2647,7 +2647,7 @@ class LeetCode {
     }
 
     //309. Best Time to Buy and Sell Stock with Cooldown
-    public int maxProfit(int[] prices) {
+    public int maxProfitWithCooldown(int[] prices) {
         if (prices == null || prices.length < 2) {
             return 0;
         }
@@ -3798,6 +3798,30 @@ class LeetCode {
         rightSideViewHelper(root.left, cur + 1, res);
     }
 
+    //188. Best Time to Buy and Sell Stock IV
+    public int maxProfit4(int k, int[] prices) {
+        int len = prices.length, profit = 0;
+        if (k >= len / 2) {
+            for (int i = 1; i < len; i++) {
+                if (prices[i] > prices[i - 1]) {
+                    profit += prices[i] - prices[i - 1];
+                }
+            }
+            return profit;
+        }
+
+        int[][] dp = new int[k + 1][len];
+        for (int i = 1; i <= k; i++) {
+            int buy = -prices[0];
+            for (int j = 1; j < len; j++) {
+                dp[i][j] = Math.max(dp[i][j - 1], buy + prices[j]);
+                buy = Math.max(buy, dp[i - 1][j - 1] - prices[j]);
+            }
+        }
+        return dp[k][len - 1];
+
+    }
+
     //186. Reverse Words in a String II(Locked)
     public void reverseWords(char[] s) {
         int n = s.length;
@@ -4120,6 +4144,49 @@ class LeetCode {
             removeNode(n);
             addNode(n);
         }
+    }
+
+    //123. Best Time to Buy and Sell Stock III
+    public int maxProfit3(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+        int buy2 = Integer.MIN_VALUE, buy1 = Integer.MIN_VALUE;
+        int sell2 = 0, sell1 = 0;
+        for (int price : prices) {
+            sell2 = Math.max(sell2, buy2 + price);
+            buy2 = Math.max(buy2, sell1 - price);
+            sell1 = Math.max(sell1, buy1 + price);
+            buy1 = Math.max(buy1, -price);
+        }
+        return sell2;
+    }
+
+    //122. Best Time to Buy and Sell Stock II//a <= b <= c <= d", the profit is "d - a = (b - a) + (c - b) + (d - c)"
+    public int maxProfit2(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+        int total = 0;
+        for (int i = 0; i < prices.length - 1; i++) {
+            if (prices[i + 1] > prices[i]) {
+                total += prices[i + 1] - prices[i];
+            }
+        }
+        return total;
+    }
+
+    //121. Best Time to Buy and Sell Stock
+    public int maxProfit(int[] prices) {
+        if (prices == null || prices.length < 1) {
+            return 0;
+        }
+        int maxSub = 0, max = 0;
+        for (int i = 1; i < prices.length; i++) {
+            maxSub = Math.max(0, maxSub += prices[i] - prices[i - 1]);
+            max = Math.max(maxSub, max);
+        }
+        return max;
     }
 
     //102. Binary Tree Level Order Traversal
