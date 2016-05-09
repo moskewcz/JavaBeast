@@ -301,12 +301,13 @@ public class Solution {
         }
         return total;
     }
-    
+
     class Node {
-       int data;
-       Node next;
+
+        int data;
+        Node next;
     }
-    
+
     //https://www.hackerrank.com/challenges/insert-a-node-at-a-specific-position-in-a-linked-list
     Node InsertNth(Node head, int data, int position) {
         // This is a "method-only" submission. 
@@ -325,6 +326,30 @@ public class Solution {
         node.next = cur.next;
         cur.next = node;
         return head;
+    }
+
+    //https://www.hackerrank.com/challenges/merge-two-sorted-linked-lists
+    Node MergeLists(Node headA, Node headB) {
+        // This is a "method-only" submission. 
+        // You only need to complete this method 
+        Node head = new Node();
+        Node pre = head;
+        while (headA != null && headB != null) {
+            if (headA.data < headB.data) {
+                pre.next = headA;
+                headA = headA.next;
+            } else {
+                pre.next = headB;
+                headB = headB.next;
+            }
+            pre = pre.next;
+        }
+        if (headA != null) {
+            pre.next = headA;
+        } else {
+            pre.next = headB;
+        }
+        return head.next;
     }
 
     //uber perfect city: https://codefights.com/fight/KuDq7HSxk4En2Z62S
