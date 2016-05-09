@@ -285,6 +285,48 @@ public class Solution {
         return n ^ ones;
     }
 
+    //https://www.hackerrank.com/challenges/stockmax
+    public static long stockMax(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+        int n = prices.length, highest = prices[n - 1];
+        long total = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            if (highest > prices[i]) {
+                total += highest - prices[i];
+            } else {
+                highest = prices[i];
+            }
+        }
+        return total;
+    }
+    
+    class Node {
+       int data;
+       Node next;
+    }
+    
+    //https://www.hackerrank.com/challenges/insert-a-node-at-a-specific-position-in-a-linked-list
+    Node InsertNth(Node head, int data, int position) {
+        // This is a "method-only" submission. 
+        // You only need to complete this method.
+        Node node = new Node();
+        node.data = data;
+        if (position <= 0) {
+            node.next = head;
+            return node;
+        }
+        Node cur = head;
+        while (position > 1) {
+            cur = cur.next;
+            position--;
+        }
+        node.next = cur.next;
+        cur.next = node;
+        return head;
+    }
+
     //uber perfect city: https://codefights.com/fight/KuDq7HSxk4En2Z62S
     double perfectCity(double[] departure, double[] destination) {
         double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0, res = 0.0;
