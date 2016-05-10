@@ -56,6 +56,72 @@ public class Solution {
         //getFirstLetter
         LeetCode.print(s.getFirstLetter("aabbccdee"));
         System.out.println(findRoot(16.0));
+        for (String str : getMessageParts("TextNow is the very first all-IP carrier.", 20)) {
+            System.out.println(str);
+        }
+
+    }
+
+    //message parts
+    /*
+    sample input:
+    TextNow is the very first all-IP carrier.
+    20
+
+    sample output:
+    TextNow is the (1/4)
+    very first (2/4)
+    all-IP (3/4)
+    carrier. (4/4)
+
+    I think real output should be :
+    TextNow is the (1/3)
+    very first (2/3)
+    all-IP carrier.(3/3)
+    
+    or :
+    TextNow is the (1/4)
+     very first  (2/4)
+    all-IP  (3/4)
+    carrier. (4/4)
+    
+    Otherwise it breaks the original format.
+    Here is the code I writed for testing.
+     */
+    public static String[] getMessageParts(String long_message, int max_size) {
+        String[] err = new String[]{"-1"};
+        if (max_size < 10) {
+            return err;
+        }
+        String[] res = null;
+        if (long_message != null) {
+            List<String> parts = new ArrayList<>();
+            char[] chs = long_message.toCharArray();
+            int len = long_message.length(), begin = 0;
+            while (begin < len) {
+                int end = begin + max_size - 5;
+                while (end > len || (end < len && chs[end] != ' ' && chs[end - 1] != ' ')) {
+                    end--;
+                }
+                //System.out.println(new String(chs, begin, end - begin)+","+chs[begin]+","+chs[end]);
+                if (begin >= end) {
+                    return err;
+                }
+
+                parts.add(new String(chs, begin, end - begin));
+                begin = end;
+            }
+            int total = parts.size();
+            res = new String[total];
+            for (int i = 0; i < total; i++) {
+                if (total > 1) {
+                    res[i] = parts.get(i) + "(" + (i + 1) + "/" + total + ")";
+                } else {
+                    res[i] = parts.get(i);
+                }
+            }
+        }
+        return res;
     }
 
     //https://www.hackerrank.com/challenges/plus-minus  
@@ -2010,6 +2076,20 @@ class LeetCode {
         // @return the nested list that this NestedInteger holds, if it holds a nested list
         // Return null if this NestedInteger holds a single integer
         public List<NestedInteger> getList();
+    }
+
+    //344. Reverse String
+    public String reverseString(String s) {
+        char[] chs = s.toCharArray();
+        int left = 0, right = chs.length - 1;
+        while (left < right) {
+            char temp = chs[left];
+            chs[left] = chs[right];
+            chs[right] = temp;
+            left++;
+            right--;
+        }
+        return new String(chs);
     }
 
     //341. Flatten Nested List Iterator

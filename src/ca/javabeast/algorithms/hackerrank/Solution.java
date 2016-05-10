@@ -45,6 +45,13 @@ import java.util.Set;
  */
 public class Solution {
 
+    class AVLNode {
+       int val;   //Value
+       int ht;      //Height
+       AVLNode left;   //Left child
+       AVLNode right;   //Right child
+    }
+        
     public static void main(String[] args) {
         String[][] arr = {{"a", "a"}, {"a", "b", "a"}};
         System.out.println(Arrays.toString(findCommonElement(arr)));
@@ -289,6 +296,76 @@ public class Solution {
         return n ^ ones;
     }
 
+
+    //https://www.hackerrank.com/challenges/self-balancing-tree
+    public AVLNode insert(AVLNode root, int val) {
+        if (root == null) {
+            AVLNode node = new AVLNode();
+            node.val = val;
+            node.ht = 0;
+            return node;
+        }
+        if (root.val > val) {
+            root.left = insert(root.left, val);
+
+        } else {
+            root.right = insert(root.right, val);
+
+        }
+        return rebalancing(root);
+    }
+
+    static int height(AVLNode node){
+        if(node == null)
+            return -1;
+        return node.ht;
+    }
+    
+    static AVLNode rebalancing(AVLNode root) {
+        root.ht = Math.max(height(root.left), height(root.right)) + 1;
+        
+        int bf = height(root.left) - height(root.right);
+        
+        if (bf > 1) {
+            
+            bf = height(root.left.left) - height(root.left.right);
+            if (bf < 0) {
+                root.left = rotate(root.left, true);
+            }
+            
+            root = rotate(root, false);
+        } else if (bf < -1) {
+            
+            bf = height(root.right.left) - height(root.right.right);
+            if (bf > 0) {
+                root.right = rotate(root.right, false);
+            }
+            
+            root = rotate(root, true);
+        }
+        
+        return root;
+    }
+
+    static AVLNode rotate(AVLNode root, boolean isLeft) {
+        if (isLeft) {
+            AVLNode right = root.right;
+            root.right = right.left;
+            right.left = root;
+            root.ht = Math.max(height(root.left), height(root.right)) + 1;
+            root = right;
+            root.ht = Math.max(height(root.left), height(root.right)) + 1;
+        } else {
+            AVLNode left = root.left;
+            root.left = left.right;
+            left.right = root;
+            root.ht = Math.max(height(root.left), height(root.right)) + 1;
+            root = left;
+            root.ht = Math.max(height(root.left), height(root.right)) + 1;
+        }
+        return root;
+    }
+
     //uber perfect city: https://codefights.com/fight/KuDq7HSxk4En2Z62S
     double perfectCity(double[] departure, double[] destination) {
         double x1 = 0.0, y1 = 0.0, x2 = 0.0, y2 = 0.0, res = 0.0;
@@ -510,5 +587,5 @@ public class Solution {
         }
         return names;
     }
-    
+
 }
