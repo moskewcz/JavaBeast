@@ -59,6 +59,24 @@ public class Solution {
         for (String str : getMessageParts("TextNow is the very first all-IP carrier.", 20)) {
             System.out.println(str);
         }
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(Arrays.asList(1, 2));
+        System.out.println(res.toString());
+
+        // your code goes here
+        Ideone g = s.new Ideone(4);
+        g.addEdge(0, 1);
+        g.addEdge(0, 2);
+        g.addEdge(1, 2);
+        g.addEdge(2, 0);
+        g.addEdge(2, 3);
+        g.addEdge(3, 3);
+
+        if (g.isCyclic()) {
+            System.out.print("Graph contains cycle" + ' ');
+        } else {
+            System.out.print("Graph doesn’t contain cycle" + " ");
+        }
 
     }
 
@@ -494,6 +512,59 @@ public class Solution {
             root.ht = Math.max(height(root.left), height(root.right)) + 1;
         }
         return root;
+    }
+
+    //http://www.geeksforgeeks.org/detect-cycle-in-a-graph/
+    /* Name of the class has to be “Main” only if the class is public. */
+    class Ideone {
+
+        private int V;
+        private LinkedList<Integer> adj[];
+
+        Ideone(int v) {
+            V = v;
+            adj = new LinkedList[v];
+            for (int i = 0; i < v; i++) {
+                adj[i] = new LinkedList();
+            }
+        }
+
+        void addEdge(int v, int w) {
+            adj[v].add(w);
+        }
+
+        boolean isCyclic() {
+            boolean visited[] = new boolean[V];
+            boolean recStack[] = new boolean[V];
+            for (int i = 0; i < V; i++) {
+                visited[i] = false;
+                recStack[i] = false;
+            }
+            for (int i = 0; i < V; i++) {
+                if (isCyclicUtil(i, visited, recStack)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        boolean isCyclicUtil(int s, boolean visited[], boolean recStack[]) {
+            if (visited[s] == false) {
+                visited[s] = true;
+                recStack[s] = true;
+                Iterator<Integer> it = adj[s].listIterator();
+                while (it.hasNext()) {
+                    int n = it.next();
+                    if (!visited[n] && isCyclicUtil(n, visited, recStack)) {
+                        return true;
+                    } else if (recStack[n]) {
+                        return true;
+                    }
+                }
+            }
+            recStack[s] = false;
+            return false;
+        }
     }
 
     //codefight
