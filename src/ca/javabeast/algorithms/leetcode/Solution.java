@@ -3335,6 +3335,22 @@ class LeetCode {
         }
     }
 
+    //283. Move Zeroes
+    public void moveZeroes(int[] nums) {
+        if (nums == null || nums.length < 1) {
+            return;
+        }
+        int n = nums.length, i = 0;
+        for (int num : nums) {
+            if (num != 0) {
+                nums[i++] = num;
+            }
+        }
+        while (i < n) {
+            nums[i++] = 0;
+        }
+    }
+
     //281. Zigzag Iterator
     public class ZigzagIterator {
 
