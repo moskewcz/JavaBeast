@@ -4265,6 +4265,17 @@ class LeetCode {
         }
     }
 
+    //168. Excel Sheet Column Title
+    public String convertToTitle(int n) {
+        StringBuilder sb = new StringBuilder();
+        while (n > 0) {
+            char c = (char) ((n - 1) % 26 + 'A');
+            n = (n - 1) / 26;
+            sb.append(c);
+        }
+        return sb.reverse().toString();
+    }
+
     //167. Two Sum II - Input array is sorted(Locked)
     public int[] twoSum2(int[] nums, int t) {
         int[] res = new int[2];
