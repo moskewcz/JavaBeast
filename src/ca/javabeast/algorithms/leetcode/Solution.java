@@ -4680,6 +4680,24 @@ class LeetCode {
         return res;
     }
 
+    //83. Remove Duplicates from Sorted List
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode list = head;
+        while (list.next != null) {
+            if (list.val == list.next.val) {
+                list.next = list.next.next;
+            } else {
+                list = list.next;
+            }
+        }
+
+        return head;
+    }
+
     //78. Subsets
     public List<List<Integer>> subsets(int[] nums) {
         int n = nums.length;
