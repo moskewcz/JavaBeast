@@ -2228,6 +2228,26 @@ class LeetCode {
         public List<NestedInteger> getList();
     }
 
+    //349. Intersection of Two Arrays
+    public int[] intersection(int[] nums1, int[] nums2) {
+        Set<Integer> set = new HashSet<>();
+        Set<Integer> intersect = new HashSet<>();
+        for (int i : nums1) {
+            set.add(i);
+        }
+        for (int i : nums2) {
+            if (set.contains(i)) {
+                intersect.add(i);
+            }
+        }
+        int[] res = new int[intersect.size()];
+        int i = 0;
+        for (int num : intersect) {
+            res[i++] = num;
+        }
+        return res;
+    }
+
     //344. Reverse String
     public String reverseString(String s) {
         char[] chs = s.toCharArray();
@@ -3936,6 +3956,19 @@ class LeetCode {
             }
         }
         return l;
+    }
+
+    //226. Invert Binary Tree
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        invertTree(root.left);
+        invertTree(root.right);
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+        return root;
     }
 
     //218. The Skyline Problem 
