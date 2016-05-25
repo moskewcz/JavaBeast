@@ -4220,6 +4220,14 @@ class LeetCode {
         return sb.charAt(0) == '0' ? "0" : sb.toString();
     }
 
+    //171. Excel Sheet Column Number
+    public int titleToNumber(String s) {
+        int result = 0;
+        char[] chs = s.toCharArray();
+        for (int i = 0; i < s.length(); result = result * 26 + (chs[i++] - 'A' + 1));
+        return result;
+    }
+
     //170. Two Sum III - Data structure design
     public class TwoSum {
 
