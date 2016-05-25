@@ -4063,7 +4063,19 @@ class LeetCode {
         return res;
     }
 
-    //206. Reverse Linked List
+    //217. Contains Duplicate
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : nums) {
+            if (set.contains(num)) {
+                return true;
+            }
+            set.add(num);
+        }
+        return false;
+    }
+
+//206. Reverse Linked List
     public ListNode reverseList(ListNode head) {
         if (head == null) {
             return null;
@@ -4254,6 +4266,7 @@ class LeetCode {
         char[] chs = s.toCharArray();
         for (int i = 0; i < s.length(); result = result * 26 + (chs[i++] - 'A' + 1));
         return result;
+
     }
 
     //170. Two Sum III - Data structure design
@@ -4293,7 +4306,7 @@ class LeetCode {
         }
     }
 
-    //169. Majority Element
+//169. Majority Element:Moore voting algorithm
     public int majorityElement(int[] nums) {
         int res = nums[0], count = 1;
         for (int i = 1; i < nums.length; i++) {
@@ -4430,6 +4443,7 @@ class LeetCode {
             cur.next = null;
         }
         return meet;
+
     }
 
     //155. Min Stack
@@ -4463,7 +4477,7 @@ class LeetCode {
         }
     }
 
-    //146. LRU Cache
+//146. LRU Cache
     public class LRUCache {
 
         final class Node {
@@ -4555,7 +4569,7 @@ class LeetCode {
         }
     }
 
-    //123. Best Time to Buy and Sell Stock III
+//123. Best Time to Buy and Sell Stock III
     public int maxProfit3(int[] prices) {
         if (prices == null || prices.length < 2) {
             return 0;
@@ -4673,6 +4687,7 @@ class LeetCode {
                 path.add(nums[i]);
                 subsetsHelper(i + 1, nums, path, res);
                 path.remove(path.size() - 1);
+
             }
         }
     }
@@ -4693,8 +4708,8 @@ class LeetCode {
         }
     }
 
-    //Sorting Questions:74,4,75
-    //74. Search a 2D Matrix
+//Sorting Questions:74,4,75
+//74. Search a 2D Matrix
     public boolean searchMatrix(int[][] matrix, int target) {
         if (matrix == null || matrix.length < 1 || matrix[0].length < 1) {
             return false;
@@ -5170,6 +5185,7 @@ class LeetCode {
             }
         }
         return nums.length - want + 1;
+
     }
 
     //G questions 5: 
@@ -5733,6 +5749,7 @@ class LeetCode {
             remove(reversed, res, 0, 0, new char[]{')', '('});
         } else {
             res.add(reversed);
+
         }
 
     }
@@ -5932,6 +5949,7 @@ class LeetCode {
         h[0] = h[0].next;
         root.right = helper(h, n / 2);
         return root;
+
     }
 
     //Definition for undirected graph.
@@ -5946,7 +5964,7 @@ class LeetCode {
         }
     }
 
-    //133. Clone Graph
+//133. Clone Graph
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
         Map<Integer, UndirectedGraphNode> map = new HashMap<>();
         return cloneGraphHelper(node, map);
