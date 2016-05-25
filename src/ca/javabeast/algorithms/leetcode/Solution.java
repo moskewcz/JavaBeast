@@ -2228,6 +2228,34 @@ class LeetCode {
         public List<NestedInteger> getList();
     }
 
+    //350. Intersection of Two Arrays II
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap<>();
+        List<Integer> list = new ArrayList<>();
+        for (int i : nums1) {
+            Integer v = map.get(i);
+            if (v == null) {
+                map.put(i, 1);
+            } else {
+                map.put(i, ++v);
+            }
+        }
+
+        for (int i : nums2) {
+            Integer v = map.get(i);
+            if (v != null && v > 0) {
+                list.add(i);
+                map.put(i, --v);
+            }
+        }
+
+        int[] res = new int[list.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
     //349. Intersection of Two Arrays
     public int[] intersection(int[] nums1, int[] nums2) {
         Set<Integer> set = new HashSet<>();
