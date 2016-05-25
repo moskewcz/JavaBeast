@@ -4092,6 +4092,30 @@ class LeetCode {
         return pre;
     }
 
+    //202. Happy Number
+    int digitSqtSum(int n) {
+        int x = 0, sum = 0;
+        while (n > 0) {
+            x = n % 10;
+            n /= 10;
+            sum += x * x;
+        }
+        return sum;
+    }
+
+    public boolean isHappy(int n) {
+        int slow = n, fast = n;
+        do {
+            slow = digitSqtSum(slow);
+            fast = digitSqtSum(fast);
+            fast = digitSqtSum(fast);
+        } while (slow != fast);
+        if (slow == 1) {
+            return true;
+        }
+        return false;
+    }
+
     //204. Count Primes
     public int countPrimes(int n) {
         if (n < 3) {
@@ -4769,6 +4793,20 @@ class LeetCode {
             }
         }
         return low;
+    }
+
+    //70. Climbing Stairs
+    public int climbStairs(int n) {
+        if (n < 3) {
+            return n;
+        }
+        int first = 1, second = 2, temp = 0;
+        for (int i = 2; i < n; i++) {
+            temp = second + first;
+            first = second;
+            second = temp;
+        }
+        return second;
     }
 
     //57. Insert Interval 
