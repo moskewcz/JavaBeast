@@ -4184,6 +4184,16 @@ class LeetCode {
         rightSideViewHelper(root.left, cur + 1, res);
     }
 
+    //191. Number of 1 Bits
+    public int hammingWeight(int n) {
+        int bits = 0;
+        while (n != 0) {
+            bits = bits + (n & 1);
+            n = n >>> 1;
+        }
+        return bits;
+    }
+
     //188. Best Time to Buy and Sell Stock IV
     public int maxProfit4(int k, int[] prices) {
         int len = prices.length, profit = 0;
