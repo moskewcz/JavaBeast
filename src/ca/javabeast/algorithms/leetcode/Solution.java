@@ -2276,6 +2276,31 @@ class LeetCode {
         return res;
     }
 
+    //345. Reverse Vowels of a String
+    public String reverseVowels(String s) {
+        char[] res = s.toCharArray();
+        char[] chs = s.toLowerCase().toCharArray();
+        int[] vowels = new int[26];
+        for (char c : new char[]{'a', 'e', 'i', 'o', 'u'}) {
+            vowels[c - 'a'] = 1;
+        }
+        int left = 0, right = chs.length - 1;
+        while (left < right) {
+            if (chs[left] - 'a' < 0 || chs[left] - 'a' >= 26 || vowels[chs[left] - 'a'] != 1) {
+                left++;
+            } else if (chs[right] - 'a' < 0 || chs[right] - 'a' >= 26 || vowels[chs[right] - 'a'] != 1) {
+                right--;
+            } else {
+                char c = res[right];
+                res[right] = res[left];
+                res[left] = c;
+                left++;
+                right--;
+            }
+        }
+        return new String(res);
+    }
+
     //344. Reverse String
     public String reverseString(String s) {
         char[] chs = s.toCharArray();
