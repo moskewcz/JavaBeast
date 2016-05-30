@@ -4949,6 +4949,17 @@ class LeetCode {
         return i + 1;
     }
 
+    //24. Swap Nodes in Pairs
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode next = head.next;
+        head.next = swapPairs(next.next);
+        next.next = head;
+        return next;
+    }
+
     //23. Merge k Sorted Lists
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) {
