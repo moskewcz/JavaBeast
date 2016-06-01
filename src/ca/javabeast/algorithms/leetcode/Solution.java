@@ -4233,6 +4233,20 @@ class LeetCode {
         rightSideViewHelper(root.left, cur + 1, res);
     }
 
+    //198. House Robber
+    public int rob(int[] nums) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        int robbed = 0, skiped = nums[0], temp = 0;
+        for (int i = 1; i < nums.length; i++) {
+            temp = Math.max(robbed, skiped);
+            skiped = robbed + nums[i];
+            robbed = temp;
+        }
+        return Math.max(robbed, skiped);
+    }
+
     //191. Number of 1 Bits
     public int hammingWeight(int n) {
         int bits = 0;
