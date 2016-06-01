@@ -4642,6 +4642,24 @@ class LeetCode {
         }
     }
 
+    //145. Binary Tree Postorder Traversal
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        while(stack.size() > 0 || root != null){
+            if(root != null){
+                stack.push(root);
+                res.add(root.val);
+                root = root.right;
+            } else {
+                root = stack.pop();
+                root = root.left;
+            }
+        }
+        Collections.reverse(res);
+        return res;
+    }
+
     //123. Best Time to Buy and Sell Stock III
     public int maxProfit3(int[] prices) {
         if (prices == null || prices.length < 2) {
@@ -4688,21 +4706,11 @@ class LeetCode {
     //107. Binary Tree Level Order Traversal II
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
-        helper(res , root, 0);
+        levelOrderHelper(root, 0, res);
         Collections.reverse(res);
         return res;
     }
-    
-    void helper(List<List<Integer>> res, TreeNode root, int level){
-        if(root == null)
-            return;
-        if(res.size() <= level){
-            res.add(new ArrayList<>());
-        }
-        res.get(level).add(root.val);
-        helper(res, root.left, level+1);
-        helper(res, root.right, level+1);
-    }
+
     //102. Binary Tree Level Order Traversal
     public List<List<Integer>> levelOrder(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
