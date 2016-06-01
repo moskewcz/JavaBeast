@@ -3941,6 +3941,47 @@ class LeetCode {
         return root;
     }
 
+    //232. Implement Queue using Stacks
+    class MyQueue {
+        // Push element x to the back of queue.
+
+        private Stack<Integer> front, rear;
+
+        public MyQueue() {
+            front = new Stack<>();
+            rear = new Stack<>();
+        }
+
+        public void push(int x) {
+            rear.push(x);
+        }
+
+        // Removes the element from in front of queue.
+        public void pop() {
+            peek();
+            front.pop();
+        }
+
+        // Get the front element.
+        public int peek() {
+            if (front.empty()) {
+                dump();
+            }
+            return front.peek();
+        }
+
+        // Return whether the queue is empty.
+        public boolean empty() {
+            return front.empty() && rear.empty();
+        }
+
+        private void dump() {
+            while (!rear.empty()) {
+                front.push(rear.pop());
+            }
+        }
+    }
+
     //231. Power of Two
     public boolean isPowerOfTwo(int n) {
         return n > 0 && (n & (n - 1)) == 0;
@@ -4663,8 +4704,8 @@ class LeetCode {
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Deque<TreeNode> stack = new ArrayDeque<>();
-        while(stack.size() > 0 || root != null){
-            if(root != null){
+        while (stack.size() > 0 || root != null) {
+            if (root != null) {
                 stack.push(root);
                 res.add(root.val);
                 root = root.left;
@@ -4674,7 +4715,7 @@ class LeetCode {
         }
         return res;
     }
-        
+
     //123. Best Time to Buy and Sell Stock III
     public int maxProfit3(int[] prices) {
         if (prices == null || prices.length < 2) {
