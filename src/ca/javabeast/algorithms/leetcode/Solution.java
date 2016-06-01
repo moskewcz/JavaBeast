@@ -4659,6 +4659,22 @@ class LeetCode {
         return res;
     }
 
+    //144. Binary Tree Preorder Traversal
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        while(stack.size() > 0 || root != null){
+            if(root != null){
+                stack.push(root);
+                res.add(root.val);
+                root = root.left;
+            } else {
+                root = stack.pop().right;
+            }
+        }
+        return res;
+    }
+        
     //123. Best Time to Buy and Sell Stock III
     public int maxProfit3(int[] prices) {
         if (prices == null || prices.length < 2) {
