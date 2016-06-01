@@ -4973,6 +4973,24 @@ class LeetCode {
         return j == n;
     }
 
+    //27. Remove Element
+    public int removeElement(int[] nums, int val) {
+        if (nums == null || nums.length < 1) {
+            return 0;
+        }
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            if (nums[left] != val) {
+                left++;
+            } else if (nums[right] == val) {
+                right--;
+            } else {
+                swap(nums, left++, right--);
+            }
+        }
+        return nums[left] == val ? left : left + 1;
+    }
+
     //26. Remove Duplicates from Sorted Array
     public int removeDuplicates(int[] nums) {
         if (nums.length < 1) {
