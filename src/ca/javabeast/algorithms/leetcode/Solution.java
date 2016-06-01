@@ -38,6 +38,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
@@ -4079,6 +4080,41 @@ class LeetCode {
         root.left = root.right;
         root.right = temp;
         return root;
+    }
+
+    //225. Implement Stack using Queues
+    class MyStack {
+
+        private Queue<Integer> q;
+
+        public MyStack() {
+            q = new LinkedList<>();
+        }
+
+        // Push element x onto stack.
+        public void push(int x) {
+            int n = q.size();
+            q.offer(x);
+            while (n > 0) {
+                q.offer(q.poll());
+                n--;
+            }
+        }
+
+        // Removes the element on top of the stack.
+        public void pop() {
+            q.poll();
+        }
+
+        // Get the top element.
+        public int top() {
+            return q.peek();
+        }
+
+        // Return whether the stack is empty.
+        public boolean empty() {
+            return q.isEmpty();
+        }
     }
 
     //218. The Skyline Problem 
