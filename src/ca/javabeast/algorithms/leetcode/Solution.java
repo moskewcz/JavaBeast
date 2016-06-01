@@ -4646,14 +4646,13 @@ class LeetCode {
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         Deque<TreeNode> stack = new ArrayDeque<>();
-        while(stack.size() > 0 || root != null){
-            if(root != null){
+        while (stack.size() > 0 || root != null) {
+            if (root != null) {
                 stack.push(root);
                 res.add(root.val);
                 root = root.right;
             } else {
-                root = stack.pop();
-                root = root.left;
+                root = stack.pop().left;
             }
         }
         Collections.reverse(res);
@@ -4754,6 +4753,23 @@ class LeetCode {
         last[0] = root.val;
         return helper(root.right, isFirst, last);
 
+    }
+
+    //94. Binary Tree Inorder Traversal
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        while (stack.size() > 0 || root != null) {
+            if (root != null) {
+                stack.push(root);
+                root = root.left;
+            } else {
+                root = stack.pop();
+                res.add(root.val);
+                root = root.right;
+            }
+        }
+        return res;
     }
 
     //89. Gray Code
