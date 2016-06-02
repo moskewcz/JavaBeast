@@ -2585,8 +2585,9 @@ class LeetCode {
     public boolean isPowerOfThree(int n) {
         return (Math.log10(n) / Math.log10(3) % 1 == 0);
     }
+
     public boolean isPowerOfThree2(int n) {
-    return Integer.toString(n, 3).matches("10*");
+        return Integer.toString(n, 3).matches("10*");
     }
 
     //324. Wiggle Sort II 
@@ -4801,6 +4802,25 @@ class LeetCode {
             max = Math.max(maxSub, max);
         }
         return max;
+    }
+
+    //118. Pascal's Triangle
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> row, pre = null;
+        for (int i = 0; i < numRows; i++) {
+            row = new ArrayList<>();
+            row.add(1);
+            for (int j = 1; j < i; j++) {
+                row.add(pre.get(j - 1) + pre.get(j));
+            }
+            if (i > 0) {
+                row.add(1);
+            }
+            pre = row;
+            res.add(row);
+        }
+        return res;
     }
 
     //107. Binary Tree Level Order Traversal II
