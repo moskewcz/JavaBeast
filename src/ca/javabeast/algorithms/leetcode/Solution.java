@@ -5173,6 +5173,38 @@ class LeetCode {
         return j == n;
     }
 
+    //36. Valid Sudoku
+    public boolean isValidSudoku(char[][] board) {
+        for(int i = 0; i < 9; i++){
+            int[] col = new int[9];
+            int[] row = new int[9];
+            int[] cube = new int[9];
+            for(int j = 0; j < 9; j++){
+                int val = board[i][j] - '1';
+                if(val != '.' - '1' && row[val] == 1)
+                    return false;
+                else if(val != '.' - '1')
+                    row[val] = 1;
+                
+                val = board[j][i] - '1';
+                if(val != '.' - '1' && col[val] == 1)
+                    return false;
+                else if(val != '.' - '1')
+                    col[val] = 1;
+                
+                int rowIndex = 3*(i/3);
+                int colIndex = 3*(i%3);
+                val = board[rowIndex + j/3][colIndex + j%3] - '1';   
+                if(val != '.' - '1' && cube[val] == 1)
+                    return false;
+                else if(val != '.' - '1')
+                    cube[val] = 1;   
+            }
+            
+        }
+        return true;
+    }
+        
     //27. Remove Element
     public int removeElement(int[] nums, int val) {
         if (nums == null || nums.length < 1) {
