@@ -4419,6 +4419,16 @@ class LeetCode {
         return sb.charAt(0) == '0' ? "0" : sb.toString();
     }
 
+    //172. Factorial Trailing Zeroes
+    public int trailingZeroes(int n) {
+        int five = 0;
+        while (n >= 5) {
+            n /= 5;
+            five += n;
+        }
+        return five;
+    }
+
     //171. Excel Sheet Column Number
     public int titleToNumber(String s) {
         int result = 0;
@@ -4465,7 +4475,7 @@ class LeetCode {
         }
     }
 
-//169. Majority Element:Moore voting algorithm
+    //169. Majority Element:Moore voting algorithm
     public int majorityElement(int[] nums) {
         int res = nums[0], count = 1;
         for (int i = 1; i < nums.length; i++) {
