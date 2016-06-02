@@ -5378,6 +5378,19 @@ class LeetCode {
         return res;
     }
 
+    //9. Palindrome Number
+    public boolean isPalindrome(int x) {
+        if (x < 0 || (x != 0 && x % 10 == 0)) {
+            return false;
+        }
+        int rev = 0;
+        while (x > rev) {
+            rev = rev * 10 + x % 10;
+            x /= 10;
+        }
+        return rev == x || x == rev / 10;
+    }
+
     //8. String to Integer (atoi)
     public int myAtoi(String str) {
         if (str == null || str.length() < 1) {
