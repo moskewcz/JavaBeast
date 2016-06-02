@@ -2316,6 +2316,11 @@ class LeetCode {
         return new String(chs);
     }
 
+    //342. Power of Four
+    public boolean isPowerOfFour(int num) {
+        return (num & (num - 1)) == 0 && (num & 0x55555555) != 0;
+    }
+
     //341. Flatten Nested List Iterator
     public class NestedIterator implements Iterator<Integer> {
 
@@ -2579,6 +2584,9 @@ class LeetCode {
     //326. Power of Three
     public boolean isPowerOfThree(int n) {
         return (Math.log10(n) / Math.log10(3) % 1 == 0);
+    }
+    public boolean isPowerOfThree2(int n) {
+    return Integer.toString(n, 3).matches("10*");
     }
 
     //324. Wiggle Sort II 
