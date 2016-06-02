@@ -5173,38 +5173,92 @@ class LeetCode {
         return j == n;
     }
 
+    //37. Sudoku Solver
+    public void solveSudoku(char[][] board) {
+        List<int[]> cells = new ArrayList<>();
+        boolean[][] rows = new boolean[9][9];
+        boolean[][] cols = new boolean[9][9];
+        boolean[][] cubes = new boolean[9][9];
+
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] == '.') {
+                    cells.add(new int[]{i, j});
+                } else {
+                    int idx = board[i][j] - '1';
+                    int k = i / 3 * 3 + j / 3;
+                    rows[i][idx] = true;
+                    cols[j][idx] = true;
+                    cubes[k][idx] = true;
+                }
+            }
+        }
+        if (!cells.isEmpty()) {
+            solveSudoku(board, rows, cols, cubes, cells, 0);
+        }
+    }
+
+    boolean solveSudoku(char[][] board, boolean[][] rows, boolean[][] cols, boolean[][] cubes, List<int[]> cells, int cur) {
+        if (cur >= cells.size()) {
+            return true;
+        }
+        int[] cell = cells.get(cur);
+        int x = cell[0], y = cell[1], k = cell[0] / 3 * 3 + cell[1] / 3;
+
+        for (int i = 0; i < 9; i++) {
+            if (!rows[x][i] && !cols[y][i] && !cubes[k][i]) {
+                board[x][y] = (char) ('1' + i);
+                rows[x][i] = true;
+                cols[y][i] = true;
+                cubes[k][i] = true;
+                if (solveSudoku(board, rows, cols, cubes, cells, cur + 1)) {
+                    return true;
+                }
+                board[x][y] = '.';
+                rows[x][i] = false;
+                cols[y][i] = false;
+                cubes[k][i] = false;
+            }
+        }
+
+        return false;
+    }
+
     //36. Valid Sudoku
     public boolean isValidSudoku(char[][] board) {
-        for(int i = 0; i < 9; i++){
+        for (int i = 0; i < 9; i++) {
             int[] col = new int[9];
             int[] row = new int[9];
             int[] cube = new int[9];
-            for(int j = 0; j < 9; j++){
+            for (int j = 0; j < 9; j++) {
                 int val = board[i][j] - '1';
-                if(val != '.' - '1' && row[val] == 1)
+                if (val != '.' - '1' && row[val] == 1) {
                     return false;
-                else if(val != '.' - '1')
+                } else if (val != '.' - '1') {
                     row[val] = 1;
-                
+                }
+
                 val = board[j][i] - '1';
-                if(val != '.' - '1' && col[val] == 1)
+                if (val != '.' - '1' && col[val] == 1) {
                     return false;
-                else if(val != '.' - '1')
+                } else if (val != '.' - '1') {
                     col[val] = 1;
-                
-                int rowIndex = 3*(i/3);
-                int colIndex = 3*(i%3);
-                val = board[rowIndex + j/3][colIndex + j%3] - '1';   
-                if(val != '.' - '1' && cube[val] == 1)
+                }
+
+                int rowIndex = 3 * (i / 3);
+                int colIndex = 3 * (i % 3);
+                val = board[rowIndex + j / 3][colIndex + j % 3] - '1';
+                if (val != '.' - '1' && cube[val] == 1) {
                     return false;
-                else if(val != '.' - '1')
-                    cube[val] = 1;   
+                } else if (val != '.' - '1') {
+                    cube[val] = 1;
+                }
             }
-            
+
         }
         return true;
     }
-        
+
     //27. Remove Element
     public int removeElement(int[] nums, int val) {
         if (nums == null || nums.length < 1) {
