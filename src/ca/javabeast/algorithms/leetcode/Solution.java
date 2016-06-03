@@ -4126,6 +4126,35 @@ class LeetCode {
         }
     }
 
+    //220. Contains Duplicate III
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        if (nums == null || nums.length < 2 || k < 1 || t < 0) {
+            return false;
+        }
+
+        int begin = 0, end = 0, n = nums.length;
+        long num = 0l, bucket = 0l, w = (long) t + 1;
+        Map<Long, Long> map = new HashMap<>();
+
+        while (end < n) {
+            if (end > k) {
+                bucket = ((long) nums[begin++] - Integer.MIN_VALUE) / w;
+                map.remove(bucket);
+            }
+
+            num = (long) nums[end++] - Integer.MIN_VALUE;
+            bucket = num / w;
+            if (map.containsKey(bucket)
+                    || map.containsKey(bucket - 1) && num - map.get(bucket - 1) <= t
+                    || map.containsKey(bucket + 1) && map.get(bucket + 1) - num <= t) {
+                return true;
+            }
+            map.put(bucket, num);
+        }
+
+        return false;
+    }
+
     //219. Contains Duplicate II
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         int begin = 0, end = 0, n = nums.length;
