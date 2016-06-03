@@ -4126,6 +4126,21 @@ class LeetCode {
         }
     }
 
+    //219. Contains Duplicate II
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        int begin = 0, end = 0, n = nums.length;
+        Set<Integer> set = new HashSet<>();
+        while (end < n) {
+            if (end > k) {
+                set.remove(nums[begin++]);
+            }
+            if (!set.add(nums[end++])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //218. The Skyline Problem 
     public List<int[]> getSkyline(int[][] buildings) {
         List<int[]> res = new ArrayList<>();
@@ -4186,7 +4201,7 @@ class LeetCode {
         return false;
     }
 
-//206. Reverse Linked List
+    //206. Reverse Linked List
     public ListNode reverseList(ListNode head) {
         if (head == null) {
             return null;
