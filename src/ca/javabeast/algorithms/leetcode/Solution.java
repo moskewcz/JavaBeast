@@ -4146,6 +4146,16 @@ class LeetCode {
         }
     }
 
+    //223. Rectangle Area
+    public int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int area = (C - A) * (D - B) + (G - E) * (H - F), overlap = 0,
+                left = Math.max(A, E), right = Math.min(C, G), bottom = Math.max(B, F), top = Math.min(D, H);
+        if (right > left && top > bottom) {
+            overlap = (right - left) * (top - bottom);
+        }
+        return area - overlap;
+    }
+
     //220. Contains Duplicate III
     public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
         if (nums == null || nums.length < 2 || k < 1 || t < 0) {
