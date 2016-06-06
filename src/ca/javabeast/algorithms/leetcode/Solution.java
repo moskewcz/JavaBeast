@@ -3205,6 +3205,26 @@ class LeetCode {
         return len;
     }
 
+    //299. Bulls and Cows
+    public String getHint(String secret, String guess) {
+        char[] schs = secret.toCharArray(), gchs = guess.toCharArray();
+        int[] table = new int[10];
+        int bulls = 0, cows = 0;
+        for (int i = 0; i < gchs.length; i++) {
+            if (schs[i] == gchs[i]) {
+                bulls++;
+            } else {
+                if (table[schs[i] - '0']++ < 0) {
+                    cows++;
+                }
+                if (table[gchs[i] - '0']-- > 0) {
+                    cows++;
+                }
+            }
+        }
+        return bulls + "A" + cows + "B";
+    }
+
     //298. Binary Tree Longest Consecutive Sequence
     public int longestConsecutive(TreeNode root) {
         if (root == null) {
