@@ -5163,6 +5163,27 @@ class LeetCode {
         return second;
     }
 
+    //58. Length of Last Word
+    public int lengthOfLastWord(String s) {
+        if (s == null || s.length() < 1) {
+            return 0;
+        }
+        int res = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) != ' ') {
+                res++;
+            } else if (res > 0) {
+                break;
+            }
+        }
+        return res;
+    }
+    public int lengthOfLastWord2(String s) {
+        s = s.trim();
+        int lastIndex = s.lastIndexOf(' ') + 1;
+        return s.length() - lastIndex;        
+    }
+
     //57. Insert Interval 
     public List<Interval> insert(List<Interval> ins, Interval newIn) {
         List<Interval> res = new ArrayList<>();
