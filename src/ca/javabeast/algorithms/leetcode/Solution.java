@@ -5488,6 +5488,28 @@ class LeetCode {
         return stack.size() == 0;
     }
 
+    //19. Remove Nth Node From End of List
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode fast = head, slow = null, dummy = new ListNode(0), deleted = null;
+        dummy.next = head;
+        slow = dummy;
+
+        while (fast != null) {
+            fast = fast.next;
+            if (n-- <= 0) {
+                slow = slow.next;
+            }
+        }
+
+        deleted = slow.next;
+        slow.next = deleted.next;
+        deleted.next = null;
+
+        head = dummy.next;
+        dummy.next = null;
+        return head;
+    }
+
     //18. 4Sum
     public List<List<Integer>> fourSum(int[] nums, int target) {
         List<List<Integer>> res = new ArrayList<>();
