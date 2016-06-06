@@ -4277,28 +4277,17 @@ class LeetCode {
         return pre;
     }
 
-    //202. Happy Number
-    int digitSqtSum(int n) {
-        int x = 0, sum = 0;
-        while (n > 0) {
-            x = n % 10;
-            n /= 10;
-            sum += x * x;
+    //205. Isomorphic Strings
+    public boolean isIsomorphic(String s, String t) {
+        char[] schs = s.toCharArray(), tchs = t.toCharArray();
+        int[] table = new int[512];
+        for (int i = 0; i < schs.length; i++) {
+            if (table[schs[i]] != table[tchs[i] + 256]) {
+                return false;
+            }
+            table[schs[i]] = table[tchs[i] + 256] = i + 1;
         }
-        return sum;
-    }
-
-    public boolean isHappy(int n) {
-        int slow = n, fast = n;
-        do {
-            slow = digitSqtSum(slow);
-            fast = digitSqtSum(fast);
-            fast = digitSqtSum(fast);
-        } while (slow != fast);
-        if (slow == 1) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     //204. Count Primes
@@ -4348,6 +4337,30 @@ class LeetCode {
             }
         }
         return dummy.next;
+    }
+
+    //202. Happy Number
+    public boolean isHappy(int n) {
+        int slow = n, fast = n;
+        do {
+            slow = digitSqtSum(slow);
+            fast = digitSqtSum(fast);
+            fast = digitSqtSum(fast);
+        } while (slow != fast);
+        if (slow == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    int digitSqtSum(int n) {
+        int x = 0, sum = 0;
+        while (n > 0) {
+            x = n % 10;
+            n /= 10;
+            sum += x * x;
+        }
+        return sum;
     }
 
     //200. Number of Islands
