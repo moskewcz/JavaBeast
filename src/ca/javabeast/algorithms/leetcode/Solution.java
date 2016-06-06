@@ -51,6 +51,7 @@ import java.util.TreeMap;
 public class Solution {
 
     public static void main(String[] args) {
+        System.out.println();
         Solution s = new Solution();
         int[] arr = {0, 5, 0, 2, 3, 0, 3, 5, 0};
         LeetCode.print(s.getNumOfSwap(arr));
@@ -4446,6 +4447,23 @@ class LeetCode {
         return bits;
     }
 
+    //190. Reverse Bits
+    public int reverseBits(int n) {
+        int res = 0;
+        for (int i = 0; i < 32; i++) {
+            res += n & 1;
+            n >>>= 1;
+
+            if (n == 0) {
+                res = res << (32 - i - 1);
+                break;
+            } else if (i < 31) {
+                res <<= 1;
+            }
+        }
+        return res;
+    }
+
     //188. Best Time to Buy and Sell Stock IV
     public int maxProfit4(int k, int[] prices) {
         int len = prices.length, profit = 0;
@@ -5311,7 +5329,7 @@ class LeetCode {
     }
 
     //38. Count and Say
-    public String countAndSay1(int n) {
+    public String countAndSay(int n) {
         StringBuilder sb = new StringBuilder("1");
         char[] chs = null;
         for (int i = 1; i < n; i++) {
