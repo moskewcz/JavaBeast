@@ -5178,10 +5178,11 @@ class LeetCode {
         }
         return res;
     }
+
     public int lengthOfLastWord2(String s) {
         s = s.trim();
         int lastIndex = s.lastIndexOf(' ') + 1;
-        return s.length() - lastIndex;        
+        return s.length() - lastIndex;
     }
 
     //57. Insert Interval 
@@ -5307,6 +5308,29 @@ class LeetCode {
             j++;
         }
         return j == n;
+    }
+
+    //38. Count and Say
+    public String countAndSay1(int n) {
+        StringBuilder sb = new StringBuilder("1");
+        char[] chs = null;
+        for (int i = 1; i < n; i++) {
+            chs = sb.toString().toCharArray();
+            sb = new StringBuilder();
+            char x = chs[0];
+            int count = 1;
+            for (int j = 1; j < chs.length; j++) {
+                if (chs[j] == x) {
+                    count++;
+                } else {
+                    sb.append(count).append(x);
+                    x = chs[j];
+                    count = 1;
+                }
+            }
+            sb.append(count).append(x);
+        }
+        return sb.toString();
     }
 
     //37. Sudoku Solver
