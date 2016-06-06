@@ -3349,6 +3349,22 @@ class LeetCode {
         return !(n % 4 == 0);
     }
 
+    //290. Word Pattern
+    public boolean wordPattern(String pattern, String str) {
+        String[] words = str.split(" ");
+        char[] chs = pattern.toCharArray();
+        if (chs.length != words.length) {
+            return false;
+        }
+        Map<Object, Integer> map = new HashMap<>();
+        for (Integer i = 0; i < chs.length; i++) {
+            if (map.put(chs[i], i) != map.put(words[i], i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //289. Game of Life
     public void gameOfLife(int[][] board) {
         if (board == null) {
