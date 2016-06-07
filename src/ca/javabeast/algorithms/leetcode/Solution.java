@@ -51,7 +51,7 @@ import java.util.TreeMap;
 public class Solution {
 
     public static void main(String[] args) {
-        System.out.println();
+        System.out.println(-15 / 10);
         Solution s = new Solution();
         int[] arr = {0, 5, 0, 2, 3, 0, 3, 5, 0};
         LeetCode.print(s.getNumOfSwap(arr));
@@ -5718,6 +5718,19 @@ class LeetCode {
             res = Integer.MIN_VALUE;
         }
         return (int) res;
+    }
+
+    //7. Reverse Integer
+    public int reverse(int x) {
+        int res = 0;
+        while (x != 0) {
+            if ((res * 10 + x % 10 - x % 10) / 10 != res) {
+                return 0;
+            }
+            res = res * 10 + x % 10;
+            x /= 10;
+        }
+        return res;
     }
 
     //5. Longest Palindromic Substring
